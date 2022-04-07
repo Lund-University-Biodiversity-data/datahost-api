@@ -1,0 +1,1977 @@
+openapi: 3.0.3
+info:
+  title: SLU API-documentation Template
+  description: Created by the DPS-group.
+  contact:
+    name: Mathieu Blanchet
+    email: mathieu.blanchet@biol.lu.se
+  license:
+    name: CC0 1.0 universell (only text information)
+    url: https://creativecommons.org/publicdomain/zero/1.0/legalcode
+  version: 1.0.0
+servers:
+- url: http://canmove-dev.ekol.lu.se:8084/
+paths:
+  /occurrences:
+    post:
+      tags:
+      - Occurrence
+      summary: Get occurrences by search
+      description: Get occurrences by search
+      operationId: getOccurrencesBySearch
+      parameters:
+      - name: skip
+        in: query
+        description: Start index
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+          nullable: true
+          default: 0
+      - name: take
+        in: query
+        description: Number of items to return. 1000 items is the max to return in
+          one call.
+        required: false
+        style: form
+        explode: true
+        schema:
+          maximum: 1000
+          type: integer
+          format: int32
+          nullable: true
+          default: 100
+      requestBody:
+        description: Filter used to limit the search.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OccurrenceFilter'
+            example:
+              date:
+                startDate: string
+                endDate: string
+                dateFilterType: BetweenStartDateAndEndDate
+              taxon:
+                ids:
+                - 0
+              area:
+                municipality: string
+                county: string
+                feature:
+                  geometry:
+                    type: polygon
+                    coordinates:
+                    - - - 15.07063
+                        - 57.92573
+                      - - 15.0051
+                        - 58.16108
+                      - - 14.58003
+                        - 58.10148
+                      - - 15.0051
+                        - 58.16108
+                  maxDistanceFromGeometries: 25
+                responseCoordinateSystem: EPSG:4326
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Occurrence'
+                x-content-type: application/json
+          links:
+            GetOccurrenceByID:
+              operationId: getOccurrencesByID
+              parameters:
+                occurrenceId: $response.body#/occurrenceID
+              description: "The 'occurrenceID' value returned in the response ca be\
+                \ used as the 'occurrenceId' parameter in 'GET /occurrences/{occurrenceId}'."
+            GetEventByID:
+              operationId: getEventsByID
+              parameters:
+                occurrenceId: $response.body#/event
+              description: "The 'event' value returned in the response ca be used\
+                \ as the 'eventId' parameter in 'GET /events/{eventId}'."
+        "400":
+          description: Bad Request
+        "403":
+          description: Forbidden
+        "500":
+          description: Internal Server Error
+      x-swagger-router-controller: Occurrence
+  /occurrences/{occurrenceId}:
+    get:
+      tags:
+      - Occurrence
+      summary: Get occurrence by ID
+      description: Get occurrence by ID
+      operationId: getOccurrencesByID
+      parameters:
+      - name: occurrenceId
+        in: path
+        description: OccurrenceId of the occurrence to get
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          format: uuid
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Occurrence'
+                x-content-type: application/json
+          links:
+            GetEventByID:
+              operationId: getEventsByID
+              parameters:
+                occurrenceId: $response.body#/event
+              description: "The 'event' value returned in the response ca be used\
+                \ as the 'eventId' parameter in 'GET /events/{eventId}'."
+        "400":
+          description: Bad Request
+        "403":
+          description: Forbidden
+        "500":
+          description: Internal Server Error
+      x-swagger-router-controller: Occurrence
+  /datasets:
+    post:
+      tags:
+      - Dataset
+      summary: Get datasets by search
+      description: Get datasets by search
+      operationId: getDatasetsBySearch
+      parameters:
+      - name: skip
+        in: query
+        description: Start index
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+          nullable: true
+          default: 0
+      - name: take
+        in: query
+        description: Number of items to return. 1000 items is the max to return in
+          one call.
+        required: false
+        style: form
+        explode: true
+        schema:
+          maximum: 1000
+          type: integer
+          format: int32
+          nullable: true
+          default: 100
+      requestBody:
+        description: Filter used to limit the search.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DatasetFilter'
+            example:
+              date:
+                startDate: string
+                endDate: string
+                dateFilterType: BetweenStartDateAndEndDate
+              taxon:
+                ids:
+                - 0
+              area:
+                municipality: string
+                county: string
+                feature:
+                  geometry:
+                    type: BoundingBox
+                    coordinates:
+                    - -122.7
+                    - 45.51
+                    - -122.64
+                    - 45.53
+                  maxDistanceFromGeometries: 25
+                responseCoordinateSystem: EPSG:4326
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Dataset'
+                x-content-type: application/json
+        "400":
+          description: Bad Request
+        "403":
+          description: Forbidden
+        "500":
+          description: Internal Server Error
+      x-swagger-router-controller: Dataset
+  /datasets/{id}:
+    get:
+      tags:
+      - Dataset
+      summary: Get dataset by ID
+      description: Get dataset by ID
+      operationId: getDatasetByID
+      parameters:
+      - name: id
+        in: path
+        description: ID of the dataset to get
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          format: uuid
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Dataset'
+                x-content-type: application/json
+        "400":
+          description: Bad Request
+        "403":
+          description: Forbidden
+        "500":
+          description: Internal Server Error
+      x-swagger-router-controller: Dataset
+  /events:
+    post:
+      tags:
+      - Event
+      summary: Get event by search
+      description: Get event by search
+      operationId: getEventsBySearch
+      parameters:
+      - name: skip
+        in: query
+        description: Start index
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+          nullable: true
+          default: 0
+      - name: take
+        in: query
+        description: Number of items to return. 1000 items is the max to return in
+          one call.
+        required: false
+        style: form
+        explode: true
+        schema:
+          maximum: 1000
+          type: integer
+          format: int32
+          nullable: true
+          default: 100
+      requestBody:
+        description: Filter used to limit the search.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EventsFilter'
+            example:
+              date:
+                startDate: string
+                endDate: string
+                dateFilterType: BetweenStartDateAndEndDate
+              taxon:
+                ids:
+                - 0
+              area:
+                municipality: Kalmar län
+                county: Hultsfred
+                feature:
+                  geometry:
+                    type: LineString
+                    coordinates:
+                    - - - 15.07063
+                        - 57.92573
+                      - - 15.0051
+                        - 58.16108
+                      - - 14.58003
+                        - 58.10148
+                  maxDistanceFromGeometries: 25
+                responseCoordinateSystem: EPSG:4326
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Event'
+                x-content-type: application/json
+        "400":
+          description: Bad Request
+        "403":
+          description: Forbidden
+        "500":
+          description: Internal Server Error
+      x-swagger-router-controller: Event
+  /events/{eventId}:
+    get:
+      tags:
+      - Event
+      summary: Get event by ID
+      description: Get event by ID
+      operationId: getEventsByID
+      parameters:
+      - name: eventId
+        in: path
+        description: EventId of the event to get
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          format: uuid
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Event'
+                x-content-type: application/json
+        "400":
+          description: Bad Request
+        "403":
+          description: Forbidden
+        "500":
+          description: Internal Server Error
+      x-swagger-router-controller: Event
+components:
+  schemas:
+    Occurrence:
+      allOf:
+      - $ref: '#/components/schemas/ExchangeObject'
+      - required:
+        - basisOfRecord
+        - occurrenceID
+        - occurrenceStatus
+        - taxon
+      - properties:
+          occurrenceID:
+            type: string
+            description: "An identifier for the Occurrence (as opposed to a particular\
+              \ digital record of the occurrence). In the absence of a persistent\
+              \ global unique identifier, construct one from a combination of identifiers\
+              \ in the record that will most closely make the occurrenceID globally\
+              \ unique. (Source: Darwin Core quick reference guide)"
+            example: SFTstd:19960523:143:102613:L
+          basisOfRecord:
+            type: string
+            description: "The type of species observation the record deals with (e.g.\
+              \ human observation, material sample etc.)"
+            enum:
+            - fysiskt prov
+            - maskinell observation
+            - mänsklig observation
+            - okänt
+          observationTime:
+            type: string
+            description: The specific time for the specific species observation (local
+              time). (A general time/date for all species observations made during
+              a survey event is given in the object inventeringstillfälle.)
+            format: date-time
+          observationPoint:
+            description: The specific place where an organism was located when it
+              was observed.
+            oneOf:
+            - $ref: '#/components/schemas/PointGeometry'
+            - $ref: '#/components/schemas/LineGeometry'
+            - $ref: '#/components/schemas/PolygonGeometry'
+          taxon:
+            $ref: '#/components/schemas/Taxon'
+          occurrenceStatus:
+            type: string
+            description: States whether a specific taxon was observed or not. Observations
+              with "Förekomst" = "inte observerad" are so called zero observations.
+            enum:
+            - inte observerad
+            - observerad
+          quantityVariable:
+            type: string
+            description: States how the quantity of the observed species (or other
+              taxonomic rank) was counted or measured.
+            enum:
+            - antal individer
+            - antal fruktkroppar
+            - antal kapslar
+            - antal plantor/tuvor
+            - antal stjälkar/strån/skott
+            - antal äggklumpar
+            - täckningsgrad
+            - yttäckning
+          quantity:
+            multipleOf: 0.01
+            type: number
+            description: Amount of organisms of a certain unit (given in the attribute
+              unit).
+            example: 10
+          unit:
+            type: string
+            description: Unit for a certain amount of organisms (given in the attribute
+              quantity).
+            enum:
+            - '%'
+            - cm²
+            - cm³
+            - dm²
+            - kompassgrader
+            - m/s
+            - m²
+            - styck
+            - °C
+          organism:
+            $ref: '#/components/schemas/OrganismVariable'
+          occurrenceRemarks:
+            type: string
+            description: Comment (freetext) about the species observation.
+            example: Håller ofta till på Skatrevet men har troligen aldrig fått fram
+              några ungar
+          observationCertainty:
+            multipleOf: 0.01
+            type: number
+            description: "States the radius within which the actual observation was\
+              \ made from the most specific coordinates given, i.e. the coordinates\
+              \ for the site, subsite or observation point."
+            example: 25
+          identificationVerificationStatus:
+            type: string
+            description: "States the quality of a species observation, i.e. whether\
+              \ its verified by an expert or similar. Quality categories are chosen\
+              \ from a codelist."
+            enum:
+            - värdelista saknas
+          associatedMedia:
+            type: array
+            description: "Attached information about the species observation, e.g.\
+              \ media files like images, sound recordings etc. Can also be collected\
+              \ physical samples that can be referenced."
+            items:
+              $ref: '#/components/schemas/AssociatedMedia'
+          event:
+            type: string
+            description: A unique identity of the event where the observation were
+              made.
+            format: UUID
+            example: d9baea4e-2436-4481-accb-7c2fe835039e
+    Dataset:
+      required:
+      - accessRights
+      - assigner
+      - creator
+      - dataStewardship
+      - description
+      - identifier
+      - language
+      - metadatalanguage
+      - methodology
+      - ownerinstitutionCode
+      - publisher
+      - purpose
+      - spatial
+      - startDate
+      - title
+      type: object
+      properties:
+        identifier:
+          type: string
+          description: The dataset id-number within the metadata catalogue administered
+            by the authority that is responsible for the information.
+          format: UUID
+        title:
+          type: string
+          description: Name of the dataset. Can sometimes be the same as the name
+            of the project.
+          example: "Svensk Fågeltaxering: Standardrutterna"
+        projectID:
+          type: string
+          description: Unique id for the project within which the dataset was collected.
+        projectCode:
+          type: string
+          description: Name of the project within which the dataset was collected.
+            Can sometimes be the same as the name of the dataset.
+          example: Svensk Fågeltaxering
+        assigner:
+          $ref: '#/components/schemas/Organisation'
+        creator:
+          $ref: '#/components/schemas/Organisation'
+        ownerinstitutionCode:
+          $ref: '#/components/schemas/Organisation'
+        publisher:
+          $ref: '#/components/schemas/Organisation'
+        dataStewardship:
+          type: string
+          description: Name of the data stewardship within which the dataset is handled.
+          example: "Datavärdskap Naturdata: Fåglar och fjärilar"
+        purpose:
+          type: string
+          description: The purpose of the data collection (e.g. national or regional
+            environmental monitoring).
+          enum:
+          - nationell miljöövervakning
+          - regional miljöövervakning
+          - biogeografisk uppföljning
+        description:
+          type: string
+          description: Short description of the dataset or the context for collection
+            of the data included in the dataset. The structure and content of the
+            description is governed by the requirements from the respective metadata
+            catalogues.
+        methodology:
+          minItems: 1
+          type: array
+          description: "The methodology that is used for the data collection, e.g.\
+            \ as described by one or more monitoring manuals. Can contain a range\
+            \ of methods for the same and/or different parts of the data collection."
+          items:
+            $ref: '#/components/schemas/Methodology'
+        startDate:
+          type: string
+          description: Start date for the dataset.
+          format: date
+          example: 1996-05-23
+        endDate:
+          type: string
+          description: End date for the dataset.
+          format: date
+        spatial:
+          type: string
+          description: The country in which the data in the dataset were collected
+            in.
+          example: Sverige
+        accessRights:
+          type: string
+          description: "Information about whether the whole, parts of, or nothing\
+            \ in the dataset is publically available."
+          enum:
+          - publik
+          - begränsad
+          - ej offentlig
+        metadatalanguage:
+          type: string
+          description: The language that is used when writing metadata about the dataset.
+          example: Engelska
+        language:
+          type: string
+          description: The language used in the dataset.
+          example: Svenska
+        events:
+          minItems: 1
+          type: array
+          description: A list of unique identites for surveys that is part of the
+            dataset.
+          example:
+          - d9baea4e-2436-4481-accb-7c2fe835039e
+          - 60152666-8c2c-4d33-a5c8-da1dda106c5d
+          - c4eaa558-83cc-4b94-9aff-1aefdc204794
+          - 273998e3-3138-41eb-b740-28ee53f7e344
+          items:
+            type: string
+            format: UUID
+      description: Metadata about a dataset.
+      example:
+        identifier: identifier
+        creator: null
+        metadatalanguage: Engelska
+        purpose: nationell miljöövervakning
+        endDate: 2000-01-23
+        assigner:
+          organisationID: "2021001975"
+          organisationCode: Naturvårdsverket
+        description: description
+        ownerinstitutionCode: null
+        language: Svenska
+        title: "Svensk Fågeltaxering: Standardrutterna"
+        dataStewardship: "Datavärdskap Naturdata: Fåglar och fjärilar"
+        projectCode: Svensk Fågeltaxering
+        publisher: null
+        accessRights: publik
+        spatial: Sverige
+        projectID: projectID
+        methodology:
+        - methodologyLink: http://example.com/aeiou
+          methodologyDescription: methodologyDescription
+          speciesList: http://example.com/aeiou
+          methodologyName: methodologyName
+        - methodologyLink: http://example.com/aeiou
+          methodologyDescription: methodologyDescription
+          speciesList: http://example.com/aeiou
+          methodologyName: methodologyName
+        startDate: 1996-05-23T00:00:00.000+00:00
+        events:
+        - d9baea4e-2436-4481-accb-7c2fe835039e
+        - 60152666-8c2c-4d33-a5c8-da1dda106c5d
+        - c4eaa558-83cc-4b94-9aff-1aefdc204794
+        - 273998e3-3138-41eb-b740-28ee53f7e344
+    OccurrenceFilter:
+      type: object
+      properties:
+        date:
+          $ref: '#/components/schemas/DateFilter'
+        taxon:
+          $ref: '#/components/schemas/TaxonFilter'
+        area:
+          $ref: '#/components/schemas/GeographicsFilter'
+      additionalProperties: false
+      description: Search filter.
+    DatasetFilter:
+      type: object
+      properties:
+        date:
+          $ref: '#/components/schemas/DateFilter'
+        taxon:
+          $ref: '#/components/schemas/TaxonFilter'
+        area:
+          $ref: '#/components/schemas/GeographicsFilter'
+      additionalProperties: false
+      description: Search filter.
+    EventsFilter:
+      type: object
+      properties:
+        date:
+          $ref: '#/components/schemas/DateFilter'
+        taxon:
+          $ref: '#/components/schemas/TaxonFilter'
+        area:
+          $ref: '#/components/schemas/GeographicsFilter'
+      additionalProperties: false
+      description: Search filter.
+    AssociatedMedia:
+      required:
+      - license
+      type: object
+      properties:
+        associatedMediaName:
+          type: string
+          description: Name of attachment.
+        associatedMediaType:
+          type: string
+          description: "Format of attachment, e.g. image, video, sound, pdf etc."
+          enum:
+          - bild
+          - film
+          - ljud
+          - pdf
+        associatedMediaLink:
+          type: string
+          description: Link to attachment.
+          format: URI
+        license:
+          type: string
+          description: States which Creative Commons license that is applied to the
+            attachment.
+          format: URI
+        rightsHolder:
+          type: string
+          description: States who the creator of the attachment is.
+    DateFilter:
+      type: object
+      properties:
+        startDate:
+          type: string
+          description: "Event start date specified in the ISO 8601 standard. If no\
+            \ timezone is specified, GMT+1 (CEST) is assumed"
+          format: date-time
+          nullable: true
+        endDate:
+          type: string
+          description: "Event end date specified in the ISO 8601 standard. If no timezone\
+            \ is specified, GMT+1 (CEST) is assumed"
+          format: date-time
+          nullable: true
+        dateFilterType:
+          $ref: '#/components/schemas/DateFilterType'
+      additionalProperties: false
+      description: Date filter.
+    DateFilterType:
+      type: string
+      description: "OverlappingStartDateAndEndDate, Start or EndDate of the event\
+        \ must be within the specified interval    \r\nBetweenStartDateAndEndDate,\
+        \ Start and EndDate of the event must be within the specified interval   \
+        \ \r\nOnlyStartDate, Only StartDate of the event must be within the specified\
+        \ interval            \r\nOnlyEndDate, Only EndDate of the event must be within\
+        \ the specified interval"
+      enum:
+      - OverlappingStartDateAndEndDate
+      - BetweenStartDateAndEndDate
+      - OnlyStartDate
+      - OnlyEndDate
+    TaxonFilter:
+      type: object
+      properties:
+        ids:
+          type: array
+          description: Dyntaxa taxon id's to match.
+          items:
+            type: integer
+            format: int32
+            nullable: true
+      additionalProperties: false
+      description: Taxon filter.
+    PointOrBoundingBoxQuery:
+      type: object
+      properties:
+        feature:
+          $ref: '#/components/schemas/PointOrBoundingBoxQuery_feature'
+    LineOrPolygonQuery:
+      type: object
+      properties:
+        feature:
+          $ref: '#/components/schemas/LineOrPolygonQuery_feature'
+    GeographicsFilter:
+      type: object
+      properties:
+        county:
+          type: array
+          description: County filter
+          nullable: true
+          items:
+            $ref: '#/components/schemas/county'
+        municipality:
+          type: array
+          description: Municipality filter
+          nullable: true
+          items:
+            $ref: '#/components/schemas/municipality'
+        area:
+          $ref: '#/components/schemas/GeographicsFilter_area'
+        responseCoordinateSystem:
+          type: array
+          items:
+            type: string
+            enum:
+            - EPSG:3006
+            - EPSG:4619
+            - EPSG:4326
+            - EPSG:3857
+            - EPSG:4258
+            default: EPSG:4326
+      additionalProperties: false
+      description: Geometry filter.
+    PointGeometry:
+      required:
+      - geometry
+      - properties
+      - type
+      type: object
+      properties:
+        type:
+          type: string
+          default: Feature
+        geometry:
+          $ref: '#/components/schemas/PointGeometry_geometry'
+        properties:
+          $ref: '#/components/schemas/PointGeometry_properties'
+    LineGeometry:
+      required:
+      - geometry
+      - properties
+      - type
+      type: object
+      properties:
+        type:
+          type: string
+          default: Feature
+        geometry:
+          $ref: '#/components/schemas/LineGeometry_geometry'
+        properties:
+          $ref: '#/components/schemas/PointGeometry_properties'
+    PolygonGeometry:
+      required:
+      - geometry
+      - properties
+      - type
+      type: object
+      properties:
+        type:
+          type: string
+          default: Feature
+        geometry:
+          $ref: '#/components/schemas/PolygonGeometry_geometry'
+        properties:
+          $ref: '#/components/schemas/PolygonGeometry_properties'
+    OrganismVariable:
+      type: object
+      properties:
+        sex:
+          type: string
+          description: Sex of the observed organism.
+          enum:
+          - hane
+          - hona
+          - i par
+        lifeStage:
+          type: string
+          description: Age category or development stage of the observed organism.
+          enum:
+          - 1K
+          - 1K+
+          - 2K
+          - 2K+
+          - 3K
+          - 3K+
+          - 3K-
+          - 4K
+          - 4K+
+          - 4K-
+          - adult
+          - blomning
+          - ej bestämd ålder
+          - fullt utvecklade blad
+          - gulnade löv/blad
+          - imago/adult
+          - juvenil
+          - knoppbristning
+          - larv
+          - larv/nymf
+          - med groddkorn
+          - med honorgan
+          - med kapsel
+          - pulli
+          - puppa
+          - subadult
+          - utan kapsel
+          - vilstadium
+          - ägg
+          - årsunge
+          - årsyngel
+          - överblommad
+        activity:
+          type: string
+          description: Activity or behavior of the observed organism.
+          enum:
+          - använt bo
+          - avledningsbeteende
+          - besöker bebott bo
+          - "bo, hörda ungar"
+          - "bo, ägg/ungar"
+          - bobesök?
+          - bobygge
+          - dräktig hona
+          - död
+          - fragment
+          - friflygande
+          - frispringande/krypande
+          - färska gnagspår
+          - föda åt ungar
+          - födosökande
+          - förbiflygande
+          - i vatten/simmande
+          - inget kriterium angivet
+          - "lockläte, övriga läten"
+          - misslyckad häckning
+          - "obs i häcktid, lämplig biotop"
+          - par i lämplig häckbiotop
+          - parning
+          - permanent revir
+          - pulli/nyligen flygga ungar
+          - på övervintringsplats
+          - rastande
+          - revirhävdande
+          - ruvande
+          - sannolikt ej häckande
+          - spel/sång
+          - "spel/sång, ej häckning"
+          - stationär
+          - sträckande
+          - "upprörd, varnande"
+          - vilande
+          - äggläggande
+          - äggskal
+          - äldre gnagspår
+      description: "Observed attributes and other variables linked to a certain individual\
+        \ or uniform group of individuals, e.g. sex, age, behavior."
+    Event:
+      required:
+      - eventDate
+      - eventID
+      - surveyLocation
+      - type
+      allOf:
+      - $ref: '#/components/schemas/ExchangeObject'
+      - properties:
+          eventID:
+            type: string
+            description: A unique id for the survey event within a specific dataset
+              hosted by the respective datahosts. A survey event is usually a visit
+              to a survey area/site. A survey event can also be a visit to a smaller
+              defined part of a survey area/site or one of several samples from the
+              same place. The term survey event can also represent a specific period
+              or season. What eventID is representing is given in the attribute type.
+            example: SFTstd:19960529:92
+          type:
+            type: string
+            description: "States what the survey event (eventID) is representing,\
+              \ e.g. a visit, part visit, sample, period, season etc."
+          parentEventID:
+            type: string
+            description: "A unique id for a visit that (usually) represents a longer\
+              \ time interval than the ”survey event”. This way, a parentEventID can\
+              \ for example group all visits to smaller parts of a survey area/site\
+              \ during a visit to the site, or all visits to a site within a season.\
+              \ Example: The eventID for a season becomes the parentEventID for a\
+              \ visit to a survey site. ParentEventID can also be used to group visits\
+              \ to different levels in the geographic structure of a survey site."
+          eventDate:
+            type: string
+            description: Date for when the survey was carried out.
+            format: date
+            example: 2021-12-07
+          eventStartTime:
+            type: string
+            description: Time for when the survey started (local time).
+            format: date-time
+          eventEndTime:
+            type: string
+            description: Time for when the survey ended (local time).
+            format: date-time
+          locationProtected:
+            type: boolean
+            description: States whether the position of a location is protected. The
+              true position for a protected location is shown only to authorized persons.
+              To others the position is shown with difused coordinates. Other information
+              about a protected location can also be limited.
+          surveyLocation:
+            maxItems: 2
+            minItems: 1
+            description: Information about the survey area/site (geodata).
+            oneOf:
+            - $ref: '#/components/schemas/Location'
+            - $ref: '#/components/schemas/LocationGeneralized'
+          recorderCode:
+            type: array
+            description: Name or code for the person conducting the survey. Several
+              names or codes can be given.
+            example: SFT:recorderId:441
+            items:
+              type: string
+          recorderOrganisation:
+            type: array
+            description: The organisation that the surveyor represents. Several organisations
+              can be given.
+            items:
+              $ref: '#/components/schemas/Organisation'
+          samplingProtocol:
+            type: string
+            description: The survey method used at the specific survey event. The
+              monitoring manual or equivalent methodology is referenced in Dataset
+              C.1.2.
+            example: "Landstigning. Se \"Edenius & Salomonson (2010). Samordnad ö\
+              vervakning av häckande kustfågel i Bottniska Viken. Länsstyrelserna,\
+              \ Meddelande 10:2010\". Line transect survey : http://www.fageltaxering.lu.se/inventera/metoder/standardrutter/metodik-standardrutter"
+          weather:
+            $ref: '#/components/schemas/WeatherVariable'
+          eventRemarks:
+            type: string
+            description: Comment (freetext) about the survey event.
+            example: Någon hade landstiget och rövat bon tidigare under dagen
+          noObservations:
+            type: string
+            description: States whether any of the sought after organisms were observed
+              during the survey event or not. "Sant" (i.e. True) means that none of
+              the sought after organisms were observed at all.
+            enum:
+            - falskt
+            - sant
+          associatedMedia:
+            type: array
+            description: "Attached information about the survey event, e.g. media\
+              \ files like images, sound recordings, maps etc."
+            items:
+              $ref: '#/components/schemas/AssociatedMedia'
+          Dataset:
+            $ref: '#/components/schemas/Event_Dataset'
+          Occurrences:
+            type: array
+            description: A list of unique identities of the occurances made during
+              an event
+            example:
+            - d9baea4e-2436-4481-accb-7c2fe835039e
+            - 60152666-8c2c-4d33-a5c8-da1dda106c5d
+            - c4eaa558-83cc-4b94-9aff-1aefdc204794
+            - 273998e3-3138-41eb-b740-28ee53f7e344
+            items:
+              type: string
+              format: UUID
+        description: ""
+    county:
+      type: string
+      enum:
+      - Blekinge län
+      - Dalarnas län
+      - Gotlands län
+      - Gävleborgs län
+      - Hallands län
+      - Jämtlands län
+      - Jönköpings län
+      - Kalmar län
+      - Kronobergs län
+      - Norrbottens län
+      - Skåne län
+      - Stockholms län
+      - Södermanlands län
+      - Uppsala län
+      - Värmlands län
+      - Västerbottens län
+      - Västernorrlands län
+      - Västmanlands län
+      - Västra Götalands län
+      - Örebro län
+      - Östergötlands län
+    municipality:
+      type: string
+      enum:
+      - Ale
+      - Alingsås
+      - Alvesta
+      - Aneby
+      - Arboga
+      - Arjeplog
+      - Arvidsjaur
+      - Arvika
+      - Askersund
+      - Avesta
+      - Bengtsfors
+      - Berg
+      - Bjurholm
+      - Bjuv
+      - Boden
+      - Bollebygd
+      - Bollnäs
+      - Borgholm
+      - Borlänge
+      - Borås
+      - Botkyrka
+      - Boxholm
+      - Bromölla
+      - Bräcke
+      - Burlöv
+      - Båstad
+      - Dals-Ed
+      - Danderyd
+      - Degerfors
+      - Dorotea
+      - Eda
+      - Ekerö
+      - Eksjö
+      - Emmaboda
+      - Enköping
+      - Eskilstuna
+      - Eslöv
+      - Essunga
+      - Fagersta
+      - Falkenberg
+      - Falköping
+      - Falun
+      - Filipstad
+      - Finspång
+      - Flen
+      - Forshaga
+      - Färgelanda
+      - Gagnef
+      - Gislaved
+      - Gnesta
+      - Gnosjö
+      - Gotland
+      - Grums
+      - Grästorp
+      - Gullspång
+      - Gällivare
+      - Gävle
+      - Göteborg
+      - Götene
+      - Habo
+      - Hagfors
+      - Hallsberg
+      - Hallstahammar
+      - Halmstad
+      - Hammarö
+      - Haninge
+      - Haparanda
+      - Heby
+      - Hedemora
+      - Helsingborg
+      - Herrljunga
+      - Hjo
+      - Hofors
+      - Huddinge
+      - Hudiksvall
+      - Hultsfred
+      - Hylte
+      - Håbo
+      - Hällefors
+      - Härjedalen
+      - Härnösand
+      - Härryda
+      - Hässleholm
+      - Höganäs
+      - Högsby
+      - Hörby
+      - Höör
+      - Jokkmokk
+      - Järfälla
+      - Jönköping
+      - Kalix
+      - Kalmar
+      - Karlsborg
+      - Karlshamn
+      - Karlskoga
+      - Karlskrona
+      - Karlstad
+      - Katrineholm
+      - Kil
+      - Kinda
+      - Kiruna
+      - Klippan
+      - Knivsta
+      - Kramfors
+      - Kristianstad
+      - Kristinehamn
+      - Krokom
+      - Kumla
+      - Kungsbacka
+      - Kungsör
+      - Kungälv
+      - Kävlinge
+      - Köping
+      - Laholm
+      - Landskrona
+      - Laxå
+      - Lekeberg
+      - Leksand
+      - Lerum
+      - Lessebo
+      - Lidingö
+      - Lidköping
+      - Lilla Edet
+      - Lindesberg
+      - Linköping
+      - Ljungby
+      - Ljusdal
+      - Ljusnarsberg
+      - Lomma
+      - Ludvika
+      - Luleå
+      - Lund
+      - Lycksele
+      - Lysekil
+      - Malmö
+      - Malung-Sälen
+      - Malå
+      - Mariestad
+      - Mark
+      - Markaryd
+      - Mellerud
+      - Mjölby
+      - Mora
+      - Motala
+      - Mullsjö
+      - Munkedal
+      - Munkfors
+      - Mölndal
+      - Mönsterås
+      - Mörbylånga
+      - Nacka
+      - Nora
+      - Norberg
+      - Nordanstig
+      - Nordmaling
+      - Norrköping
+      - Norrtälje
+      - Norsjö
+      - Nybro
+      - Nykvarn
+      - Nyköping
+      - Nynäshamn
+      - Nässjö
+      - Ockelbo
+      - Olofström
+      - Orsa
+      - Orust
+      - Osby
+      - Oskarshamn
+      - Ovanåker
+      - Oxelösund
+      - Pajala
+      - Partille
+      - Perstorp
+      - Piteå
+      - Ragunda
+      - Robertsfors
+      - Ronneby
+      - Rättvik
+      - Sala
+      - Salem
+      - Sandviken
+      - Sigtuna
+      - Simrishamn
+      - Sjöbo
+      - Skara
+      - Skellefteå
+      - Skinnskatteberg
+      - Skurup
+      - Skövde
+      - Smedjebacken
+      - Sollefteå
+      - Sollentuna
+      - Solna
+      - Sorsele
+      - Sotenäs
+      - Staffanstorp
+      - Stenungsund
+      - Stockholm
+      - Storfors
+      - Storuman
+      - Strängnäs
+      - Strömstad
+      - Strömsund
+      - Sundbyberg
+      - Sundsvall
+      - Sunne
+      - Surahammar
+      - Svalöv
+      - Svedala
+      - Svenljunga
+      - Säffle
+      - Säter
+      - Sävsjö
+      - Söderhamn
+      - Söderköping
+      - Södertälje
+      - Sölvesborg
+      - Tanum
+      - Tibro
+      - Tidaholm
+      - Tierp
+      - Timrå
+      - Tingsryd
+      - Tjörn
+      - Tomelilla
+      - Torsby
+      - Torsås
+      - Tranemo
+      - Tranås
+      - Trelleborg
+      - Trollhättan
+      - Trosa
+      - Tyresö
+      - Täby
+      - Töreboda
+      - Uddevalla
+      - Ulricehamn
+      - Umeå
+      - Upplands Väsby
+      - Upplands-Bro
+      - Uppsala
+      - Uppvidinge
+      - Vadstena
+      - Vaggeryd
+      - Valdemarsvik
+      - Vallentuna
+      - Vansbro
+      - Vara
+      - Varberg
+      - Vaxholm
+      - Vellinge
+      - Vetlanda
+      - Vilhelmina
+      - Vimmerby
+      - Vindeln
+      - Vingåker
+      - Vårgårda
+      - Vänersborg
+      - Vännäs
+      - Värmdö
+      - Värnamo
+      - Västervik
+      - Västerås
+      - Växjö
+      - Ydre
+      - Ystad
+      - Åmål
+      - Ånge
+      - Åre
+      - Årjäng
+      - Åsele
+      - Åstorp
+      - Åtvidaberg
+      - Älmhult
+      - Älvdalen
+      - Älvkarleby
+      - Älvsbyn
+      - Ängelholm
+      - Öckerö
+      - Ödeshög
+      - Örebro
+      - Örkelljunga
+      - Örnsköldsvik
+      - Östersund
+      - Österåker
+      - Östhammar
+      - Östra Göinge
+      - Överkalix
+      - Övertorneå
+    Location:
+      required:
+      - county
+      - locactionID
+      - location protected
+      - municipality
+      - position
+      type: object
+      properties:
+        locationID:
+          type: string
+          description: "A unique id-number for a place, e.g. a survey site or a subsite.\
+            \ Should be the id-number from \"Stationsregistret\" where relevant."
+          example: KBV:SiteId:RZ7542
+        locality:
+          type: string
+          description: The name of a survey site or a subsite.
+          example: "Rasmus södra, Sonaboda"
+        locationType:
+          type: string
+          description: "The type of survey site that was surveyed, e.g. square, segment,\
+            \ point site, counting zone, route etc."
+          enum:
+          - block
+          - linje
+          - linjetransekt
+          - polygon
+          - provyta
+          - punkt
+          - punktlokal
+          - ruta
+          - rutt
+          - räkningssektor
+          - räkningszon
+          - segment
+          - slinga
+          - transportsträcka
+          - ö
+        emplacement:
+          maxItems: 2
+          minItems: 1
+          description: "Information about the shape and geographic position of the\
+            \ site. It is possible to provide the geographic position of each site\
+            \ in two ways. The geographic position of a line- or polygon-shaped site\
+            \ can thereby be provided both as a point, e.g. the centroid, a corner\
+            \ or the start point (described by methodology), and as a line or polygon\
+            \ with coordinates for the full extent of the site. The geographic position\
+            \ of a point-shaped site is provided as a point."
+          oneOf:
+          - $ref: '#/components/schemas/PointGeometry'
+          - $ref: '#/components/schemas/LineGeometry'
+          - $ref: '#/components/schemas/PolygonGeometry'
+        stateProvince:
+          type: string
+          description: "The province (swe: landskap) within which the site is situated.\
+            \ Should be derived from the given position."
+        county:
+          $ref: '#/components/schemas/county'
+        province:
+          type: string
+          description: "The province (swe: provins) within which the site is situated.\
+            \ Should be derived from the given position."
+        municipality:
+          $ref: '#/components/schemas/municipality'
+        parish:
+          type: string
+          description: The parish within which the site is situated. Should be derived
+            from the given position.
+        locationRemarks:
+          type: string
+          description: Comment (freetext) from the survey event about the site.
+          example: under water since 2005
+    LocationGeneralized:
+      required:
+      - locationID
+      type: object
+      properties:
+        locationID:
+          type: string
+          description: "A unique id-number for a place, e.g. a survey site or a subsite.\
+            \ Should be the id-number from \"Stationsregistret\" where relevant."
+        locality:
+          type: string
+          description: The name of a survey site or a subsite.
+        locationType:
+          type: string
+          description: "The type of survey site that was surveyed, e.g. square, segment,\
+            \ point site, counting zone, route etc."
+          enum:
+          - block
+          - linje
+          - linjetransekt
+          - polygon
+          - provyta
+          - punkt
+          - punktlokal
+          - ruta
+          - rutt
+          - räkningssektor
+          - räkningszon
+          - segment
+          - slinga
+          - transportsträcka
+          - ö
+        emplacement:
+          maxItems: 2
+          minItems: 1
+          description: "Information about the shape and geographic position of the\
+            \ site. It is possible to provide the geographic position of each site\
+            \ in two ways. The geographic position of a line- or polygon-shaped site\
+            \ can thereby be provided both as a point, e.g. the centroid, a corner\
+            \ or the start point (described by methodology), and as a line or polygon\
+            \ with coordinates for the full extent of the site. The geographic position\
+            \ of a point-shaped site is provided as a point."
+          oneOf:
+          - $ref: '#/components/schemas/PointGeometry'
+          - $ref: '#/components/schemas/LineGeometry'
+          - $ref: '#/components/schemas/PolygonGeometry'
+        stateProvince:
+          type: string
+          description: "The province (swe: landskap) within which the site is situated.\
+            \ Should be derived from the given position."
+        county:
+          $ref: '#/components/schemas/county'
+        province:
+          type: string
+          description: "The province (swe: provins) within which the site is situated.\
+            \ Should be derived from the given position."
+        municipality:
+          $ref: '#/components/schemas/municipality'
+        parish:
+          type: string
+          description: The parish within which the site is situated. Should be derived
+            from the given position.
+        locationRemarks:
+          type: string
+          description: Comment (freetext) from the survey event about the site.
+          example: under water since 2005
+    Methodology:
+      required:
+      - methodologyDescription
+      - methodologyLink
+      - methodologyName
+      - speciesList
+      type: object
+      properties:
+        methodologyName:
+          type: string
+          description: "The title or name of a methodology, e.g. a monitoring manual."
+        methodologyDescription:
+          type: string
+          description: "Short description of a methodology, e.g. a monitoring manual."
+        methodologyLink:
+          type: string
+          description: "Persistent link to description of a methodology, e.g. a monitoring\
+            \ manual."
+          format: uri
+        speciesList:
+          type: string
+          description: Persistent link to published species list for the dataset.
+          format: uri
+      description: "The methodology that is used for the data collection, e.g. as\
+        \ described by one or more monitoring manuals. Can contain a range of methods\
+        \ for the same and/or different parts of the data collection."
+      example:
+        methodologyLink: http://example.com/aeiou
+        methodologyDescription: methodologyDescription
+        speciesList: http://example.com/aeiou
+        methodologyName: methodologyName
+    Organisation:
+      required:
+      - organisationCode
+      type: object
+      properties:
+        organisationCode:
+          type: string
+          description: The name of an organisation.
+          example: Naturvårdsverket
+        organisationID:
+          type: string
+          description: The id-number of an organisation.
+          example: "2021001975"
+      example:
+        organisationID: "2021001975"
+        organisationCode: Naturvårdsverket
+    Taxon:
+      required:
+      - scientificName
+      - taxonID
+      - taxonRank
+      type: object
+      properties:
+        taxonID:
+          pattern: (urn:lsid:dyntaxa.se:Taxon:\S+)
+          type: string
+          description: Unique id for species or other given taxon rank according to
+            Dyntaxa.
+          format: urn
+          example: urn:lsid:dyntaxa.se:Taxon:100049
+        vernacularName:
+          type: string
+          description: "The Swedish name according to Dyntaxa for the observed organism,\
+            \ at the given taxonomic level."
+          example: Spillkråka
+        scientificName:
+          type: string
+          description: "The scientific name according to Dyntaxa for the observed\
+            \ organism, at the given taxonomic level."
+          example: Dryocopus martius
+        taxonRank:
+          type: string
+          description: The taxonomic level according to Dyntaxa at which the species
+            identification is given.
+        verbatimName:
+          type: string
+          description: "The Swedish name for the observed organism, at the given taxonomic\
+            \ level, as reported by the surveyor. Can be different from now valid\
+            \ taxonomy. (For traceability.)"
+        verbatimTaxonID:
+          type: string
+          description: The id for species or other given level of taxonomy as reported
+            by the surveyor. Can be different from now valid taxonomy. (For traceability.)
+      description: "Taxonomic information about the observation. States which species\
+        \ (or subspecies, species aggregation, genus, family etc) was observed and\
+        \ identified."
+    ExchangeObject:
+      required:
+      - beginLifespanVersion
+      - objectIdentity
+      - objectVersion
+      type: object
+      properties:
+        objectIdentity:
+          type: string
+          description: "Global unique identity of an exchange object as an UUID. (In\
+            \ this DPS the UUID refers to an Event, an Occurence and/or metadata about\
+            \ a dataset."
+          format: uuid
+        objectVersion:
+          type: integer
+          description: "States which version of the object it is, in cases where versions\
+            \ of objects are handled through version numbering."
+        beginLifespanVersion:
+          type: string
+          description: "Date and time at which this version of the spatial object\
+            \ was inserted or changed in the spatial data set. (Source: INSPIRE)"
+          format: date-time
+        endLifespanVersion:
+          type: string
+          description: "Date and time at which this version of the spatial object\
+            \ was superseded or retired in the spatial data set. (Source: INSPIRE)"
+          format: date-time
+    WeatherVariable:
+      type: object
+      properties:
+        snowCover:
+          type: string
+          description: States the snow conditions on the ground during the survey
+            event.
+          enum:
+          - barmark
+          - snötäckt mark
+          - mycket tunt snötäcke eller fläckvis snötäcke
+        sunshine:
+          $ref: '#/components/schemas/WeatherMeasuring'
+        airTemperature:
+          $ref: '#/components/schemas/WeatherMeasuring'
+        windDirectionCompass:
+          type: string
+          description: States the wind direction during the survey event as a compass
+            direction.
+          enum:
+          - nord
+          - nordost
+          - nordväst
+          - ost
+          - syd
+          - sydost
+          - sydväst
+          - väst
+        windDirectionDegrees:
+          $ref: '#/components/schemas/WeatherMeasuring'
+        windSpeed:
+          $ref: '#/components/schemas/WeatherMeasuring'
+        windStrength:
+          type: string
+          description: States the strength of the wind during the survey event.
+          enum:
+          - "vindstilla, <1 m/s"
+          - "svag vind, 1-3 m/s"
+          - "måttlig vind, 4-7 m/s"
+          - "frisk vind, 8-13 m/s"
+          - "hård vind, 14-19 m/s"
+          - "mycket hård vind, 20-24 m/s"
+          - "storm, 25-32 m/s"
+          - "orkan, ≥33 m/s"
+          - 0 Beaufort
+          - 1 Beaufort
+          - 2 Beaufort
+          - 3 Beaufort
+          - 4 Beaufort
+          - 5 Beaufort
+          - 6 Beaufort
+          - 7 Beaufort
+          - 8 Beaufort
+          - 9 Beaufort
+          - 10 Beaufort
+        precipitation:
+          type: string
+          description: States the precipitation conditions during the survey event.
+          enum:
+          - kraftigt regn
+          - kraftigt snöfall
+          - lätt regn
+          - lätt snöfall
+          - måttligt regn
+          - måttligt snöfall
+          - regnskurar
+          - uppehåll
+        sight:
+          type: string
+          description: States the visibility conditions during the survey event.
+          enum:
+          - "dimma, <1 km"
+          - "dis, 1-4 km"
+          - "god, 10-20 km"
+          - "mycket god, >20 km"
+          - "måttlig, 4-10 km"
+        cloudiness:
+          type: string
+          description: States the cloud condtions during the survey event.
+          enum:
+          - "halvklart, 3-5/8"
+          - "klart, 0/8"
+          - "molnigt, 6-7/8"
+          - "mulet, 8/8"
+          - "nästan klart, 1-2/8"
+          - "växlande, 0-8/8"
+    WeatherMeasuring:
+      required:
+      - unit
+      - weatherMeasure
+      type: object
+      properties:
+        weatherMeasure:
+          multipleOf: 0.01
+          type: number
+          description: Value for measured weather variable.
+          example: 15
+        unit:
+          type: string
+          description: Unit for a reported measurement (given in the attribute "vädermått").
+          enum:
+          - '%'
+          - cm²
+          - cm³
+          - dm²
+          - m/s
+          - m²
+          - styck
+          - °C
+          - grader
+    PointOrBoundingBoxQuery_feature_geometry:
+      type: object
+      properties:
+        type:
+          type: string
+          example: Point
+          enum:
+          - Point
+          - BoundingBox
+        coordinates:
+          type: array
+          example:
+          - 125.6
+          - 10.1
+          items:
+            multipleOf: 0.01
+            type: integer
+      example: null
+    PointOrBoundingBoxQuery_feature:
+      type: object
+      properties:
+        geometry:
+          $ref: '#/components/schemas/PointOrBoundingBoxQuery_feature_geometry'
+      example: null
+    LineOrPolygonQuery_feature_geometry:
+      type: object
+      properties:
+        type:
+          type: string
+          example: Polygon
+          enum:
+          - Polygon
+          - LineString
+        coordinates:
+          type: array
+          items:
+            type: array
+            example:
+            - - -100.44
+              - 0.2
+            - - 101.8
+              - 0.1
+            - - 101.5
+              - 1.7
+            items:
+              multipleOf: 0.01
+              type: integer
+      example: null
+    LineOrPolygonQuery_feature:
+      type: object
+      properties:
+        geometry:
+          $ref: '#/components/schemas/LineOrPolygonQuery_feature_geometry'
+      example: null
+    GeographicsFilter_area:
+      properties:
+        maxDistanceFromGeometries:
+          type: number
+          description: The offset in meters from the geometries. This variable is
+            required if geometries type is point
+          format: double
+          nullable: true
+      example: null
+    PointGeometry_geometry:
+      required:
+      - coordinates
+      - type
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - Point
+          default: Point
+        coordinates:
+          type: array
+          items:
+            multipleOf: 0.01
+            type: number
+      example: null
+    PointGeometry_properties:
+      required:
+      - dimension
+      - horizontalCoordinateSystem
+      type: object
+      properties:
+        horizontalGeometryEstimatedAccuracy:
+          multipleOf: 0.01
+          type: number
+          description: "The estimated absolute positional accuracy of the (X,Y) coordinates\
+            \ of the building geometry, in the INSPIRE official Coordinate Reference\
+            \ System. Absolute positional accuracy is defined as the mean value of\
+            \ the positional uncertainties for a set of positions where the positional\
+            \ uncertainties are defined as the distance between a measured position\
+            \ and what is considered as the corresponding true position. (Source:\
+            \ INSPIRE). The positional accuracy is applied to all points within each\
+            \ object geometry, and if there are several points within an object with\
+            \ different positional accuracies, the greatest value for positional accuracy\
+            \ within the object is applied for the whole object geometry. Positional\
+            \ accuracy is given in metres."
+        verticalGeometryEstimatedAccuracy:
+          multipleOf: 0.01
+          type: number
+          description: "The estimated absolute positional accuracy of the Z coordinates\
+            \ of the building geometry, in the INSPIRE official Coordinate Reference\
+            \ System. Absolute positional accuracy is defined as the mean value of\
+            \ the positional uncertainties for a set of positions where the positional\
+            \ uncertainties are defined as the distance between a measured position\
+            \ and what is considered as the corresponding true position. (Source:\
+            \ INSPIRE) The positional accuracy is applied to all points within each\
+            \ object geometry, and if there are several points within an object with\
+            \ different positional accuracies, the greatest value for positional accuracy\
+            \ within the object is applied for the whole object geometry. Positional\
+            \ accuracy is given in metres."
+        horizontalCoordinateSystem:
+          type: string
+          description: "Coordinate system for the (X, Y) coordinates of the geometry."
+          enum:
+          - EPSG:4326
+          - EPSG:3006
+          - EPSG:4619
+          - EPSG:3857
+          - EPSG:4258
+        verticalCoordinateSystem:
+          type: string
+          description: Coordinate system for the Z coordinates of the geometry.
+          enum:
+          - EPSG:5613
+          default: EPSG:5613
+        dimension:
+          type: number
+          enum:
+          - 2
+          - 3
+          default: 2
+      example: null
+    LineGeometry_geometry:
+      required:
+      - coordinates
+      - type
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - LineString
+          default: LineString
+        coordinates:
+          type: array
+          items:
+            type: array
+            items:
+              multipleOf: 0.01
+              type: number
+      example: null
+    PolygonGeometry_geometry:
+      required:
+      - coordinates
+      - type
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - Polygon
+          default: Polygon
+        coordinates:
+          type: array
+          items:
+            type: array
+            items:
+              type: array
+              items:
+                multipleOf: 0.01
+                type: number
+      example: null
+    PolygonGeometry_properties:
+      required:
+      - dimension
+      - horizontalCoordinateSystem
+      type: object
+      properties:
+        horizontalGeometryEstimatedAccuracy:
+          multipleOf: 0.01
+          type: number
+          description: "The estimated absolute positional accuracy of the (X,Y) coordinates\
+            \ of the building geometry, in the INSPIRE official Coordinate Reference\
+            \ System. Absolute positional accuracy is defined as the mean value of\
+            \ the positional uncertainties for a set of positions where the positional\
+            \ uncertainties are defined as the distance between a measured position\
+            \ and what is considered as the corresponding true position. (Source:\
+            \ INSPIRE). The positional accuracy is applied to all points within each\
+            \ object geometry, and if there are several points within an object with\
+            \ different positional accuracies, the greatest value for positional accuracy\
+            \ within the object is applied for the whole object geometry. Positional\
+            \ accuracy is given in metres."
+        verticalGeometryEstimatedAccuracy:
+          multipleOf: 0.01
+          type: number
+          description: "The estimated absolute positional accuracy of the Z coordinates\
+            \ of the building geometry, in the INSPIRE official Coordinate Reference\
+            \ System. Absolute positional accuracy is defined as the mean value of\
+            \ the positional uncertainties for a set of positions where the positional\
+            \ uncertainties are defined as the distance between a measured position\
+            \ and what is considered as the corresponding true position. (Source:\
+            \ INSPIRE) The positional accuracy is applied to all points within each\
+            \ object geometry, and if there are several points within an object with\
+            \ different positional accuracies, the greatest value for positional accuracy\
+            \ within the object is applied for the whole object geometry. Positional\
+            \ accuracy is given in metres."
+        horizontalCoordinateSystem:
+          type: string
+          description: "Coordinate system for the (X, Y) coordinates of the geometry."
+          enum:
+          - EPSG:4326
+          - EPSG:3006
+          - EPSG:4619
+          - EPSG:3857
+          - EPSG:4258
+        verticalCoordinateSystem:
+          type: string
+          description: Coordinate system for the Z coordinates of the geometry.
+          enum:
+          - EPSG:5613
+          default: EPSG:5613
+        dimension:
+          type: number
+          description: States whether the object geometry is described by two or three
+            dimensions.
+          enum:
+          - 2
+          - 3
+          default: 2
+      example: null
+    Event_Dataset:
+      type: object
+      properties:
+        identifier:
+          type: string
+          format: UUID
+          example: d9baea4e-2436-4481-accb-7c2fe835039e
+        title:
+          type: string
+      example: null
+  parameters:
+    skipParam:
+      name: skip
+      in: query
+      description: Start index
+      required: false
+      style: form
+      explode: true
+      schema:
+        type: integer
+        format: int32
+        nullable: true
+        default: 0
+    takeParam:
+      name: take
+      in: query
+      description: Number of items to return. 1000 items is the max to return in one
+        call.
+      required: false
+      style: form
+      explode: true
+      schema:
+        maximum: 1000
+        type: integer
+        format: int32
+        nullable: true
+        default: 100
