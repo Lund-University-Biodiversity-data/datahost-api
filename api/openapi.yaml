@@ -97,7 +97,7 @@ paths:
               parameters:
                 occurrenceId: $response.body#/event
               description: "The 'event' value returned in the response ca be used\
-                \ as the 'eventId' parameter in 'GET /events/{eventId}'."
+                \ as the 'eventID' parameter in 'GET /events/{eventID}'."
         "400":
           description: Bad Request
         "403":
@@ -121,7 +121,7 @@ paths:
         explode: false
         schema:
           type: string
-          format: uuid
+          #format: uuid
       responses:
         "200":
           description: Success
@@ -138,7 +138,7 @@ paths:
               parameters:
                 occurrenceId: $response.body#/event
               description: "The 'event' value returned in the response ca be used\
-                \ as the 'eventId' parameter in 'GET /events/{eventId}'."
+                \ as the 'eventID' parameter in 'GET /events/{eventID}'."
         "400":
           description: Bad Request
         "403":
@@ -238,7 +238,7 @@ paths:
         explode: false
         schema:
           type: string
-          format: uuid
+          #format: uuid
       responses:
         "200":
           description: Success
@@ -334,7 +334,7 @@ paths:
         "500":
           description: Internal Server Error
       x-swagger-router-controller: Event
-  /events/{eventId}:
+  /events/{eventID}:
     get:
       tags:
       - Event
@@ -342,7 +342,7 @@ paths:
       description: Get event by ID
       operationId: getEventsByID
       parameters:
-      - name: eventId
+      - name: eventID
         in: path
         description: EventId of the event to get
         required: true
@@ -350,7 +350,7 @@ paths:
         explode: false
         schema:
           type: string
-          format: uuid
+          #format: uuid
       responses:
         "200":
           description: Success
@@ -483,7 +483,7 @@ components:
             type: string
             description: A unique identity of the event where the observation were
               made.
-            format: UUID
+            #format: UUID
             example: d9baea4e-2436-4481-accb-7c2fe835039e
     Dataset:
       required:
@@ -508,7 +508,7 @@ components:
           type: string
           description: The dataset id-number within the metadata catalogue administered
             by the authority that is responsible for the information.
-          format: UUID
+          #format: UUID
         title:
           type: string
           description: Name of the dataset. Can sometimes be the same as the name
@@ -598,7 +598,7 @@ components:
           - 273998e3-3138-41eb-b740-28ee53f7e344
           items:
             type: string
-            format: UUID
+            #format: UUID
       description: Metadata about a dataset.
       example:
         identifier: identifier
@@ -1023,7 +1023,7 @@ components:
             - 273998e3-3138-41eb-b740-28ee53f7e344
             items:
               type: string
-              format: UUID
+              #format: UUID
         description: ""
     county:
       type: string
@@ -1539,7 +1539,7 @@ components:
           type: string
           description: Unique id for species or other given taxon rank according to
             Dyntaxa.
-          format: urn
+          #format: urn
           example: urn:lsid:dyntaxa.se:Taxon:100049
         vernacularName:
           type: string
@@ -1579,7 +1579,7 @@ components:
           description: "Global unique identity of an exchange object as an UUID. (In\
             \ this DPS the UUID refers to an Event, an Occurence and/or metadata about\
             \ a dataset."
-          format: uuid
+          #format: uuid
         objectVersion:
           type: integer
           description: "States which version of the object it is, in cases where versions\
@@ -1943,7 +1943,7 @@ components:
       properties:
         identifier:
           type: string
-          format: UUID
+          #format: UUID
           example: d9baea4e-2436-4481-accb-7c2fe835039e
         title:
           type: string

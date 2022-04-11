@@ -6,6 +6,8 @@ var http = require('http');
 var oas3Tools = require('oas3-tools');
 var serverPort = 8080;
 
+var dbMongo = require ('./dbmongo.js');
+
 // swaggerRouter configuration
 var options = {
     routing: {
@@ -20,5 +22,11 @@ var app = expressAppConfig.getApp();
 http.createServer(app).listen(serverPort, function () {
     console.log('Your server is listening on port %d (http://localhost:%d)', serverPort, serverPort);
     console.log('Swagger-ui is available on http://localhost:%d/docs', serverPort);
+
+    console.log('try conection');
+    dbMongo.connectToServer( function( err, client ) {
+      if (err) console.log(err);
+      console.log("connected");
+    } );
 });
 
