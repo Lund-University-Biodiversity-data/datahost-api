@@ -6,7 +6,7 @@ var dbMongo = require ('../dbmongo.js');
  * Get event by ID
  * Get event by ID
  *
- * eventId UUID EventId of the event to get
+ * eventId String EventId of the event to get
  * returns List
  **/
 exports.getEventsByID = function(eventId) {

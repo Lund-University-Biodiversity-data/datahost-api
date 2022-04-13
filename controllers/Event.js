@@ -3,8 +3,8 @@
 var utils = require('../utils/writer.js');
 var Event = require('../service/EventService');
 
-module.exports.getEventsByID = function getEventsByID (req, res, next, eventId) {
-  Event.getEventsByID(eventId)
+module.exports.getEventsByID = function getEventsByID (req, res, next, eventID) {
+  Event.getEventsByID(eventID)
     .then(function (response) {
       utils.writeJson(res, response);
     })

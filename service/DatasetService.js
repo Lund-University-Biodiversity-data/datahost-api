@@ -5,7 +5,7 @@
  * Get dataset by ID
  * Get dataset by ID
  *
- * id UUID ID of the dataset to get
+ * id String ID of the dataset to get
  * returns List
  **/
 exports.getDatasetByID = function(id) {

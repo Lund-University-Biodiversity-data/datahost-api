@@ -5,7 +5,7 @@
  * Get occurrence by ID
  * Get occurrence by ID
  *
- * occurrenceId UUID OccurrenceId of the occurrence to get
+ * occurrenceId String OccurrenceId of the occurrence to get
  * returns List
  **/
 exports.getOccurrencesByID = function(occurrenceId) {
