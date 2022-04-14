@@ -1,5 +1,7 @@
 'use strict';
 
+var dbMongo = require ('../dbmongo.js');
+
 
 /**
  * Get occurrence by ID

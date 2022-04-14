@@ -1570,7 +1570,7 @@ components:
         objectIdentity:
           type: string
           description: "Global unique identity of an exchange object as an UUID. (In\
-            \ this DPS the UUID refers to an Event, an Occurence and/or metadata about\
+            \ this DPS the UUID refers to an Event, an Occurrence and/or metadata about\
             \ a dataset."
         objectVersion:
           type: integer

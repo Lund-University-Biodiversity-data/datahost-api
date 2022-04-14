@@ -11,26 +11,18 @@ var dbMongo = require ('../dbmongo.js');
  **/
 exports.getEventsByID = function(eventId) {
 
-  console.log("ici getEventsByID");
-  console.log(eventId);
   return new Promise(function(resolve, reject) {
     var examples = {};
     //examples['application/json'] = [ "", "" ];
     if (Object.keys(examples).length > 0) {
       resolve(examples[Object.keys(examples)[0]]);
     } else {
-        console.log("avant coll getEventsByID");
-
         var collEvents = dbMongo.getCollection("Events");
-        console.log(eventId);
         collEvents.findOne({ "eventID": eventId }, (error, result) => {
           if(error) {
-            console.log("500");
             resolve(500);
               //return response.status(500).send(error);
           }
-          console.log("pas d'erreur c'est carré");
-          console.log(result);
           resolve(result);
           //response.send(result);
         });

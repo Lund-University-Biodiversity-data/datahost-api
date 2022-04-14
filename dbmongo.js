@@ -6,7 +6,7 @@ const DATABASE_NAME = "datahost";
 
 const LIMIT_MAX = 50;
 
-var database, collEvents, collOccurences;
+var database, collEvents, collOccurrences, collDatasets;
 
 var _db;
 
@@ -14,7 +14,6 @@ var _db;
 module.exports = {
 
   connectToServer: function( callback ) {
-    console.log("try connectToServer");
     MongoClient.connect(CONNECTION_URL, { useUnifiedTopology: true, useNewUrlParser: true }, (error, client) => {
 	    if(error) {
           console.log(error);
@@ -22,7 +21,8 @@ module.exports = {
 	    }
 	    database = client.db(DATABASE_NAME);
 	    collEvents = database.collection("events");
-	    collOccurences = database.collection("occurences");
+      collOccurrences = database.collection("occurrences");
+      collDatasets = database.collection("datasets");
 	    console.log("Connected to `" + DATABASE_NAME + "`!");
 
     });
@@ -33,8 +33,13 @@ module.exports = {
   },
 
   getCollection: function(name) {
+    console.log("search collection with name "+name);
   	if (name == "Events") return collEvents;
-  	else if (name == "Occurences") return collOccurences;
+    else if (name == "Occurrences") return collOccurrences;
+    else if (name == "Datasets") return collDatasets;
+    else {
+      return false;
+    }
   }
 
 
