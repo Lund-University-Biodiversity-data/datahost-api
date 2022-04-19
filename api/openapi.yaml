@@ -910,7 +910,6 @@ components:
       required:
       - eventDate
       - eventID
-      - eventType
       - locationProtected
       - surveyLocation
       allOf:
@@ -1564,7 +1563,6 @@ components:
       required:
       - beginLifespanVersion
       - objectIdentity
-      - objectVersion
       type: object
       properties:
         objectIdentity:
