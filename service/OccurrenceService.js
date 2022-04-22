@@ -13,11 +13,19 @@ var dbMongo = require ('../dbmongo.js');
 exports.getOccurrencesByID = function(occurrenceId) {
   return new Promise(function(resolve, reject) {
     var examples = {};
-    examples['application/json'] = [ "", "" ];
+    //examples['application/json'] = [ "", "" ];
     if (Object.keys(examples).length > 0) {
       resolve(examples[Object.keys(examples)[0]]);
     } else {
-      resolve();
+        var collOccurrences = dbMongo.getCollection("Occurrences");
+        collOccurrences.findOne({ "occurrenceID": occurrenceId }, (error, result) => {
+          if(error) {
+            resolve(500);
+              //return response.status(500).send(error);
+          }
+          resolve(result);
+          //response.send(result);
+        });
     }
   });
 }

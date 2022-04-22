@@ -21,7 +21,7 @@ module.exports = {
 	    }
 	    database = client.db(DATABASE_NAME);
 	    collEvents = database.collection("events");
-      collOccurrences = database.collection("occurrences");
+      collOccurrences = database.collection("records");
       collDatasets = database.collection("datasets");
 	    console.log("Connected to `" + DATABASE_NAME + "`!");
 
