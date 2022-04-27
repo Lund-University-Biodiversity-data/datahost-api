@@ -32,9 +32,17 @@ exports.getEventsByID = function(eventId) {
 
 
 
-async function getOccurrencesAsync (idsArray) {
+async function getOccurrencesFromDyntaxaIdAsync (idsArray) {
   var collOccurrences = dbMongo.getCollection("Occurrences");
   let occs = await collOccurrences.find({"taxon.dyntaxaId":{"$in":idsArray}}).toArray();
+
+  return occs;
+}
+
+
+async function getSitesFromCountiesAsync (idsArray) {
+  var collSites = dbMongo.getCollection("Sites");
+  let occs = await collSites.find({"county":{"$in":idsArray}}).toArray();
 
   return occs;
 }
@@ -60,27 +68,59 @@ exports.getEventsBySearch = function(body,skip,take) {
       if(body) {
         var collOccurrences = dbMongo.getCollection("Occurrences");
 
+        var eventIdArray=[];
+        
+
         if (body.hasOwnProperty('taxon')) {
+
           if (body.taxon.hasOwnProperty('ids')) {
-            var idsArray=Object.values(body.taxon.ids);
+            var idDyntaxaArray=Object.values(body.taxon.ids);
             var collEvents = dbMongo.getCollection("Events");
 
-            var eventIdArray=[];
-            
-            let occs = await getOccurrencesAsync (idsArray);
+            let occs = await getOccurrencesFromDyntaxaIdAsync(idDyntaxaArray);
 
             if (occs) {
               occs.forEach(function(element, index) {
                 eventIdArray.push(element.event);
               })
             }
-
-            collEvents.find({"eventID":{"$in":eventIdArray}}).toArray(function(err, result) {
-              //if (err) throw err;
-              resolve(result);
-            });
           }
         }
+
+        var siteIdArray=[];
+
+        if (body.hasOwnProperty('area')) {
+          if (body.area.hasOwnProperty('county')) {
+            var countyArray=Object.values(body.area.county);
+            let sits = await getSitesFromCountiesAsync(countyArray); 
+
+            if (sits) {
+              sits.forEach(function(element, index) {
+                siteIdArray.push(element.locationID);
+              })
+            }
+
+          }
+        }
+
+        // build the query filter
+        var query;
+
+        // with the eventIds from the taxon filter
+        if (eventIdArray.length>0) {
+          query = {"eventID":{"$in":eventIdArray}};
+        }
+
+        // and the siteIds from the county filter 
+        if (siteIdArray.length>0) {
+          query["site"]={"$in":siteIdArray};
+        }
+
+        collEvents.find(query).toArray(function(err, result) {
+          console.log(result.length+" result(s)");
+          //if (err) throw err;
+          resolve(result);
+        });
 
       }
       else {

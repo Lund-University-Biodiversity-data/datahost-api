@@ -6,7 +6,7 @@ const DATABASE_NAME = "datahost";
 
 const LIMIT_MAX = 50;
 
-var database, collEvents, collOccurrences, collDatasets;
+var database, collEvents, collOccurrences, collDatasets, collSites;
 
 var _db;
 
@@ -23,6 +23,7 @@ module.exports = {
 	    collEvents = database.collection("events");
       collOccurrences = database.collection("records");
       collDatasets = database.collection("datasets");
+      collSites = database.collection("sites");
 	    console.log("Connected to `" + DATABASE_NAME + "`!");
 
     });
@@ -33,10 +34,11 @@ module.exports = {
   },
 
   getCollection: function(name) {
-    console.log("search collection with name "+name);
+    //console.log("search collection with name "+name);
   	if (name == "Events") return collEvents;
     else if (name == "Occurrences") return collOccurrences;
     else if (name == "Datasets") return collDatasets;
+    else if (name == "Sites") return collSites;
     else {
       return false;
     }
