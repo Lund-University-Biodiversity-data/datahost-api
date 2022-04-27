@@ -31,6 +31,15 @@ exports.getEventsByID = function(eventId) {
 }
 
 
+
+async function getOccurrencesAsync (idsArray) {
+  var collOccurrences = dbMongo.getCollection("Occurrences");
+  let occs = await collOccurrences.find({"taxon.dyntaxaId":{"$in":idsArray}}).toArray();
+
+  return occs;
+}
+
+
 /**
  * Get event by search
  * Get event by search
@@ -41,13 +50,42 @@ exports.getEventsByID = function(eventId) {
  * returns List
  **/
 exports.getEventsBySearch = function(body,skip,take) {
-  return new Promise(function(resolve, reject) {
+  return new Promise(async function(resolve, reject) {
+    console.log("getEventsBySearch")
     var examples = {};
-    examples['application/json'] = [ "", "" ];
+    //examples['application/json'] = [ "", "" ];
     if (Object.keys(examples).length > 0) {
       resolve(examples[Object.keys(examples)[0]]);
     } else {
-      resolve();
+      if(body) {
+        var collOccurrences = dbMongo.getCollection("Occurrences");
+
+        if (body.hasOwnProperty('taxon')) {
+          if (body.taxon.hasOwnProperty('ids')) {
+            var idsArray=Object.values(body.taxon.ids);
+            var collEvents = dbMongo.getCollection("Events");
+
+            var eventIdArray=[];
+            
+            let occs = await getOccurrencesAsync (idsArray);
+
+            if (occs) {
+              occs.forEach(function(element, index) {
+                eventIdArray.push(element.event);
+              })
+            }
+
+            collEvents.find({"eventID":{"$in":eventIdArray}}).toArray(function(err, result) {
+              //if (err) throw err;
+              resolve(result);
+            });
+          }
+        }
+
+      }
+      else {
+        resolve();
+      }
     }
   });
 }
