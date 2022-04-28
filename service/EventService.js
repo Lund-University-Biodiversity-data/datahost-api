@@ -70,9 +70,11 @@ exports.getEventsBySearch = function(body,skip,take) {
 
         var eventIdArray=[];
         
+        // build the query filter
+        var query;
 
+        // TAXON FILTER
         if (body.hasOwnProperty('taxon')) {
-
           if (body.taxon.hasOwnProperty('ids')) {
             var idDyntaxaArray=Object.values(body.taxon.ids);
             var collEvents = dbMongo.getCollection("Events");
@@ -86,6 +88,42 @@ exports.getEventsBySearch = function(body,skip,take) {
             }
           }
         }
+
+        // with the eventIds from the taxon filter
+        if (eventIdArray.length>0) {
+          query = {"eventID":{"$in":eventIdArray}};
+        }
+
+
+
+        // DATE FILTER
+        if (body.hasOwnProperty('date')) {
+          var startDate="";
+          var endDate="";
+          if (body.date.hasOwnProperty('startDate')) {
+            //console.log(body.date.startDate);
+            startDate=body.date.startDate;
+          }
+          
+          if (body.date.hasOwnProperty('endDate')) {
+            //console.log(body.date.endDate);
+            endDate=body.date.endDate;
+          }
+          
+          if(startDate!="" && endDate!="") {
+            query["eventDate"]={"$gte":startDate, "$lte":endDate};
+          }
+          else if (startDate!="") {
+            query["eventDate"]={"$gte":startDate};
+          }
+          else if (endDate!="") {
+            query["eventDate"]={"$lte":endDate};
+          }
+
+        }
+
+
+        // GEOGRAPHIC FILTER
 
         var siteIdArray=[];
 
@@ -103,18 +141,11 @@ exports.getEventsBySearch = function(body,skip,take) {
           }
         }
 
-        // build the query filter
-        var query;
-
-        // with the eventIds from the taxon filter
-        if (eventIdArray.length>0) {
-          query = {"eventID":{"$in":eventIdArray}};
-        }
-
-        // and the siteIds from the county filter 
+        // the siteIds from the county filter 
         if (siteIdArray.length>0) {
           query["site"]={"$in":siteIdArray};
         }
+        //console.log(query);
 
         collEvents.find(query).toArray(function(err, result) {
           console.log(result.length+" result(s)");
