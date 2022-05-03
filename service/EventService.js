@@ -98,6 +98,15 @@ exports.getEventsBySearch = function(body,skip,take) {
 
         // DATE FILTER
         if (body.hasOwnProperty('date')) {
+
+          // dateFilterType
+          
+          // default : OverlappingStartDateAndEndDate
+          var dateFilterType="OverlappingStartDateAndEndDate";
+          if (body.date.hasOwnProperty('dateFilterType')) {
+            dateFilterType=body.date.dateFilterType;
+          }
+
           var startDate="";
           var endDate="";
           if (body.date.hasOwnProperty('startDate')) {
@@ -110,7 +119,7 @@ exports.getEventsBySearch = function(body,skip,take) {
             endDate=body.date.endDate;
           }
           
-          if(startDate!="" && endDate!="") {
+          /*if(startDate!="" && endDate!="") {
             query["eventDate"]={"$gte":startDate, "$lte":endDate};
           }
           else if (startDate!="") {
@@ -118,7 +127,55 @@ exports.getEventsBySearch = function(body,skip,take) {
           }
           else if (endDate!="") {
             query["eventDate"]={"$lte":endDate};
-          }
+          }*/
+          
+          switch(dateFilterType) {
+            
+            case "BetweenStartDateAndEndDate": //  => Start AND EndDate of the event must be within the specified interval
+              if (startDate!="") {
+                query["eventStartTime"]={"$gte":startDate};
+              }
+              if (endDate!="") {
+                query["eventEndTime"]={"$lte":endDate};
+              }
+              break;
+
+            case "OnlyStartDate": //  => Only StartDate of the event must be within the specified interval
+
+              if(startDate!="" && endDate!="") {
+                query["eventStartTime"]={"$gte":startDate, "$lte":endDate};
+              }
+              else if (startDate!="") {
+                query["eventStartTime"]={"$gte":startDate};
+              }
+              else if (endDate!="") {
+                query["eventStartTime"]={"$lte":endDate};
+              }
+              break;
+
+            case "OnlyEndDate": //  => Only EndDate of the event must be within the specified interval
+              if(startDate!="" && endDate!="") {
+                query["eventEndTime"]={"$gte":startDate, "$lte":endDate};
+              }
+              else if (startDate!="") {
+                query["eventEndTime"]={"$gte":startDate};
+              }
+              else if (endDate!="") {
+                query["eventEndTime"]={"$lte":endDate};
+              }
+              break;
+
+            case "OverlappingStartDateAndEndDate": // => Start OR EndDate of the event may be within the specified interval
+            default:
+              if (startDate!="") {
+                query["eventEndTime"]={"$gte":startDate};
+              }
+              if (endDate!="") {
+                query["eventStartTime"]={"$lte":endDate};
+              }
+              break;
+          } 
+
 
         }
 
@@ -145,7 +202,8 @@ exports.getEventsBySearch = function(body,skip,take) {
         if (siteIdArray.length>0) {
           query["site"]={"$in":siteIdArray};
         }
-        //console.log(query);
+        
+        console.log(query);
 
         collEvents.find(query).toArray(function(err, result) {
           console.log(result.length+" result(s)");
