@@ -710,9 +710,9 @@ components:
       description: Date filter.
     DateFilterType:
       type: string
-      description: "OverlappingStartDateAndEndDate, Start or EndDate of the event\
-        \ must be within the specified interval    \r\nBetweenStartDateAndEndDate,\
-        \ Start and EndDate of the event must be within the specified interval   \
+      description: "OverlappingStartDateAndEndDate, Start OR EndDate of the event\
+        \ may be within the specified interval    \r\nBetweenStartDateAndEndDate,\
+        \ Start AND EndDate of the event must be within the specified interval   \
         \ \r\nOnlyStartDate, Only StartDate of the event must be within the specified\
         \ interval            \r\nOnlyEndDate, Only EndDate of the event must be within\
         \ the specified interval"
@@ -771,7 +771,7 @@ components:
             - EPSG:3857
             - EPSG:4258
             default: EPSG:4326
-      additionalProperties: false
+      additionalProperties: true
       description: Geometry filter.
     PointGeometry:
       required:
@@ -1568,8 +1568,8 @@ components:
         objectIdentity:
           type: string
           description: "Global unique identity of an exchange object as an UUID. (In\
-            \ this DPS the UUID refers to an Event, an Occurrence and/or metadata about\
-            \ a dataset."
+            \ this DPS the UUID refers to an Event, an Occurrence and/or metadata\
+            \ about a dataset."
         objectVersion:
           type: integer
           description: "States which version of the object it is, in cases where versions\
@@ -1749,13 +1749,20 @@ components:
           $ref: '#/components/schemas/LineOrPolygonQuery_feature_geometry'
       example: null
     GeographicsFilter_area:
+      type: object
       properties:
+        geographicArea:
+          oneOf:
+          - $ref: '#/components/schemas/LineOrPolygonQuery'
+          - $ref: '#/components/schemas/PointOrBoundingBoxQuery'
         maxDistanceFromGeometries:
           type: number
           description: The offset in meters from the geometries. This variable is
             required if geometries type is point
           format: double
           nullable: true
+      additionalProperties: false
+      description: Geographic Area
       example: null
     PointGeometry_geometry:
       required:
