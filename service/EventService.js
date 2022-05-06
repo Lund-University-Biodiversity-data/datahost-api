@@ -268,7 +268,10 @@ exports.getEventsBySearch = function(body,skip,take) {
         }
 
         // the siteIds from the geographic filter 
-        if (siteIdArray.length>0) {
+        if (body.area.hasOwnProperty('area') && siteIdArray.length==0) {
+          query["site"]="NORESULT";
+        }
+        else if (siteIdArray.length>0) {
           query["site"]={"$in":siteIdArray};
         }
         
