@@ -736,13 +736,13 @@ components:
     PointOrBoundingBoxQuery:
       type: object
       properties:
-        feature:
-          $ref: '#/components/schemas/PointOrBoundingBoxQuery_feature'
+        featurePBB:
+          $ref: '#/components/schemas/PointOrBoundingBoxQuery_featurePBB'
     LineOrPolygonQuery:
       type: object
       properties:
-        feature:
-          $ref: '#/components/schemas/LineOrPolygonQuery_feature'
+        featureLP:
+          $ref: '#/components/schemas/LineOrPolygonQuery_featureLP'
     GeographicsFilter:
       type: object
       properties:
@@ -1694,7 +1694,7 @@ components:
           - styck
           - °C
           - grader
-    PointOrBoundingBoxQuery_feature_geometry:
+    PointOrBoundingBoxQuery_featurePBB_geometry:
       type: object
       properties:
         type:
@@ -1712,13 +1712,13 @@ components:
             multipleOf: 0.01
             type: integer
       example: null
-    PointOrBoundingBoxQuery_feature:
+    PointOrBoundingBoxQuery_featurePBB:
       type: object
       properties:
         geometry:
-          $ref: '#/components/schemas/PointOrBoundingBoxQuery_feature_geometry'
+          $ref: '#/components/schemas/PointOrBoundingBoxQuery_featurePBB_geometry'
       example: null
-    LineOrPolygonQuery_feature_geometry:
+    LineOrPolygonQuery_featureLP_geometry:
       type: object
       properties:
         type:
@@ -1742,11 +1742,11 @@ components:
               multipleOf: 0.01
               type: integer
       example: null
-    LineOrPolygonQuery_feature:
+    LineOrPolygonQuery_featureLP:
       type: object
       properties:
         geometry:
-          $ref: '#/components/schemas/LineOrPolygonQuery_feature_geometry'
+          $ref: '#/components/schemas/LineOrPolygonQuery_featureLP_geometry'
       example: null
     GeographicsFilter_area:
       type: object

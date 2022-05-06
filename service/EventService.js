@@ -2,6 +2,10 @@
 
 var dbMongo = require ('../dbmongo.js');
 
+
+var Site = require('../service/SiteService');
+var geolib = require('geolib');
+
 /**
  * Get event by ID
  * Get event by ID
@@ -93,8 +97,6 @@ exports.getEventsBySearch = function(body,skip,take) {
         if (eventIdArray.length>0) {
           query = {"eventID":{"$in":eventIdArray}};
         }
-
-
 
         // DATE FILTER
         if (body.hasOwnProperty('date')) {
@@ -194,7 +196,74 @@ exports.getEventsBySearch = function(body,skip,take) {
                 siteIdArray.push(element.locationID);
               })
             }
+          }
 
+          if (body.area.hasOwnProperty('area')) {
+            //console.log("area.area");
+
+
+            var maxDistanceFromGeometries=0;
+            if (body.area.area.hasOwnProperty('maxDistanceFromGeometries')) {
+              maxDistanceFromGeometries=body.area.area.maxDistanceFromGeometries;
+              //console.log("area.area.maxDistanceFromGeometries : "+maxDistanceFromGeometries);
+            }
+
+
+            var listSites = await Site.getAllSitesCoordinates();
+
+            if (body.area.area.hasOwnProperty('geographicArea')) {
+              //console.log("area.area.geographicArea");
+
+              if (body.area.area.geographicArea.hasOwnProperty('featurePBB')) {
+                //console.log("area.area.geographicArea.featurePBB");
+                if (body.area.area.geographicArea.featurePBB.hasOwnProperty('geometry')) {
+                  //console.log("area.area.geographicArea.featurePBB.geometry");
+
+                  if (body.area.area.geographicArea.featurePBB.geometry.hasOwnProperty('type')) {
+                    //console.log("area.area.geographicArea.featurePBB.geometry.type");
+
+                    if (body.area.area.geographicArea.featurePBB.geometry.type=="Point") {
+
+                      if (body.area.area.geographicArea.featurePBB.geometry.hasOwnProperty('coordinates')) {
+                        //console.log("area.area.geographicArea.featurePBB.geometry.coordinates");
+                        //console.log(body.area.area.geographicArea.featurePBB.geometry.coordinates);
+                        
+                        var inputBBCoord = body.area.area.geographicArea.featurePBB.geometry.coordinates;
+
+                        // COMPARE THE COORDINATE SYSTEMS ???
+
+                        listSites.forEach(function(eltSite) {
+                          //console.log(eltSite.emplacement.geometry.coordinates);
+                          var siteCoord = eltSite.emplacement.geometry.coordinates;
+
+
+                          var distance = geolib.getDistance(
+                            {latitude: inputBBCoord[0], longitude: inputBBCoord[1]}, 
+                            {latitude: siteCoord[0], longitude: siteCoord[1]}
+                          );
+                          //console.log("distance : "+distance);
+
+                          if (distance < maxDistanceFromGeometries) {
+                            //console.log("adding site "+eltSite.locationID);
+                            siteIdArray.push(eltSite.locationID);
+                          }
+                        })
+
+
+                     }
+
+
+
+                    }
+                  }
+
+                }
+              }
+            }
+
+            if (body.area.area.hasOwnProperty('maxDistanceFromGeometries')) {
+              console.log("area.area.maxDistanceFromGeometries");
+            }
           }
         }
 
