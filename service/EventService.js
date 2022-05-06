@@ -71,17 +71,17 @@ exports.getEventsBySearch = function(body,skip,take) {
     } else {
       if(body) {
         var collOccurrences = dbMongo.getCollection("Occurrences");
+        var collEvents = dbMongo.getCollection("Events");
 
         var eventIdArray=[];
         
-        // build the query filter
-        var query;
+        // build the query filter, defined as an object (and NOT an array)
+        var query = {};
 
         // TAXON FILTER
         if (body.hasOwnProperty('taxon')) {
           if (body.taxon.hasOwnProperty('ids')) {
             var idDyntaxaArray=Object.values(body.taxon.ids);
-            var collEvents = dbMongo.getCollection("Events");
 
             let occs = await getOccurrencesFromDyntaxaIdAsync(idDyntaxaArray);
 
@@ -95,7 +95,8 @@ exports.getEventsBySearch = function(body,skip,take) {
 
         // with the eventIds from the taxon filter
         if (eventIdArray.length>0) {
-          query = {"eventID":{"$in":eventIdArray}};
+          //query = {"eventID":{"$in":eventIdArray}};
+          query["eventID"]={"$in":eventIdArray};
         }
 
         // DATE FILTER
@@ -202,14 +203,13 @@ exports.getEventsBySearch = function(body,skip,take) {
             //console.log("area.area");
 
 
+            var listSites = await Site.getAllSitesCoordinates();
+
             var maxDistanceFromGeometries=0;
             if (body.area.area.hasOwnProperty('maxDistanceFromGeometries')) {
               maxDistanceFromGeometries=body.area.area.maxDistanceFromGeometries;
               //console.log("area.area.maxDistanceFromGeometries : "+maxDistanceFromGeometries);
             }
-
-
-            var listSites = await Site.getAllSitesCoordinates();
 
             if (body.area.area.hasOwnProperty('geographicArea')) {
               //console.log("area.area.geographicArea");
@@ -267,7 +267,7 @@ exports.getEventsBySearch = function(body,skip,take) {
           }
         }
 
-        // the siteIds from the county filter 
+        // the siteIds from the geographic filter 
         if (siteIdArray.length>0) {
           query["site"]={"$in":siteIdArray};
         }
