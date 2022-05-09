@@ -908,7 +908,7 @@ components:
         \ or uniform group of individuals, e.g. sex, age, behavior."
     Event:
       required:
-      - eventDate
+      - eventStartDate
       - eventID
       - locationProtected
       - surveyLocation
@@ -937,18 +937,14 @@ components:
               \ all the visits to the different subparts. EventID for a season becomes\
               \ the parentID for all the visits to all locations within the survey\
               \ programme."
-          eventDate:
+          eventStartDate:
             type: string
-            description: Date for when the survey was carried out.
-            format: date
-            example: 2021-12-07
-          eventStartTime:
-            type: string
-            description: Time for when the survey started (local time).
+            description: Date and Time for when the survey started (local time).
             format: date-time
-          eventEndTime:
+            example: 1996-05-27T03:55:00Z
+          eventEndDate:
             type: string
-            description: Time for when the survey ended (local time).
+            description: Date and Time for when the survey ended (local time).
             format: date-time
           locationProtected:
             type: boolean
