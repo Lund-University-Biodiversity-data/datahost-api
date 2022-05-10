@@ -2,9 +2,10 @@
 
 var dbMongo = require ('../dbmongo.js');
 
-
 var Site = require('../service/SiteService');
-var geolib = require('geolib');
+
+//var geolib = require('geolib');
+var turf = require('@turf/turf');
 
 /**
  * Get event by ID
@@ -226,27 +227,37 @@ exports.getEventsBySearch = function(body,skip,take) {
                           //console.log(eltSite.emplacement.geometry.coordinates);
                           var siteCoord = eltSite.emplacement.geometry.coordinates;
 
-
+                          // with turf
+                          // need to reverse latitude/longitude
+                          var distance = turf.distance(
+                            [inputBBCoord[1], inputBBCoord[0]], 
+                            [siteCoord[1], siteCoord[0]], 
+                            {units: 'meters'}
+                          );
+                          
+                          /*
+                          console.log("distance turf : "+distance);
+                          
+                          // with geolib
                           var distance = geolib.getDistance(
                             {latitude: inputBBCoord[0], longitude: inputBBCoord[1]}, 
                             {latitude: siteCoord[0], longitude: siteCoord[1]}
                           );
-                          //console.log("distance : "+distance);
+                          
+                          console.log("distance geolib : "+distance);
+                          
+                          var distance = geolib.getDistance(inputBBCoord, siteCoord);
+                          
+                          console.log("distance geolib2 : "+distance);*/
 
                           if (distance < maxDistanceFromGeometries) {
                             //console.log("adding site "+eltSite.locationID);
                             siteIdArray.push(eltSite.locationID);
                           }
                         })
-
-
-                     }
-
-
-
+                      }
                     }
                   }
-
                 }
               }
             }
