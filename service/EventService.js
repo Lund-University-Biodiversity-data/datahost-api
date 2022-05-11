@@ -203,23 +203,14 @@ exports.getEventsBySearch = function(body,skip,take) {
             }
 
             if (body.area.area.hasOwnProperty('geographicArea')) {
-              //console.log("area.area.geographicArea");
-
               if (body.area.area.geographicArea.hasOwnProperty('featurePBB')) {
-                //console.log("area.area.geographicArea.featurePBB");
                 if (body.area.area.geographicArea.featurePBB.hasOwnProperty('geometry')) {
-                  //console.log("area.area.geographicArea.featurePBB.geometry");
-
                   if (body.area.area.geographicArea.featurePBB.geometry.hasOwnProperty('type')) {
-                    //console.log("area.area.geographicArea.featurePBB.geometry.type");
+                    if (body.area.area.geographicArea.featurePBB.geometry.hasOwnProperty('coordinates')) {
 
-                    if (body.area.area.geographicArea.featurePBB.geometry.type=="Point") {
+                      var inputPBBCoord = body.area.area.geographicArea.featurePBB.geometry.coordinates;
 
-                      if (body.area.area.geographicArea.featurePBB.geometry.hasOwnProperty('coordinates')) {
-                        //console.log("area.area.geographicArea.featurePBB.geometry.coordinates");
-                        //console.log(body.area.area.geographicArea.featurePBB.geometry.coordinates);
-                        
-                        var inputBBCoord = body.area.area.geographicArea.featurePBB.geometry.coordinates;
+                      if (body.area.area.geographicArea.featurePBB.geometry.type=="Point") {
 
                         // COMPARE THE COORDINATE SYSTEMS ???
 
@@ -230,36 +221,115 @@ exports.getEventsBySearch = function(body,skip,take) {
                           // with turf
                           // need to reverse latitude/longitude
                           var distance = turf.distance(
-                            [inputBBCoord[1], inputBBCoord[0]], 
+                            [inputPBBCoord[1], inputPBBCoord[0]], 
                             [siteCoord[1], siteCoord[0]], 
                             {units: 'meters'}
                           );
-                          
-                          /*
-                          console.log("distance turf : "+distance);
-                          
-                          // with geolib
-                          var distance = geolib.getDistance(
-                            {latitude: inputBBCoord[0], longitude: inputBBCoord[1]}, 
-                            {latitude: siteCoord[0], longitude: siteCoord[1]}
-                          );
-                          
-                          console.log("distance geolib : "+distance);
-                          
-                          var distance = geolib.getDistance(inputBBCoord, siteCoord);
-                          
-                          console.log("distance geolib2 : "+distance);*/
 
                           if (distance < maxDistanceFromGeometries) {
                             //console.log("adding site "+eltSite.locationID);
                             siteIdArray.push(eltSite.locationID);
                           }
                         })
+
                       }
+                      else if (body.area.area.geographicArea.featurePBB.geometry.type=="BoundingBox") {
+
+                        var invertCoordPBB = [];
+
+                        // can get more than 2 points
+                        inputPBBCoord.forEach(function(eltPt) {
+                          invertCoordPBB.push([eltPt[1], eltPt[0]]);
+                        });
+
+                        /*
+                        var line = turf.lineString([[-74, 40], [-78, 42], [-82, 35]]);
+                        var bbox = turf.bbox(line);
+                        var bboxPolygon = turf.bboxPolygon(bbox);   
+                        */
+                        //var poly = turf.polygon([invertCoordPoly]);
+                        var line = turf.lineString(invertCoordPBB);
+                        var bbox = turf.bbox(line);
+                        var bboxPolygon = turf.bboxPolygon(bbox);  
+
+                        listSites.forEach(function(eltSite) {
+                          //console.log(eltSite.emplacement.geometry.coordinates);
+                          var siteCoord = eltSite.emplacement.geometry.coordinates;
+                          var pt = turf.point([siteCoord[1], siteCoord[0]]);
+
+                          // with turf
+                          var isInPolygon = turf.booleanPointInPolygon(pt, bboxPolygon);
+                          if (isInPolygon){
+                            console.log("in polygon BBox :"+eltSite.locationID);
+                            siteIdArray.push(eltSite.locationID);
+                          }
+                          /*
+                          if (distance < maxDistanceFromGeometries) {
+                            //console.log("adding site "+eltSite.locationID);
+                            siteIdArray.push(eltSite.locationID);
+                          }
+                          */
+                        })
+
+       
+
+                      }
+
+                      
                     }
                   }
                 }
               }
+
+
+              if (body.area.area.geographicArea.hasOwnProperty('featureLP')) {
+                if (body.area.area.geographicArea.featureLP.hasOwnProperty('geometry')) {
+                  if (body.area.area.geographicArea.featureLP.geometry.hasOwnProperty('type')) {
+                    if (body.area.area.geographicArea.featureLP.geometry.hasOwnProperty('coordinates')) {
+                      
+                      var inputLPCoord = body.area.area.geographicArea.featureLP.geometry.coordinates;
+
+                      if (body.area.area.geographicArea.featureLP.geometry.type=="Polygon") {
+
+                        var invertCoordLP = [];
+
+                        // can get more than 2 points
+                        inputLPCoord.forEach(function(eltPt) {
+                          invertCoordLP.push([eltPt[1], eltPt[0]]);
+                        });
+
+                        var line = turf.lineString(invertCoordLP);
+                        var bbox = turf.bbox(line);
+                        var bboxPolygon = turf.bboxPolygon(bbox);  
+
+                        listSites.forEach(function(eltSite) {
+                          //console.log(eltSite.emplacement.geometry.coordinates);
+                          var siteCoord = eltSite.emplacement.geometry.coordinates;
+                          var pt = turf.point([siteCoord[1], siteCoord[0]]);
+
+                          // with turf
+                          var isInPolygon = turf.booleanPointInPolygon(pt, bboxPolygon);
+                          if (isInPolygon){
+                            console.log("in polygon :"+eltSite.locationID);
+                            siteIdArray.push(eltSite.locationID);
+                          }
+                          /*
+                          if (distance < maxDistanceFromGeometries) {
+                            //console.log("adding site "+eltSite.locationID);
+                            siteIdArray.push(eltSite.locationID);
+                          }
+                          */
+                        })
+                      }
+                      else if (body.area.area.geographicArea.featureLP.geometry.type=="lineString") {
+                      }
+
+                      
+                    }
+                  }
+                }
+              }
+
             }
 
             if (body.area.area.hasOwnProperty('maxDistanceFromGeometries')) {
