@@ -3,6 +3,17 @@
 var dbMongo = require ('../dbmongo.js');
 
 
+// returns all the occurrences based on taxonID array
+exports.getOccurrencesFromDyntaxaIdAsync = async function (idsArray) {
+  var collOccurrences = dbMongo.getCollection("Occurrences");
+  let occs = await collOccurrences.find({"taxon.dyntaxaId":{"$in":idsArray}}).toArray();
+
+  return occs;
+}
+
+
+
+
 /**
  * Get occurrence by ID
  * Get occurrence by ID

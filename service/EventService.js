@@ -3,6 +3,7 @@
 var dbMongo = require ('../dbmongo.js');
 
 var Site = require('../service/SiteService');
+var Occurrence = require('../service/OccurrenceService');
 
 //var geolib = require('geolib');
 var turf = require('@turf/turf');
@@ -35,24 +36,6 @@ exports.getEventsByID = function(eventId) {
   });
 }
 
-
-
-async function getOccurrencesFromDyntaxaIdAsync (idsArray) {
-  var collOccurrences = dbMongo.getCollection("Occurrences");
-  let occs = await collOccurrences.find({"taxon.dyntaxaId":{"$in":idsArray}}).toArray();
-
-  return occs;
-}
-
-
-async function getSitesFromCountiesAsync (idsArray) {
-  var collSites = dbMongo.getCollection("Sites");
-  let occs = await collSites.find({"county":{"$in":idsArray}}).toArray();
-
-  return occs;
-}
-
-
 /**
  * Get event by search
  * Get event by search
@@ -71,7 +54,6 @@ exports.getEventsBySearch = function(body,skip,take) {
       resolve(examples[Object.keys(examples)[0]]);
     } else {
       if(body) {
-        var collOccurrences = dbMongo.getCollection("Occurrences");
         var collEvents = dbMongo.getCollection("Events");
 
         var eventIdArray=[];
@@ -84,7 +66,7 @@ exports.getEventsBySearch = function(body,skip,take) {
           if (body.taxon.hasOwnProperty('ids')) {
             var idDyntaxaArray=Object.values(body.taxon.ids);
 
-            let occs = await getOccurrencesFromDyntaxaIdAsync(idDyntaxaArray);
+            let occs = await Occurrence.getOccurrencesFromDyntaxaIdAsync(idDyntaxaArray);
 
             if (occs) {
               occs.forEach(function(element, index) {
@@ -181,7 +163,7 @@ exports.getEventsBySearch = function(body,skip,take) {
         if (body.hasOwnProperty('area')) {
           if (body.area.hasOwnProperty('county')) {
             var countyArray=Object.values(body.area.county);
-            let sits = await getSitesFromCountiesAsync(countyArray); 
+            let sits = await Site.getSitesFromCountiesAsync(countyArray); 
 
             if (sits) {
               sits.forEach(function(element, index) {
