@@ -1708,6 +1708,7 @@ components:
           items:
             multipleOf: 0.01
             type: integer
+          description: Must follow the standard coordinate system WGS84.
       example: null
     PointOrBoundingBoxQuery_featurePBB:
       type: object
@@ -1735,6 +1736,7 @@ components:
               - 0.1
             - - 101.5
               - 1.7
+            description: Must follow the standard coordinate system WGS84.
             items:
               multipleOf: 0.01
               type: integer
