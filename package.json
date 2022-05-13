@@ -16,7 +16,7 @@
     "@turf/turf": "^6.5.0",
     "connect": "^3.2.0",
     "js-yaml": "^3.3.0",
-    "mongodb": "^4.5.0",
+    "mongodb": "^4.6.0",
     "oas3-tools": "^2.2.3"
   }
 }

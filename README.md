@@ -39,14 +39,17 @@ This project leverages the mega-awesome [swagger-tools](https://github.com/apige
 
 ### local version 
 npm -v
-8.3.1
-
+8.10.0
+node -v
+v12.22.12
 
 ### additional modules required
-npm i mongodb
+npm install mongodb
 npm install @turf/turf
 
 
 
 #npm install geolib
 #https://www.npmjs.com/package/geolib
+
+
