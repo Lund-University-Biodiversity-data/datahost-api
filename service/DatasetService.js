@@ -176,7 +176,6 @@ exports.getDatasetsBySearch = function(body,skip,take) {
         var collDatasets = dbMongo.getCollection("Datasets");
         var collEvents = dbMongo.getCollection("Events");
 
-        var eventIdArray=[];
         var datasetIdArray=[];
         
         // build the query filter, defined as an object (and NOT an array)

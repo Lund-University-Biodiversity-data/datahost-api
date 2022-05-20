@@ -23,15 +23,15 @@ exports.getEventsByID = function(eventId) {
     if (Object.keys(examples).length > 0) {
       resolve(examples[Object.keys(examples)[0]]);
     } else {
-        var collEvents = dbMongo.getCollection("Events");
-        collEvents.findOne({ "eventID": eventId }, (error, result) => {
-          if(error) {
-            resolve(500);
-              //return response.status(500).send(error);
-          }
-          resolve(result);
-          //response.send(result);
-        });
+      var collEvents = dbMongo.getCollection("Events");
+      collEvents.findOne({ "eventID": eventId }, (error, result) => {
+        if(error) {
+          resolve(500);
+            //return response.status(500).send(error);
+        }
+        resolve(result);
+        //response.send(result);
+      });
     }
   });
 }
