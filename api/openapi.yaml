@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  title: SLU API-documentation Template
+  title: LU API-documentation Template
   description: Created by the DPS-group.
   contact:
     name: Mathieu Blanchet
