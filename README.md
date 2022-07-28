@@ -24,7 +24,7 @@ sudo npm install pm2 -g
 
 run one app in the background
 ```
-pm2 --name datahost-api start npm -- start
+pm2 --name datahost-api-server start npm -- start
 ```
 list processes :
 ```
