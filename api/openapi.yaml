@@ -10,7 +10,7 @@ info:
     url: https://creativecommons.org/publicdomain/zero/1.0/legalcode
   version: 1.0.0
 servers:
-- url: http://canmove-dev.ekol.lu.se:8088/
+- url: http://canmove-dev.ekol.lu.se:8088
 paths:
   /occurrences:
     post:
