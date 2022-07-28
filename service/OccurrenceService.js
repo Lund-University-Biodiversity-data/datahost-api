@@ -77,9 +77,9 @@ exports.getOccurrencesBySearch = function(body,skip,take) {
         }
 
         // DATE FILTER
-        if (body.hasOwnProperty('date')) {
+        if (body.hasOwnProperty('datum')) {
 
-          var queryDate=Event.getDateFilterFromBody(body);
+          var queryDate=Event.getDatumFilterFromBody(body);
 
           if (queryDate["eventStartDate"]!="") queryEvent["eventStartDate"]=queryDate["eventStartDate"];
           if (queryDate["eventEndDate"]!="") queryEvent["eventEndDate"]=queryDate["eventEndDate"];

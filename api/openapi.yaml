@@ -51,10 +51,10 @@ paths:
             schema:
               $ref: '#/components/schemas/OccurrenceFilter'
             example:
-              date:
+              datum:
                 startDate: string
                 endDate: string
-                dateFilterType: BetweenStartDateAndEndDate
+                datumFilterType: BetweenStartDateAndEndDate
               taxon:
                 ids:
                 - 0
@@ -184,10 +184,10 @@ paths:
             schema:
               $ref: '#/components/schemas/DatasetFilter'
             example:
-              date:
+              datum:
                 startDate: string
                 endDate: string
-                dateFilterType: BetweenStartDateAndEndDate
+                datumFilterType: BetweenStartDateAndEndDate
               taxon:
                 ids:
                 - 0
@@ -293,10 +293,10 @@ paths:
             schema:
               $ref: '#/components/schemas/EventsFilter'
             example:
-              date:
+              datum:
                 startDate: string
                 endDate: string
-                dateFilterType: BetweenStartDateAndEndDate
+                datumFilterType: BetweenStartDateAndEndDate
               taxon:
                 ids:
                 - 0
@@ -631,8 +631,8 @@ components:
     OccurrenceFilter:
       type: object
       properties:
-        date:
-          $ref: '#/components/schemas/DateFilter'
+        datum:
+          $ref: '#/components/schemas/DatumFilter'
         taxon:
           $ref: '#/components/schemas/TaxonFilter'
         area:
@@ -642,8 +642,8 @@ components:
     DatasetFilter:
       type: object
       properties:
-        date:
-          $ref: '#/components/schemas/DateFilter'
+        datum:
+          $ref: '#/components/schemas/DatumFilter'
         taxon:
           $ref: '#/components/schemas/TaxonFilter'
         area:
@@ -653,8 +653,8 @@ components:
     EventsFilter:
       type: object
       properties:
-        date:
-          $ref: '#/components/schemas/DateFilter'
+        datum:
+          $ref: '#/components/schemas/DatumFilter'
         taxon:
           $ref: '#/components/schemas/TaxonFilter'
         area:
@@ -689,7 +689,7 @@ components:
         rightsHolder:
           type: string
           description: States who the creator of the attachment is.
-    DateFilter:
+    DatumFilter:
       type: object
       properties:
         startDate:
@@ -704,11 +704,11 @@ components:
             \ is specified, GMT+1 (CEST) is assumed"
           format: date-time
           nullable: true
-        dateFilterType:
-          $ref: '#/components/schemas/DateFilterType'
+        datumFilterType:
+          $ref: '#/components/schemas/DatumFilterType'
       additionalProperties: false
       description: Date filter.
-    DateFilterType:
+    DatumFilterType:
       type: string
       description: "OverlappingStartDateAndEndDate, Start OR EndDate of the event\
         \ may be within the specified interval    \r\nBetweenStartDateAndEndDate,\
@@ -908,9 +908,9 @@ components:
         \ or uniform group of individuals, e.g. sex, age, behavior."
     Event:
       required:
-      - eventStartDate
       - eventEndDate
       - eventID
+      - eventStartDate
       - locationProtected
       - surveyLocation
       allOf:
@@ -1702,13 +1702,13 @@ components:
           - BoundingBox
         coordinates:
           type: array
+          description: Must follow the standard coordinate system WGS84.
           example:
           - 125.6
           - 10.1
           items:
             multipleOf: 0.01
             type: integer
-          description: Must follow the standard coordinate system WGS84.
       example: null
     PointOrBoundingBoxQuery_featurePBB:
       type: object
@@ -1729,6 +1729,7 @@ components:
           type: array
           items:
             type: array
+            description: Must follow the standard coordinate system WGS84.
             example:
             - - -100.44
               - 0.2
@@ -1736,7 +1737,6 @@ components:
               - 0.1
             - - 101.5
               - 1.7
-            description: Must follow the standard coordinate system WGS84.
             items:
               multipleOf: 0.01
               type: integer

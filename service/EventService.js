@@ -37,31 +37,31 @@ exports.getEventsByID = function(eventId) {
 }
 
 
-exports.getDateFilterFromBody = function(body) {
+exports.getDatumFilterFromBody = function(body) {
 
   var query = [];
 
-  // dateFilterType
+  // datumFilterType
   
   // default : OverlappingStartDateAndEndDate
-  var dateFilterType="OverlappingStartDateAndEndDate";
-  if (body.date.hasOwnProperty('dateFilterType')) {
-    dateFilterType=body.date.dateFilterType;
+  var datumFilterType="OverlappingStartDateAndEndDate";
+  if (body.datum.hasOwnProperty('datumFilterType')) {
+    datumFilterType=body.datum.datumFilterType;
   }
 
   var startDate="";
   var endDate="";
-  if (body.date.hasOwnProperty('startDate')) {
-    //console.log(body.date.startDate);
-    startDate=body.date.startDate;
+  if (body.datum.hasOwnProperty('startDate')) {
+    //console.log(body.datum.startDate);
+    startDate=body.datum.startDate;
   }
   
-  if (body.date.hasOwnProperty('endDate')) {
-    //console.log(body.date.endDate);
-    endDate=body.date.endDate;
+  if (body.datum.hasOwnProperty('endDate')) {
+    //console.log(body.datum.endDate);
+    endDate=body.datum.endDate;
   }
   
-  switch(dateFilterType) {
+  switch(datumFilterType) {
     
     case "BetweenStartDateAndEndDate": //  => Start AND EndDate of the event must be within the specified interval
       if (startDate!="") {
@@ -326,9 +326,9 @@ exports.getEventsBySearch = function(body,skip,take) {
         }
 
         // DATE FILTER
-        if (body.hasOwnProperty('date')) {
+        if (body.hasOwnProperty('datum')) {
 
-          var queryDate=exports.getDateFilterFromBody(body);
+          var queryDate=exports.getDatumFilterFromBody(body);
 
           if (queryDate["eventStartDate"]!="") query["eventStartDate"]=queryDate["eventStartDate"];
           if (queryDate["eventEndDate"]!="") query["eventEndDate"]=queryDate["eventEndDate"];
