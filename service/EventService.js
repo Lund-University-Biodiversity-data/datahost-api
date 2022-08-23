@@ -313,10 +313,14 @@ exports.getEventsBySearch = function(body,skip,take) {
 
             let occs = await Occurrence.getOccurrencesFromDyntaxaIdAsync(idDyntaxaArray);
 
-            if (occs) {
+            if (occs && occs.length>0) {
               occs.forEach(function(element, index) {
                 eventIdArray.push(element.event);
               })
+            }
+            // if no occurrence returned, no event. It has to be specified because the filter will be skipped instead
+            else {
+              eventIdArray.push("NOOCCURRENCEWITHINPUTTAXON");
             }
           }
         }

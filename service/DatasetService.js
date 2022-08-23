@@ -182,6 +182,8 @@ exports.getDatasetsBySearch = function(body,skip,take) {
         var queryDataset = {};
         var queryEvent = {};
 
+        var noDataset=false;
+
         // TAXON FILTER
         if (body.hasOwnProperty('taxon')) {
           if (body.taxon.hasOwnProperty('ids')) {
@@ -189,10 +191,14 @@ exports.getDatasetsBySearch = function(body,skip,take) {
 
             let occs = await Occurrence.getOccurrencesFromDyntaxaIdAsync(idDyntaxaArray);
 
-            if (occs) {
+            if (occs && occs.length>0) {
               occs.forEach(function(element, index) {
                 if (!datasetIdArray.includes(element.datasetID)) datasetIdArray.push(element.datasetID);
               })
+            }
+            // if no occurrence returned, no event. It has to be specified because the filter will be skipped instead
+            else {
+              noDataset=true;
             }
           }
         }
@@ -233,13 +239,18 @@ exports.getDatasetsBySearch = function(body,skip,take) {
 
         // with the datasetIds 
         if (datasetIdArray.length>0) {
-          queryDataset["identifier"]={"$in":datasetIdArray};
+          // if the taxon filter was specified and did not rueturn anything => no result
+          if (noDataset) {
+            queryDataset["identifier"]={"$in":"NOOCCURRENCEWITHINPUTTAXON"};
+          } 
+          else          
+            queryDataset["identifier"]={"$in":datasetIdArray};
 
           console.log("queryDataset:");
           console.log(queryDataset);
 
           collDatasets.find(queryDataset).toArray(function(err, result) {
-            console.log(result.length+" result(s)");
+            console.log((typeof result !== 'undefined' ? result.length : 0)+" result(s)");
             //if (err) throw err;
             resolve(result);
           });
