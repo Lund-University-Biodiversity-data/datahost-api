@@ -55,4 +55,13 @@ npm install @turf/turf
 
 
 
+### for the species script ###
 
+create folder public/speciesFiles
+* Requirements
+npm install https
+npm install fs
+
+
+* Run to create the public json species files in public/speciesFiles
+npm run species
