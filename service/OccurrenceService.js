@@ -35,6 +35,8 @@ exports.getOccurrencesFromDyntaxaIdAsync = async function (idsArray) {
   //console.log("list species final :");
   //console.log(listTaxonIncludingHierarchy);
 
+  console.log(idsArray.length+" in idsArray => "+listTaxonIncludingHierarchy.length+" in the end including hierarchy");
+
   var collOccurrences = dbMongo.getCollection("Occurrences");
   let occs = await collOccurrences.find({"taxon.dyntaxaId":{"$in":listTaxonIncludingHierarchy}}).toArray();
 
