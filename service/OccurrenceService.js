@@ -3,11 +3,40 @@
 var dbMongo = require ('../dbmongo.js');
 
 var Event = require('../service/EventService');
+var Species = require('../service/SpeciesService');
 
 // returns all the occurrences based on taxonID array
+// includes all the speciesHierarchy
 exports.getOccurrencesFromDyntaxaIdAsync = async function (idsArray) {
+
+  const listTaxonIncludingHierarchy =[];
+
+  const tableTaxonHierarchy = Species.getSpeciesHierarchy();
+
+  idsArray.forEach((element) => {
+    if (element!="None selected") {
+      // check if this dyntaxaId has childdrenIds to add
+      if (tableTaxonHierarchy[element] !== undefined) {
+        //console.log(element+ " has children ! => "+tableTaxonHierarchy[element].length);
+        tableTaxonHierarchy[element].forEach((child) => {
+          if (!listTaxonIncludingHierarchy.includes(child)) {
+            listTaxonIncludingHierarchy.push(parseInt(child));
+          }
+          else {
+            //console.log("child "+child+" already in listTaxonIncludingHierarchy");
+          }
+        });
+
+      }
+      listTaxonIncludingHierarchy.push(element);
+    }
+  });
+
+  //console.log("list species final :");
+  //console.log(listTaxonIncludingHierarchy);
+
   var collOccurrences = dbMongo.getCollection("Occurrences");
-  let occs = await collOccurrences.find({"taxon.dyntaxaId":{"$in":idsArray}}).toArray();
+  let occs = await collOccurrences.find({"taxon.dyntaxaId":{"$in":listTaxonIncludingHierarchy}}).toArray();
 
   return occs;
 }

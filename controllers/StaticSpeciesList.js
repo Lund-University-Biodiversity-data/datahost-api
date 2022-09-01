@@ -4,9 +4,6 @@ var utils = require('../utils/writer.js');
 var fs = require('fs');
 
 module.exports.getSpeciesList = function getSpeciesList (req, res, next, id) {
-  console.log("yo");
-  console.log(__dirname);
-  console.log(req.url);
 
   fs.readFile(__dirname + "/../public/speciesFiles/species.json",  function (err,data) {
     if (err) {
@@ -19,11 +16,8 @@ module.exports.getSpeciesList = function getSpeciesList (req, res, next, id) {
   });
 };
 
-
+/*
 module.exports.getSpeciesHierarchy = function getSpeciesHierarchy (req, res, next, id) {
-  console.log("yo");
-  console.log(__dirname);
-  console.log(req.url);
 
   fs.readFile(__dirname + "/../public/speciesFiles/speciesHierarchy.json",  function (err,data) {
     if (err) {
@@ -34,4 +28,6 @@ module.exports.getSpeciesHierarchy = function getSpeciesHierarchy (req, res, nex
     res.writeHead(200);
     res.end(data);
   });
+  
 };
+*/

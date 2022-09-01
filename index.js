@@ -8,6 +8,8 @@ var serverPort = 8088;
 
 var dbMongo = require ('./dbmongo.js');
 
+
+
 // swaggerRouter configuration
 var options = {
     routing: {
@@ -17,6 +19,22 @@ var options = {
 
 var expressAppConfig = oas3Tools.expressAppConfig(path.join(__dirname, 'api/openapi.yaml'), options);
 var app = expressAppConfig.getApp();
+
+/*
+var config = require ('./config/config.js');
+var fs = require ('fs');
+
+// get the hierarchyList
+const speciesHierarchyFilePath = config.speciesHierarchyFilePath;
+const tableTaxonHierarchy={};
+
+let rawdataSpeciesHierarchy = fs.readFileSync(speciesHierarchyFilePath);
+let speciesHierarchyList = JSON.parse(rawdataSpeciesHierarchy);
+Object.entries(speciesHierarchyList).forEach(([key, val]) => {
+  tableTaxonHierarchy[key]=val;
+});
+console.log(Object.keys(tableTaxonHierarchy).length+ " element(s) in tableTaxonHierarchy");
+*/
 
 // Initialize the Swagger middleware
 http.createServer(app).listen(serverPort, function () {
