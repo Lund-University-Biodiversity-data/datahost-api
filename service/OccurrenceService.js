@@ -103,7 +103,35 @@ exports.getOccurrencesBySearch = function(body,skip,take) {
         // TAXON FILTER
         if (body.hasOwnProperty('taxon')) {
           if (body.taxon.hasOwnProperty('ids')) {
-            queryOccurrence["taxon.dyntaxaId"]={"$in":body.taxon.ids};
+
+            const listTaxonIncludingHierarchy =[];
+            const tableTaxonHierarchy = Species.getSpeciesHierarchy();
+
+            body.taxon.ids.forEach((element) => {
+              if (element!="None selected") {
+                // check if this dyntaxaId has childdrenIds to add
+                if (tableTaxonHierarchy[element] !== undefined) {
+                  //console.log(element+ " has children ! => "+tableTaxonHierarchy[element].length);
+                  tableTaxonHierarchy[element].forEach((child) => {
+                    if (!listTaxonIncludingHierarchy.includes(child)) {
+                      listTaxonIncludingHierarchy.push(parseInt(child));
+                    }
+                    else {
+                      console.log("child "+child+" already in listTaxonIncludingHierarchy");
+                    }
+                  });
+                }
+                listTaxonIncludingHierarchy.push(element);
+              }
+            });
+
+            //console.log("list species final :");
+            //console.log(listTaxonIncludingHierarchy);
+
+            console.log(body.taxon.ids.length+" in idsArray => "+listTaxonIncludingHierarchy.length+" in the end including hierarchy");
+
+            //queryOccurrence["taxon.dyntaxaId"]={"$in":body.taxon.ids};
+            queryOccurrence["taxon.dyntaxaId"]={"$in":listTaxonIncludingHierarchy};
           }
         }
 
