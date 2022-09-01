@@ -16,7 +16,7 @@ module.exports.getSpeciesList = function getSpeciesList (req, res, next, id) {
   });
 };
 
-/*
+
 module.exports.getSpeciesHierarchy = function getSpeciesHierarchy (req, res, next, id) {
 
   fs.readFile(__dirname + "/../public/speciesFiles/speciesHierarchy.json",  function (err,data) {
@@ -30,4 +30,3 @@ module.exports.getSpeciesHierarchy = function getSpeciesHierarchy (req, res, nex
   });
   
 };
-*/
