@@ -208,8 +208,9 @@ exports.getDatasetsBySearch = function(body,skip,take) {
 
           var queryDate=Event.getDatumFilterFromBody(body);
 
-          if (queryDate["eventStartDate"]!="") queryEvent["eventStartDate"]=queryDate["eventStartDate"];
-          if (queryDate["eventEndDate"]!="") queryEvent["eventEndDate"]=queryDate["eventEndDate"];
+          if (typeof queryDate["eventStartDate"] !== 'undefined' && queryDate["eventStartDate"]!="" && queryDate["eventStartDate"] !== null) queryEvent["eventStartDate"]=queryDate["eventStartDate"];
+          if (typeof queryDate["eventEndDate"] !== 'undefined' && queryDate["eventEndDate"]!="" && queryDate["eventEndDate"] !== null) queryEvent["eventEndDate"]=queryDate["eventEndDate"];
+
 
         }
 
