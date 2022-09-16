@@ -487,7 +487,7 @@ components:
             - cm²
             - cm³
             - dm²
-            - kompassgrader
+            - grader
             - m/s
             - m²
             - styck
@@ -562,12 +562,16 @@ components:
             Can sometimes be the same as the name of the dataset.
           example: Svensk Fågeltaxering
         assigner:
+          description: "The organisation that orders the data collection."
           $ref: '#/components/schemas/Organisation'
         creator:
+          description: "The organisation responsible for the data collection."
           $ref: '#/components/schemas/Organisation'
         ownerinstitutionCode:
+          description: "The organisation that is responsible for the information in the dataset."
           $ref: '#/components/schemas/Organisation'
         publisher:
+          description: "The organisation that receives the dataset from the data provider. Responsible for making the dataset accessible. (Also corresponding to: data host)"
           $ref: '#/components/schemas/Organisation'
         dataStewardship:
           type: string
