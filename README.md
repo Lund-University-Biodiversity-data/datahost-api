@@ -55,6 +55,11 @@ npm install @turf/turf
 
 
 
+## for csv
+npm install flat
+npm install json2csv
+
+
 ### for the species script ###
 
 create folder public/speciesFiles

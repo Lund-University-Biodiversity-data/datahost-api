@@ -8,54 +8,10 @@ info:
   license:
     name: CC0 1.0 universell (only text information)
     url: https://creativecommons.org/publicdomain/zero/1.0/legalcode
-  version: 1.0.0
+  version: 1.0.4
 servers:
 - url: http://canmove-dev.ekol.lu.se:8088
 paths:
-
-  /speciesList:
-    get:
-      tags: 
-        - SpeciesList
-      summary: Displays static page of the speciesList available from our datasets and dyntaxa API.
-      description: Displays static page of the speciesList available from our datasets and dyntaxa API
-      operationId: getSpeciesList
-      responses:
-        '200':
-          description: Successfully loaded page with speciesList.
-          content:
-            text/html:   # Add the media type here
-              schema:
-                type: string
-        "400":
-          description: Bad Request
-        "403":
-          description: Forbidden
-        "500":
-          description: Internal Server Error
-      x-swagger-router-controller: StaticSpeciesList
-  /speciesHierarchy:
-    get:
-      tags: 
-        - SpeciesHierarchy
-      summary: Displays static page of the speciesHierarchy available from our datasets and dyntaxa API.
-      description: Displays static page of the speciesHierarchy available from our datasets and dyntaxa API
-      operationId: getSpeciesHierarchy
-      responses:
-        '200':
-          description: Successfully loaded page with speciesHierarchy.
-          content:
-            text/html:   # Add the media type here
-              schema:
-                type: string
-        "400":
-          description: Bad Request
-        "403":
-          description: Forbidden
-        "500":
-          description: Internal Server Error
-      x-swagger-router-controller: StaticSpeciesList
-
   /occurrences:
     post:
       tags:
@@ -95,6 +51,7 @@ paths:
             schema:
               $ref: '#/components/schemas/OccurrenceFilter'
             example:
+              exportMode: json
               datum:
                 startDate: string
                 endDate: string
@@ -129,6 +86,12 @@ paths:
                 items:
                   $ref: '#/components/schemas/Occurrence'
                 x-content-type: application/json
+            text/csv:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Occurrence'
+                x-content-type: text/csv
           links:
             GetOccurrenceByID:
               operationId: getOccurrencesByID
@@ -228,6 +191,7 @@ paths:
             schema:
               $ref: '#/components/schemas/DatasetFilter'
             example:
+              exportMode: json
               datum:
                 startDate: string
                 endDate: string
@@ -337,6 +301,7 @@ paths:
             schema:
               $ref: '#/components/schemas/EventsFilter'
             example:
+              exportMode: json
               datum:
                 startDate: string
                 endDate: string
@@ -409,6 +374,51 @@ paths:
         "500":
           description: Internal Server Error
       x-swagger-router-controller: Event
+
+  /speciesList:
+    get:
+      tags: 
+        - SpeciesList
+      summary: Displays static page of the speciesList available from our datasets and dyntaxa API.
+      description: Displays static page of the speciesList available from our datasets and dyntaxa API
+      operationId: getSpeciesList
+      responses:
+        '200':
+          description: Successfully loaded page with speciesList.
+          content:
+            text/html:   # Add the media type here
+              schema:
+                type: string
+        "400":
+          description: Bad Request
+        "403":
+          description: Forbidden
+        "500":
+          description: Internal Server Error
+      x-swagger-router-controller: StaticSpeciesList
+  /speciesHierarchy:
+    get:
+      tags: 
+        - SpeciesHierarchy
+      summary: Displays static page of the speciesHierarchy available from our datasets and dyntaxa API.
+      description: Displays static page of the speciesHierarchy available from our datasets and dyntaxa API
+      operationId: getSpeciesHierarchy
+      responses:
+        '200':
+          description: Successfully loaded page with speciesHierarchy.
+          content:
+            text/html:   # Add the media type here
+              schema:
+                type: string
+        "400":
+          description: Bad Request
+        "403":
+          description: Forbidden
+        "500":
+          description: Internal Server Error
+      x-swagger-router-controller: StaticSpeciesList
+
+
 components:
   schemas:
     Occurrence:
@@ -679,6 +689,8 @@ components:
     OccurrenceFilter:
       type: object
       properties:
+        exportMode:
+          $ref: '#/components/schemas/exportMode'
         datum:
           $ref: '#/components/schemas/DatumFilter'
         taxon:
@@ -690,6 +702,8 @@ components:
     DatasetFilter:
       type: object
       properties:
+        exportMode:
+          $ref: '#/components/schemas/exportMode'
         datum:
           $ref: '#/components/schemas/DatumFilter'
         taxon:
@@ -701,6 +715,8 @@ components:
     EventsFilter:
       type: object
       properties:
+        exportMode:
+          $ref: '#/components/schemas/exportMode'
         datum:
           $ref: '#/components/schemas/DatumFilter'
         taxon:
@@ -1604,6 +1620,13 @@ components:
       description: "Taxonomic information about the observation. States which species\
         \ (or subspecies, species aggregation, genus, family etc) was observed and\
         \ identified."
+    exportMode:
+      type: string
+      description: "json or csv"
+      enum:
+      - json
+      - csv
+      default: json
     ExchangeObject:
       required:
       - beginLifespanVersion

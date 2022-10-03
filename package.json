@@ -16,7 +16,9 @@
   "dependencies": {
     "@turf/turf": "^6.5.0",
     "connect": "^3.2.0",
+    "flat": "^5.0.2",
     "js-yaml": "^3.3.0",
+    "json2csv": "^5.0.7",
     "mongodb": "^4.6.0",
     "oas3-tools": "^2.2.3"
   }
