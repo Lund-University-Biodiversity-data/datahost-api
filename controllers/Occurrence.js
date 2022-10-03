@@ -3,7 +3,6 @@
 var utils = require('../utils/writer.js');
 var Occurrence = require('../service/OccurrenceService');
 
-
 const { Parser } = require("json2csv");
 const flatten = require("flat");
 
@@ -40,7 +39,7 @@ module.exports.getOccurrencesBySearch = function getOccurrencesBySearch (req, re
 
 
         res.header('Content-Type', 'text/csv');
-        res.attachment("fileName.csv");
+        res.attachment("tempOcurrence.csv");
         return res.send(csv);        
 
 
@@ -50,8 +49,6 @@ module.exports.getOccurrencesBySearch = function getOccurrencesBySearch (req, re
       }
     })
     .catch(function (response) {
-      console.log(response);
-
       utils.writeJson(res, response);
     });
 };
