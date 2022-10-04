@@ -360,6 +360,11 @@ exports.getEventsBySearch = function(body,skip,take) {
           query["site"]={"$in":siteIdArray};
         }
         
+        // set the datasetList filter
+        if (body.hasOwnProperty('datasetList')) {
+          query["datasetID"]={"$in":body.datasetList};
+        }
+
         console.log(query);
 
         collEvents.find(query).toArray(function(err, result) {

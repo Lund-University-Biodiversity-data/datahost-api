@@ -179,10 +179,15 @@ exports.getOccurrencesBySearch = function(body,skip,take) {
           queryOccurrence["event"]={"$in":eventIdArray};
         }
 
+        // set the datasetList filter
+        if (body.hasOwnProperty('datasetList')) {
+          queryOccurrence["datasetID"]={"$in":body.datasetList};
+        }
+
         //console.log("queryOccurrence:");
         //console.log(queryOccurrence);
-        
-        if (queryOccurrence.hasOwnProperty('event') || queryOccurrence.hasOwnProperty('taxon.dyntaxaId')) {
+
+        if (queryOccurrence.hasOwnProperty('event') || queryOccurrence.hasOwnProperty('taxon.dyntaxaId') || queryOccurrence.hasOwnProperty('datasetID')) {
 
           collOccurrences.find(queryOccurrence).toArray(function(err, result) {
             console.log(result.length+" result(s)");

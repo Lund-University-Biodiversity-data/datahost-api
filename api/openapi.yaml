@@ -52,6 +52,9 @@ paths:
               $ref: '#/components/schemas/OccurrenceFilter'
             example:
               exportMode: json
+              datasetList:
+              - - - hjkhk5-hg454-f54f53-f55f4
+                  - hjkhk5-hg454-f54f53-f55f4
               datum:
                 startDate: string
                 endDate: string
@@ -192,6 +195,9 @@ paths:
               $ref: '#/components/schemas/DatasetFilter'
             example:
               exportMode: json
+              datasetList:
+              - - - hjkhk5-hg454-f54f53-f55f4
+                  - hjkhk5-hg454-f54f53-f55f4
               datum:
                 startDate: string
                 endDate: string
@@ -302,6 +308,9 @@ paths:
               $ref: '#/components/schemas/EventsFilter'
             example:
               exportMode: json
+              datasetList:
+              - - - hjkhk5-hg454-f54f53-f55f4
+                  - hjkhk5-hg454-f54f53-f55f4
               datum:
                 startDate: string
                 endDate: string
@@ -374,21 +383,23 @@ paths:
         "500":
           description: Internal Server Error
       x-swagger-router-controller: Event
-
   /speciesList:
     get:
-      tags: 
-        - SpeciesList
-      summary: Displays static page of the speciesList available from our datasets and dyntaxa API.
-      description: Displays static page of the speciesList available from our datasets and dyntaxa API
+      tags:
+      - SpeciesList
+      summary: Displays static page of the speciesList available from our datasets
+        and dyntaxa API.
+      description: Displays static page of the speciesList available from our datasets
+        and dyntaxa API
       operationId: getSpeciesList
       responses:
-        '200':
+        "200":
           description: Successfully loaded page with speciesList.
           content:
-            text/html:   # Add the media type here
+            text/html:
               schema:
                 type: string
+                x-content-type: text/html
         "400":
           description: Bad Request
         "403":
@@ -398,18 +409,21 @@ paths:
       x-swagger-router-controller: StaticSpeciesList
   /speciesHierarchy:
     get:
-      tags: 
-        - SpeciesHierarchy
-      summary: Displays static page of the speciesHierarchy available from our datasets and dyntaxa API.
-      description: Displays static page of the speciesHierarchy available from our datasets and dyntaxa API
+      tags:
+      - SpeciesHierarchy
+      summary: Displays static page of the speciesHierarchy available from our datasets
+        and dyntaxa API.
+      description: Displays static page of the speciesHierarchy available from our
+        datasets and dyntaxa API
       operationId: getSpeciesHierarchy
       responses:
-        '200':
+        "200":
           description: Successfully loaded page with speciesHierarchy.
           content:
-            text/html:   # Add the media type here
+            text/html:
               schema:
                 type: string
+                x-content-type: text/html
         "400":
           description: Bad Request
         "403":
@@ -417,8 +431,6 @@ paths:
         "500":
           description: Internal Server Error
       x-swagger-router-controller: StaticSpeciesList
-
-
 components:
   schemas:
     Occurrence:
@@ -572,16 +584,12 @@ components:
             Can sometimes be the same as the name of the dataset.
           example: Svensk Fågeltaxering
         assigner:
-          description: "The organisation that orders the data collection."
           $ref: '#/components/schemas/Organisation'
         creator:
-          description: "The organisation responsible for the data collection."
           $ref: '#/components/schemas/Organisation'
         ownerinstitutionCode:
-          description: "The organisation that is responsible for the information in the dataset."
           $ref: '#/components/schemas/Organisation'
         publisher:
-          description: "The organisation that receives the dataset from the data provider. Responsible for making the dataset accessible. (Also corresponding to: data host)"
           $ref: '#/components/schemas/Organisation'
         dataStewardship:
           type: string
@@ -654,7 +662,6 @@ components:
       description: Metadata about a dataset.
       example:
         identifier: identifier
-        creator: null
         metadatalanguage: Engelska
         purpose: nationell miljöövervakning
         endDate: 2000-01-23
@@ -662,12 +669,10 @@ components:
           organisationID: "2021001975"
           organisationCode: Naturvårdsverket
         description: description
-        ownerinstitutionCode: null
         language: Svenska
         title: "Svensk Fågeltaxering: Standardrutterna"
         dataStewardship: "Datavärdskap Naturdata: Fåglar och fjärilar"
         projectCode: Svensk Fågeltaxering
-        publisher: null
         accessRights: publik
         spatial: Sverige
         projectID: projectID
@@ -691,6 +696,8 @@ components:
       properties:
         exportMode:
           $ref: '#/components/schemas/exportMode'
+        datasetList:
+          $ref: '#/components/schemas/datasetList'
         datum:
           $ref: '#/components/schemas/DatumFilter'
         taxon:
@@ -717,6 +724,8 @@ components:
       properties:
         exportMode:
           $ref: '#/components/schemas/exportMode'
+        datasetList:
+          $ref: '#/components/schemas/datasetList'
         datum:
           $ref: '#/components/schemas/DatumFilter'
         taxon:
@@ -1622,11 +1631,19 @@ components:
         \ identified."
     exportMode:
       type: string
-      description: "json or csv"
+      description: json or csv
       enum:
       - json
       - csv
       default: json
+    datasetList:
+      type: array
+      description: List of datasetIds
+      example:
+      - 5435432-543543-5325-5432
+      - f5443-f5f53-f53f4-f54f55
+      items:
+        type: string
     ExchangeObject:
       required:
       - beginLifespanVersion
@@ -1780,13 +1797,11 @@ components:
           items:
             multipleOf: 0.01
             type: integer
-      example: null
     PointOrBoundingBoxQuery_featurePBB:
       type: object
       properties:
         geometry:
           $ref: '#/components/schemas/PointOrBoundingBoxQuery_featurePBB_geometry'
-      example: null
     LineOrPolygonQuery_featureLP_geometry:
       type: object
       properties:
@@ -1811,13 +1826,11 @@ components:
             items:
               multipleOf: 0.01
               type: integer
-      example: null
     LineOrPolygonQuery_featureLP:
       type: object
       properties:
         geometry:
           $ref: '#/components/schemas/LineOrPolygonQuery_featureLP_geometry'
-      example: null
     GeographicsFilter_area:
       type: object
       properties:
@@ -1833,7 +1846,6 @@ components:
           nullable: true
       additionalProperties: false
       description: Geographic Area
-      example: null
     PointGeometry_geometry:
       required:
       - coordinates
@@ -1850,7 +1862,6 @@ components:
           items:
             multipleOf: 0.01
             type: number
-      example: null
     PointGeometry_properties:
       required:
       - dimension
@@ -1908,7 +1919,6 @@ components:
           - 2
           - 3
           default: 2
-      example: null
     LineGeometry_geometry:
       required:
       - coordinates
@@ -1927,7 +1937,6 @@ components:
             items:
               multipleOf: 0.01
               type: number
-      example: null
     PolygonGeometry_geometry:
       required:
       - coordinates
@@ -1948,7 +1957,6 @@ components:
               items:
                 multipleOf: 0.01
                 type: number
-      example: null
     Event_Dataset:
       type: object
       properties:
@@ -1957,7 +1965,6 @@ components:
           example: d9baea4e-2436-4481-accb-7c2fe835039e
         title:
           type: string
-      example: null
   parameters:
     skipParam:
       name: skip
