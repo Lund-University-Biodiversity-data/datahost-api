@@ -176,8 +176,17 @@ exports.getDatasetsBySearch = function(body,skip,take) {
         var collDatasets = dbMongo.getCollection("Datasets");
         var collEvents = dbMongo.getCollection("Events");
 
+        var datasetAvailableIdArray=[];
         var datasetIdArray=[];
-        
+
+        var allDatasetsAvailable=true;
+
+        // set the datasetList filter
+        if (body.hasOwnProperty('datasetList')) {
+          allDatasetsAvailable=false;
+          datasetAvailableIdArray=body.datasetList;
+        }
+
         // build the query filter, defined as an object (and NOT an array)
         var queryDataset = {};
         var queryEvent = {};
@@ -193,7 +202,7 @@ exports.getDatasetsBySearch = function(body,skip,take) {
 
             if (occs && occs.length>0) {
               occs.forEach(function(element, index) {
-                if (!datasetIdArray.includes(element.datasetID)) datasetIdArray.push(element.datasetID);
+                if (!datasetIdArray.includes(element.datasetID) && (allDatasetsAvailable || datasetAvailableIdArray.includes(element.datasetID))) datasetIdArray.push(element.datasetID);
               })
             }
             // if no occurrence returned, no event. It has to be specified because the filter will be skipped instead
@@ -235,12 +244,12 @@ exports.getDatasetsBySearch = function(body,skip,take) {
 
         let events = await collEvents.find(queryEvent).toArray();
         events.forEach(function(element, index) {
-          if (!datasetIdArray.includes(element.datasetID)) datasetIdArray.push(element.datasetID);
+          if (!datasetIdArray.includes(element.datasetID) && (allDatasetsAvailable || datasetAvailableIdArray.includes(element.datasetID))) datasetIdArray.push(element.datasetID);
         })
 
         // with the datasetIds 
         if (datasetIdArray.length>0) {
-          // if the taxon filter was specified and did not rueturn anything => no result
+          // if the taxon filter was specified and did not return anything => no result
           if (noDataset) {
             queryDataset["identifier"]={"$in":"NOOCCURRENCEWITHINPUTTAXON"};
           } 

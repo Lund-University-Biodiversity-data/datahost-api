@@ -716,6 +716,8 @@ components:
       properties:
         exportMode:
           $ref: '#/components/schemas/exportMode'
+        datasetList:
+          $ref: '#/components/schemas/datasetList'
         datum:
           $ref: '#/components/schemas/DatumFilter'
         taxon:

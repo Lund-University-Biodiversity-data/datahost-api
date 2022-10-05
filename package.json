@@ -1,7 +1,7 @@
 {
   "name": "lu-api-documentation-template",
-  "version": "1.0.0",
-  "description": "Created by the DPS-group.",
+  "version": "1.0.5",
+  "description": "Created by the DPS-group. Updated by LU",
   "main": "index.js",
   "scripts": {
     "prestart": "npm install",
