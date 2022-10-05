@@ -434,6 +434,7 @@ paths:
 components:
   schemas:
     Occurrence:
+      description: "A specific observation of an organism or a uniform group of organisms made at an event."
       allOf:
       - $ref: '#/components/schemas/ExchangeObject'
       - required:
@@ -584,12 +585,16 @@ components:
             Can sometimes be the same as the name of the dataset.
           example: Svensk Fågeltaxering
         assigner:
+          description: "The organisation that orders the data collection."
           $ref: '#/components/schemas/Organisation'
         creator:
+          description: "The organisation responsible for the data collection."
           $ref: '#/components/schemas/Organisation'
         ownerinstitutionCode:
+          description: "The organisation that is responsible for the information in the dataset."
           $ref: '#/components/schemas/Organisation'
         publisher:
+          description: "The organisation that receives the dataset from the data provider. Responsible for making the dataset accessible. (Also corresponding to: data host)"
           $ref: '#/components/schemas/Organisation'
         dataStewardship:
           type: string
@@ -756,8 +761,7 @@ components:
           format: URI
         license:
           type: string
-          description: States which Creative Commons license that is applied to the
-            attachment.
+          description: "Gives a permanent link to the Creative Commons license that is applied to the attachment."
           format: URI
         rightsHolder:
           type: string
@@ -977,9 +981,9 @@ components:
           - äggläggande
           - äggskal
           - äldre gnagspår
-      description: "Observed attributes and other variables linked to a certain individual\
-        \ or uniform group of individuals, e.g. sex, age, behavior."
+      description: "Different variables that describe an organism."
     Event:
+      description: "A specified event when organisms were surveyed according to a specified methodology at a specific place."
       required:
       - eventEndDate
       - eventID
@@ -996,7 +1000,7 @@ components:
               to a survey area/site. A survey event can also be a visit to a smaller
               defined part of a survey area/site or one of several samples from the
               same place. The term survey event can also represent a specific period
-              or season. What eventID is representing is given in the attribute type.
+              or season. What eventID is representing is given in the attribute eventType.
             example: SFTstd:19960529:92
           eventType:
             type: string
@@ -1089,6 +1093,7 @@ components:
               type: string
         description: ""
     county:
+      description: "The county within which the site is situated. Should be derived from the given position."
       type: string
       enum:
       - Blekinge län
@@ -1113,6 +1118,7 @@ components:
       - Örebro län
       - Östergötlands län
     municipality:
+      description: "The municipality within which the site is situated. Should be derived from the given position."
       type: string
       enum:
       - Ale
@@ -1406,6 +1412,7 @@ components:
       - Överkalix
       - Övertorneå
     Location:
+      description: "Information about a place that has been surveyed."
       required:
       - county
       - emplacement
@@ -1441,16 +1448,16 @@ components:
           - segment
           - slinga
           - transportsträcka
-          - ö
+          - "ö"
         emplacement:
           maxItems: 2
           minItems: 1
-          description: "Information about the shape and geographic position of the\
-            \ site. It is possible to provide the geographic position of each site\
-            \ in two ways. The geographic position of a line- or polygon-shaped site\
+          description: "Information about the shape and geographic emplacement of the\
+            \ site. It is possible to provide the geographic emplacement of each site\
+            \ in two ways. The geographic emplacement of a line- or polygon-shaped site\
             \ can thereby be provided both as a point, e.g. the centroid, a corner\
             \ or the start point (described by methodology), and as a line or polygon\
-            \ with coordinates for the full extent of the site. The geographic position\
+            \ with coordinates for the full extent of the site. The geographic emplacement\
             \ of a point-shaped site is provided as a point."
           oneOf:
           - $ref: '#/components/schemas/PointGeometry'
@@ -1477,6 +1484,7 @@ components:
           description: Comment (freetext) from the survey event about the site.
           example: under water since 2005
     LocationGeneralized:
+      description: "Generalized (i.e. less detailed) information about a place that has been surveyed."
       required:
       - emplacement
       - locationID
@@ -1508,16 +1516,16 @@ components:
           - segment
           - slinga
           - transportsträcka
-          - ö
+          - "ö"
         emplacement:
           maxItems: 2
           minItems: 1
-          description: "Information about the shape and geographic position of the\
-            \ site. It is possible to provide the geographic position of each site\
-            \ in two ways. The geographic position of a line- or polygon-shaped site\
+          description: "Information about the shape and geographic emplacement of the\
+            \ site. It is possible to provide the geographic emplacement of each site\
+            \ in two ways. The geographic emplacement of a line- or polygon-shaped site\
             \ can thereby be provided both as a point, e.g. the centroid, a corner\
             \ or the start point (described by methodology), and as a line or polygon\
-            \ with coordinates for the full extent of the site. The geographic position\
+            \ with coordinates for the full extent of the site. The geographic emplacement\
             \ of a point-shaped site is provided as a point."
           oneOf:
           - $ref: '#/components/schemas/PointGeometry'
@@ -1544,6 +1552,7 @@ components:
           description: Comment (freetext) from the survey event about the site.
           example: under water since 2005
     Methodology:
+      description: "Information about a methodology used for the data collection, e.g. as described by one or more monitoring manuals. Can contain a range of methods for the same and/or different parts of the data collection."
       required:
       - methodologyDescription
       - methodologyLink
@@ -1553,28 +1562,30 @@ components:
       properties:
         methodologyName:
           type: string
+          example: methodologyName
           description: "The title or name of a methodology, e.g. a monitoring manual."
         methodologyDescription:
           type: string
+          example: methodologyDescription
           description: "Short description of a methodology, e.g. a monitoring manual."
         methodologyLink:
           type: string
+          example: http://example.com/aeiou
           description: "Persistent link to description of a methodology, e.g. a monitoring\
             \ manual."
           format: uri
         speciesList:
           type: string
+          example: http://example.com/aeiou
           description: Persistent link to published species list for the dataset.
           format: uri
-      description: "The methodology that is used for the data collection, e.g. as\
-        \ described by one or more monitoring manuals. Can contain a range of methods\
-        \ for the same and/or different parts of the data collection."
       example:
         methodologyLink: http://example.com/aeiou
         methodologyDescription: methodologyDescription
         speciesList: http://example.com/aeiou
         methodologyName: methodologyName
     Organisation:
+      description: "Information about an organisation."
       required:
       - organisationCode
       type: object
@@ -1670,24 +1681,25 @@ components:
             \ was superseded or retired in the spatial data set. (Source: INSPIRE)"
           format: date-time
     WeatherVariable:
+      description: "Information about the weather conditions during the survey event."
       type: object
       properties:
         snowCover:
           type: string
-          description: States the snow conditions on the ground during the survey
-            event.
+          description: "States the snow conditions on the ground during the survey event."
           enum:
           - barmark
           - snötäckt mark
           - mycket tunt snötäcke eller fläckvis snötäcke
         sunshine:
+          description: "States the amount of sunshine during the survey event."
           $ref: '#/components/schemas/WeatherMeasuring'
         airTemperature:
+          description: "States the air temperature during the survey event."
           $ref: '#/components/schemas/WeatherMeasuring'
         windDirectionCompass:
+          description: "States the wind direction during the survey event as a number of degrees."
           type: string
-          description: States the wind direction during the survey event as a compass
-            direction.
           enum:
           - nord
           - nordost
@@ -1700,6 +1712,7 @@ components:
         windDirectionDegrees:
           $ref: '#/components/schemas/WeatherMeasuring'
         windSpeed:
+          description: "States the wind speed during the survey event."
           $ref: '#/components/schemas/WeatherMeasuring'
         windStrength:
           type: string
@@ -1756,6 +1769,7 @@ components:
           - "nästan klart, 1-2/8"
           - "växlande, 0-8/8"
     WeatherMeasuring:
+      description: "Weather variable reported as a measurement and a unit."
       required:
       - unit
       - weatherMeasure
@@ -1863,6 +1877,7 @@ components:
             multipleOf: 0.01
             type: number
     PointGeometry_properties:
+      description: "Information about the geometry of a place that has been surveyed."
       required:
       - dimension
       - horizontalCoordinateSystem
