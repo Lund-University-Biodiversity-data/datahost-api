@@ -1770,7 +1770,7 @@ components:
           description: Value for measured weather variable.
           example: 15
         unit:
-          description: "Unit for a reported measurement (given in the attribute "vädermått")."
+          description: "Unit for a reported measurement (given in the attribute vädermått)."
           $ref: '#/components/schemas/unit'
     PointOrBoundingBoxQuery_featurePBB_geometry:
       type: object
