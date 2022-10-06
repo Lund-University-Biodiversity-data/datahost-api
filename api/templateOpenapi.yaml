@@ -459,19 +459,9 @@ components:
               unit).
             example: 10
           unit:
-            type: string
-            description: Unit for a certain amount of organisms (given in the attribute
-              quantity).
-            enum:
-            - '%'
-            - cm²
-            - cm³
-            - dm²
-            - grader
-            - m/s
-            - m²
-            - styck
-            - °C
+            description: "Unit for a certain amount of organisms (given in the attribute\
+              \ quantity)."
+            $ref: '#/components/schemas/unit'
           organism:
             description: "Observed attributes and other variables linked to a certain\
               \ individual or uniform group of individuals, e.g. sex, age, behavior"
@@ -1055,6 +1045,18 @@ components:
             items:
               type: string
         description: ""
+    unit:
+      type: string
+      enum:
+      - '%'
+      - cm²
+      - cm³
+      - dm²
+      - grader
+      - m/s
+      - m²
+      - styck
+      - °C
     locationType:
       type: string
       description: "The type of survey site that was surveyed, e.g. square, segment,\
@@ -1720,18 +1722,8 @@ components:
           description: Value for measured weather variable.
           example: 15
         unit:
-          type: string
-          description: Unit for a reported measurement (given in the attribute "vädermått").
-          enum:
-          - '%'
-          - cm²
-          - cm³
-          - dm²
-          - m/s
-          - m²
-          - styck
-          - °C
-          - grader
+          description: "Unit for a reported measurement (given in the attribute "vädermått")."
+          $ref: '#/components/schemas/unit'
     PointOrBoundingBoxQuery_featurePBB_geometry:
       type: object
       properties:
