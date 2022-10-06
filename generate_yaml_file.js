@@ -37,24 +37,27 @@ fs.writeFile(tempOpenApiFile, tempYmlContent, function (err) {
   console.log('File created : '+tempOpenApiFile);
 
   okGeneration=true;
+
+  // if ok => replace the finalName file
+  if (okGeneration) {
+    // Copying the file to a the same name
+    fs.copyFile(tempOpenApiFile, finalOpenApiFile, (err) => {
+      if (err) {
+        console.log("Error Found when copying TEMP to final:", err);
+      }
+      else {
+        console.log("Final file created "+finalOpenApiFile)
+        // Get the current filenames
+        // after the function
+        //getCurrentFilenames();
+        //console.log("\nFile Contents of copied_file:",
+        //fs.readFileSync("copied_file.txt", "utf8"));
+      }
+    });
+  }
+
+
 });
 
 
-// if ok => replace the finalName file
-if (okGeneration) {
-  // Copying the file to a the same name
-  fs.copyFile(tempOpenApiFile, finalOpenApiFile, (err) => {
-    if (err) {
-      console.log("Error Found when copying TEMP to final:", err);
-    }
-    else {
-      console.log("Final file created "+finalOpenApiFile)
-      // Get the current filenames
-      // after the function
-      //getCurrentFilenames();
-      //console.log("\nFile Contents of copied_file:",
-      //fs.readFileSync("copied_file.txt", "utf8"));
-    }
-  });
-}
 

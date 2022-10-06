@@ -429,6 +429,8 @@ components:
             - $ref: '#/components/schemas/LineGeometry'
             - $ref: '#/components/schemas/PolygonGeometry'
           taxon:
+            description: "Taxonomic information about the observation. States which species \
+              \ (or subspecies, species aggregation, genus, family etc) was observed and identified."
             $ref: '#/components/schemas/Taxon'
           occurrenceStatus:
             type: string
@@ -471,6 +473,8 @@ components:
             - styck
             - °C
           organism:
+            description: "Observed attributes and other variables linked to a certain\
+              \ individual or uniform group of individuals, e.g. sex, age, behavior"
             $ref: '#/components/schemas/OrganismVariable'
           occurrenceRemarks:
             type: string
@@ -906,6 +910,7 @@ components:
           - "bo, ägg/ungar"
           - bobesök?
           - bobygge
+          - exkrementsäck
           - dräktig hona
           - död
           - fragment
@@ -1016,6 +1021,7 @@ components:
               vervakning av häckande kustfågel i Bottniska Viken. Länsstyrelserna,\
               \ Meddelande 10:2010\". Line transect survey : http://www.fageltaxering.lu.se/inventera/metoder/standardrutter/metodik-standardrutter"
           weather:
+            description: "Information about the weather conditions during the survey event."
             $ref: '#/components/schemas/WeatherVariable'
           eventRemarks:
             type: string
@@ -1049,8 +1055,27 @@ components:
             items:
               type: string
         description: ""
+    locationType:
+      type: string
+      description: "The type of survey site that was surveyed, e.g. square, segment,\
+        \ point site, counting zone, route etc."
+      enum:
+      - block
+      - linje
+      - linjetransekt
+      - polygon
+      - provyta
+      - punkt
+      - punktlokal
+      - ruta
+      - rutt
+      - räkningssektor
+      - räkningszon
+      - segment
+      - slinga
+      - transportsträcka
+      - "ö"
     county:
-      description: "The county within which the site is situated. Should be derived from the given position."
       type: string
       enum:
       - Blekinge län
@@ -1075,7 +1100,6 @@ components:
       - Örebro län
       - Östergötlands län
     municipality:
-      description: "The municipality within which the site is situated. Should be derived from the given position."
       type: string
       enum:
       - Ale
@@ -1387,25 +1411,7 @@ components:
           description: The name of a survey site or a subsite.
           example: "Rasmus södra, Sonaboda"
         locationType:
-          type: string
-          description: "The type of survey site that was surveyed, e.g. square, segment,\
-            \ point site, counting zone, route etc."
-          enum:
-          - block
-          - linje
-          - linjetransekt
-          - polygon
-          - provyta
-          - punkt
-          - punktlokal
-          - ruta
-          - rutt
-          - räkningssektor
-          - räkningszon
-          - segment
-          - slinga
-          - transportsträcka
-          - "ö"
+          $ref: '#/components/schemas/locationType'
         emplacement:
           maxItems: 2
           minItems: 1
@@ -1420,17 +1426,15 @@ components:
           - $ref: '#/components/schemas/PointGeometry'
           - $ref: '#/components/schemas/LineGeometry'
           - $ref: '#/components/schemas/PolygonGeometry'
-        stateProvince:
-          type: string
-          description: "The province (swe: landskap) within which the site is situated.\
-            \ Should be derived from the given position."
         county:
+          description: "The county within which the site is situated. Should be derived from the given position."
           $ref: '#/components/schemas/county'
         province:
           type: string
           description: "The province (swe: provins) within which the site is situated.\
             \ Should be derived from the given position."
         municipality:
+          description: "The municipality within which the site is situated. Should be derived from the given position."
           $ref: '#/components/schemas/municipality'
         parish:
           type: string
@@ -1455,25 +1459,7 @@ components:
           type: string
           description: The name of a survey site or a subsite.
         locationType:
-          type: string
-          description: "The type of survey site that was surveyed, e.g. square, segment,\
-            \ point site, counting zone, route etc."
-          enum:
-          - block
-          - linje
-          - linjetransekt
-          - polygon
-          - provyta
-          - punkt
-          - punktlokal
-          - ruta
-          - rutt
-          - räkningssektor
-          - räkningszon
-          - segment
-          - slinga
-          - transportsträcka
-          - "ö"
+          $ref: '#/components/schemas/locationType'
         emplacement:
           maxItems: 2
           minItems: 1
@@ -1488,17 +1474,15 @@ components:
           - $ref: '#/components/schemas/PointGeometry'
           - $ref: '#/components/schemas/LineGeometry'
           - $ref: '#/components/schemas/PolygonGeometry'
-        stateProvince:
-          type: string
-          description: "The province (swe: landskap) within which the site is situated.\
-            \ Should be derived from the given position."
         county:
+          description: "The county within which the site is situated. Should be derived from the given position."
           $ref: '#/components/schemas/county'
         province:
           type: string
           description: "The province (swe: provins) within which the site is situated.\
             \ Should be derived from the given position."
         municipality:
+          description: "The municipality within which the site is situated. Should be derived from the given position."
           $ref: '#/components/schemas/municipality'
         parish:
           type: string
@@ -1509,7 +1493,7 @@ components:
           description: Comment (freetext) from the survey event about the site.
           example: under water since 2005
     Methodology:
-      description: "Information about a methodology used for the data collection, e.g. as described by one or more monitoring manuals. Can contain a range of methods for the same and/or different parts of the data collection."
+      description: "Information about a methodology."
       required:
       - methodologyDescription
       - methodologyLink
@@ -1594,9 +1578,7 @@ components:
           type: string
           description: The id for species or other given level of taxonomy as reported
             by the surveyor. Can be different from now valid taxonomy. (For traceability.)
-      description: "Taxonomic information about the observation. States which species\
-        \ (or subspecies, species aggregation, genus, family etc) was observed and\
-        \ identified."
+      description: "Information about a species or other taxon rank."
     exportMode:
       type: string
       description: json or csv
@@ -1638,7 +1620,7 @@ components:
             \ was superseded or retired in the spatial data set. (Source: INSPIRE)"
           format: date-time
     WeatherVariable:
-      description: "Information about the weather conditions during the survey event."
+      description: "Different weather variables."
       type: object
       properties:
         snowCover:
@@ -1655,7 +1637,6 @@ components:
           description: "States the air temperature during the survey event."
           $ref: '#/components/schemas/WeatherMeasuring'
         windDirectionCompass:
-          description: "States the wind direction during the survey event as a number of degrees."
           type: string
           enum:
           - nord
@@ -1667,6 +1648,7 @@ components:
           - sydväst
           - väst
         windDirectionDegrees:
+          description: "States the wind direction during the survey event as a number of degrees."
           $ref: '#/components/schemas/WeatherMeasuring'
         windSpeed:
           description: "States the wind speed during the survey event."
