@@ -6,7 +6,8 @@
   "scripts": {
     "prestart": "npm install",
     "start": "node index.js",
-    "species": "node import_species_list.js"
+    "species": "node import_species_list.js",
+    "yamlgen": "node generate_yaml_file.js"
   },
   "keywords": [
     "swagger"

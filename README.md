@@ -64,9 +64,23 @@ npm install json2csv
 
 create folder public/speciesFiles
 * Requirements
+```
 npm install https
 npm install fs
-
+```
 
 * Run to create the public json species files in public/speciesFiles
+```
 npm run species
+```
+
+### for generating the YAML file ###
+Before using the swagger editor for generating the server files or the client files, the yml file is needed.
+The basefile is *templateOpenapi.yaml*, shared between the different datahost.
+The parameters that can be changed are the ones with the caracters %%
+THe file specificLU_endpoints contains specific elements for LU.
+
+to generate the new openapi.yml file
+```
+npm run yamlgen
+```

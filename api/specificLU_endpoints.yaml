@@ -1,0 +1,49 @@
+
+  /speciesList:
+    get:
+      tags:
+      - SpeciesList
+      summary: Displays static page of the speciesList available from our datasets
+        and dyntaxa API.
+      description: Displays static page of the speciesList available from our datasets
+        and dyntaxa API
+      operationId: getSpeciesList
+      responses:
+        "200":
+          description: Successfully loaded page with speciesList.
+          content:
+            text/html:
+              schema:
+                type: string
+                x-content-type: text/html
+        "400":
+          description: Bad Request
+        "403":
+          description: Forbidden
+        "500":
+          description: Internal Server Error
+      x-swagger-router-controller: StaticSpeciesList
+  /speciesHierarchy:
+    get:
+      tags:
+      - SpeciesHierarchy
+      summary: Displays static page of the speciesHierarchy available from our datasets
+        and dyntaxa API.
+      description: Displays static page of the speciesHierarchy available from our
+        datasets and dyntaxa API
+      operationId: getSpeciesHierarchy
+      responses:
+        "200":
+          description: Successfully loaded page with speciesHierarchy.
+          content:
+            text/html:
+              schema:
+                type: string
+                x-content-type: text/html
+        "400":
+          description: Bad Request
+        "403":
+          description: Forbidden
+        "500":
+          description: Internal Server Error
+      x-swagger-router-controller: StaticSpeciesList
