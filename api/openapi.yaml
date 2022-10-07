@@ -611,11 +611,6 @@ components:
           - nationell miljöövervakning
           - regional miljöövervakning
           - biogeografisk uppföljning
-        license:
-          type: string
-          description: "States which Creative Commons license that is applied to the dataset. \
-            \ Note that any attachments included in the dataset have their own separate licenses."
-          format: URI
         description:
           type: string
           description: Short description of the dataset or the context for collection
@@ -652,6 +647,11 @@ components:
           - publik
           - begränsad
           - ej offentlig
+        license:
+          type: string
+          description: "States which Creative Commons license that is applied to the dataset. \
+            \ Note that any attachments included in the dataset have their own separate licenses."
+          format: URI
         metadatalanguage:
           type: string
           description: The language that is used when writing metadata about the dataset.
@@ -1492,7 +1492,7 @@ components:
           $ref: '#/components/schemas/county'
         province:
           type: string
-          description: "The province (swe: provins) within which the site is situated.\
+          description: "The province (swe: landskap OR provins) within which the site is situated.\
             \ Should be derived from the given position."
         municipality:
           description: "The municipality within which the site is situated. Should be derived from the given position."
