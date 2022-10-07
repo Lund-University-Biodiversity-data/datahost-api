@@ -5,8 +5,6 @@ var https = require ('https');
 
 var fs = require ('fs');
 
-console.log(config);
-
 const speciesFilePath= config.speciesFilePath;
 const speciesHierarchyFilePath= config.speciesHierarchyFilePath;
 
@@ -80,7 +78,6 @@ async function getDyntaxaAPIparentsId (dyntaxaId) {
                 }
               }    
 
-
             });
             //console.log(speciesArr);
           });
@@ -141,13 +138,13 @@ async function getDyntaxaAPIgetTaxa (url) {
           resolve(1);
 
         } catch (error) {
-            console.error(error.message);
-            resolve(0);
+          console.error(error.message);
+          resolve(0);
         };
       });
     }).on("error", (error) => {
-        console.error(error.message);
-        resolve(0);
+      console.error(error.message);
+      resolve(0);
     });
 
     //console.log("c'est bon fini https.get");

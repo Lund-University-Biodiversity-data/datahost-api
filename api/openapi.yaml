@@ -1163,296 +1163,297 @@ components:
     municipality:
       type: string
       enum:
-      - Ale
-      - Alingsås
-      - Alvesta
-      - Aneby
-      - Arboga
-      - Arjeplog
-      - Arvidsjaur
-      - Arvika
-      - Askersund
-      - Avesta
-      - Bengtsfors
-      - Berg
-      - Bjurholm
-      - Bjuv
-      - Boden
-      - Bollebygd
-      - Bollnäs
-      - Borgholm
-      - Borlänge
-      - Borås
-      - Botkyrka
-      - Boxholm
-      - Bromölla
-      - Bräcke
-      - Burlöv
-      - Båstad
-      - Dals-Ed
-      - Danderyd
-      - Degerfors
-      - Dorotea
-      - Eda
-      - Ekerö
-      - Eksjö
-      - Emmaboda
-      - Enköping
-      - Eskilstuna
-      - Eslöv
-      - Essunga
-      - Fagersta
-      - Falkenberg
-      - Falköping
-      - Falun
-      - Filipstad
-      - Finspång
-      - Flen
-      - Forshaga
-      - Färgelanda
-      - Gagnef
-      - Gislaved
-      - Gnesta
-      - Gnosjö
-      - Gotland
-      - Grums
-      - Grästorp
-      - Gullspång
-      - Gällivare
-      - Gävle
-      - Göteborg
-      - Götene
-      - Habo
-      - Hagfors
-      - Hallsberg
-      - Hallstahammar
-      - Halmstad
-      - Hammarö
-      - Haninge
-      - Haparanda
-      - Heby
-      - Hedemora
-      - Helsingborg
-      - Herrljunga
-      - Hjo
-      - Hofors
-      - Huddinge
-      - Hudiksvall
-      - Hultsfred
-      - Hylte
-      - Håbo
-      - Hällefors
-      - Härjedalen
-      - Härnösand
-      - Härryda
-      - Hässleholm
-      - Höganäs
-      - Högsby
-      - Hörby
-      - Höör
-      - Jokkmokk
-      - Järfälla
-      - Jönköping
-      - Kalix
-      - Kalmar
-      - Karlsborg
-      - Karlshamn
-      - Karlskoga
-      - Karlskrona
-      - Karlstad
-      - Katrineholm
-      - Kil
-      - Kinda
-      - Kiruna
-      - Klippan
-      - Knivsta
-      - Kramfors
-      - Kristianstad
-      - Kristinehamn
-      - Krokom
-      - Kumla
-      - Kungsbacka
-      - Kungsör
-      - Kungälv
-      - Kävlinge
-      - Köping
-      - Laholm
-      - Landskrona
-      - Laxå
-      - Lekeberg
-      - Leksand
-      - Lerum
-      - Lessebo
-      - Lidingö
-      - Lidköping
-      - Lilla Edet
-      - Lindesberg
-      - Linköping
-      - Ljungby
-      - Ljusdal
-      - Ljusnarsberg
-      - Lomma
-      - Ludvika
-      - Luleå
-      - Lund
-      - Lycksele
-      - Lysekil
-      - Malmö
-      - Malung-Sälen
-      - Malå
-      - Mariestad
-      - Mark
-      - Markaryd
-      - Mellerud
-      - Mjölby
-      - Mora
-      - Motala
-      - Mullsjö
-      - Munkedal
-      - Munkfors
-      - Mölndal
-      - Mönsterås
-      - Mörbylånga
-      - Nacka
-      - Nora
-      - Norberg
-      - Nordanstig
-      - Nordmaling
-      - Norrköping
-      - Norrtälje
-      - Norsjö
-      - Nybro
-      - Nykvarn
-      - Nyköping
-      - Nynäshamn
-      - Nässjö
-      - Ockelbo
-      - Olofström
-      - Orsa
-      - Orust
-      - Osby
-      - Oskarshamn
-      - Ovanåker
-      - Oxelösund
-      - Pajala
-      - Partille
-      - Perstorp
-      - Piteå
-      - Ragunda
-      - Robertsfors
-      - Ronneby
-      - Rättvik
-      - Sala
-      - Salem
-      - Sandviken
-      - Sigtuna
-      - Simrishamn
-      - Sjöbo
-      - Skara
-      - Skellefteå
-      - Skinnskatteberg
-      - Skurup
-      - Skövde
-      - Smedjebacken
-      - Sollefteå
-      - Sollentuna
-      - Solna
-      - Sorsele
-      - Sotenäs
-      - Staffanstorp
-      - Stenungsund
-      - Stockholm
-      - Storfors
-      - Storuman
-      - Strängnäs
-      - Strömstad
-      - Strömsund
-      - Sundbyberg
-      - Sundsvall
-      - Sunne
-      - Surahammar
-      - Svalöv
-      - Svedala
-      - Svenljunga
-      - Säffle
-      - Säter
-      - Sävsjö
-      - Söderhamn
-      - Söderköping
-      - Södertälje
-      - Sölvesborg
-      - Tanum
-      - Tibro
-      - Tidaholm
-      - Tierp
-      - Timrå
-      - Tingsryd
-      - Tjörn
-      - Tomelilla
-      - Torsby
-      - Torsås
-      - Tranemo
-      - Tranås
-      - Trelleborg
-      - Trollhättan
-      - Trosa
-      - Tyresö
-      - Täby
-      - Töreboda
-      - Uddevalla
-      - Ulricehamn
-      - Umeå
-      - Upplands Väsby
-      - Upplands-Bro
-      - Uppsala
-      - Uppvidinge
-      - Vadstena
-      - Vaggeryd
-      - Valdemarsvik
-      - Vallentuna
-      - Vansbro
-      - Vara
-      - Varberg
-      - Vaxholm
-      - Vellinge
-      - Vetlanda
-      - Vilhelmina
-      - Vimmerby
-      - Vindeln
-      - Vingåker
-      - Vårgårda
-      - Vänersborg
-      - Vännäs
-      - Värmdö
-      - Värnamo
-      - Västervik
-      - Västerås
-      - Växjö
-      - Ydre
-      - Ystad
-      - Åmål
-      - Ånge
-      - Åre
-      - Årjäng
-      - Åsele
-      - Åstorp
-      - Åtvidaberg
-      - Älmhult
-      - Älvdalen
-      - Älvkarleby
-      - Älvsbyn
-      - Ängelholm
-      - Öckerö
-      - Ödeshög
-      - Örebro
-      - Örkelljunga
-      - Örnsköldsvik
-      - Östersund
-      - Österåker
-      - Östhammar
-      - Östra Göinge
-      - Överkalix
-      - Övertorneå
+      - "Ale kommun"
+      - "Alingsås kommun"
+      - "Älmhults kommun"
+      - "Älvdalens kommun"
+      - "Alvesta kommun"
+      - "Älvkarleby kommun"
+      - "Älvsbyns kommun"
+      - "Åmåls kommun"
+      - "Aneby kommun"
+      - "Ånge kommun"
+      - "Ängelholms kommun"
+      - "Arboga kommun"
+      - "Åre kommun"
+      - "Årjängs kommun"
+      - "Arjeplogs kommun"
+      - "Arvidsjaurs kommun"
+      - "Arvika kommun"
+      - "Åsele kommun"
+      - "Askersunds kommun"
+      - "Åstorps kommun"
+      - "Åtvidabergs kommun"
+      - "Avesta kommun"
+      - "Båstads kommun"
+      - "Bengtsfors kommun"
+      - "Bergs kommun"
+      - "Bjurholms kommun"
+      - "Bjuvs kommun"
+      - "Bodens kommun"
+      - "Bollebygds kommun"
+      - "Bollnäs kommun"
+      - "Borås stad"
+      - "Borgholms kommun"
+      - "Borlänge kommun"
+      - "Botkyrka kommun"
+      - "Boxholms kommun"
+      - "Bräcke kommun"
+      - "Bromölla kommun"
+      - "Burlövs kommun"
+      - "Dals-Eds kommun"
+      - "Danderyds kommun"
+      - "Degerfors kommun"
+      - "Dorotea kommun"
+      - "Eda kommun"
+      - "Ekerö kommun"
+      - "Eksjö kommun"
+      - "Emmaboda kommun"
+      - "Enköpings kommun"
+      - "Eskilstuna kommun"
+      - "Eslövs kommun"
+      - "Essunga kommun"
+      - "Fagersta kommun"
+      - "Falkenbergs kommun"
+      - "Falköpings kommun"
+      - "Falu kommun"
+      - "Färgelanda kommun"
+      - "Filipstads kommun"
+      - "Finspångs kommun"
+      - "Flens kommun"
+      - "Forshaga kommun"
+      - "Gagnefs kommun"
+      - "Gällivare kommun"
+      - "Gävle kommun"
+      - "Gislaveds kommun"
+      - "Gnesta kommun"
+      - "Gnosjö kommun"
+      - "Göteborgs stad"
+      - "Götene kommun"
+      - "Grästorps kommun"
+      - "Grums kommun"
+      - "Gullspångs kommun"
+      - "Habo kommun"
+      - "Håbo kommun"
+      - "Hagfors kommun"
+      - "Hällefors kommun"
+      - "Hallsbergs kommun"
+      - "Hallstahammars kommun"
+      - "Halmstads kommun"
+      - "Hammarö kommun"
+      - "Haninge kommun"
+      - "Haparanda stad"
+      - "Härjedalens kommun"
+      - "Härnösands kommun"
+      - "Härryda kommun"
+      - "Hässleholms kommun"
+      - "Heby kommun"
+      - "Hedemora kommun"
+      - "Helsingborgs stad"
+      - "Herrljunga kommun"
+      - "Hjo kommun"
+      - "Hofors kommun"
+      - "Höganäs kommun"
+      - "Högsby kommun"
+      - "Höörs kommun"
+      - "Hörby kommun"
+      - "Huddinge kommun"
+      - "Hudiksvalls kommun"
+      - "Hultsfreds kommun"
+      - "Hylte kommun"
+      - "Järfälla kommun"
+      - "Jokkmokks kommun"
+      - "Jönköpings kommun"
+      - "Kalix kommun"
+      - "Kalmar kommun"
+      - "Karlsborgs kommun"
+      - "Karlshamns kommun"
+      - "Karlskoga kommun"
+      - "Karlskrona kommun"
+      - "Karlstads kommun"
+      - "Katrineholms kommun"
+      - "Kävlinge kommun"
+      - "Kils kommun"
+      - "Kinda kommun"
+      - "Kiruna kommun"
+      - "Klippans kommun"
+      - "Knivsta kommun"
+      - "Köpings kommun"
+      - "Kramfors kommun"
+      - "Kristianstads kommun"
+      - "Kristinehamns kommun"
+      - "Krokoms kommun"
+      - "Kumla kommun"
+      - "Kungälvs kommun"
+      - "Kungsbacka kommun"
+      - "Kungsörs kommun"
+      - "Laholms kommun"
+      - "Landskrona stad"
+      - "Laxå kommun"
+      - "Lekebergs kommun"
+      - "Leksands kommun"
+      - "Lerums kommun"
+      - "Lessebo kommun"
+      - "Lidingö stad"
+      - "Lidköpings kommun"
+      - "Lilla Edets kommun"
+      - "Lindesbergs kommun"
+      - "Linköpings kommun"
+      - "Ljungby kommun"
+      - "Ljusdals kommun"
+      - "Ljusnarsbergs kommun"
+      - "Lomma kommun"
+      - "Ludvika kommun"
+      - "Luleå kommun"
+      - "Lunds kommun"
+      - "Lycksele kommun"
+      - "Lysekils kommun"
+      - "Malå kommun"
+      - "Malmö stad"
+      - "Malung-Sälens kommun"
+      - "Mariestads kommun"
+      - "Markaryds kommun"
+      - "Marks kommun"
+      - "Melleruds kommun"
+      - "Mjölby kommun"
+      - "Mölndals stad"
+      - "Mönsterås kommun"
+      - "Mora kommun"
+      - "Mörbylånga kommun"
+      - "Motala kommun"
+      - "Mullsjö kommun"
+      - "Munkedals kommun"
+      - "Munkfors kommun"
+      - "Nacka kommun"
+      - "Nässjö kommun"
+      - "Nora kommun"
+      - "Norbergs kommun"
+      - "Nordanstigs kommun"
+      - "Nordmalings kommun"
+      - "Norrköpings kommun"
+      - "Norrtälje kommun"
+      - "Norsjö kommun"
+      - "Nybro kommun"
+      - "Nyköpings kommun"
+      - "Nykvarns kommun"
+      - "Nynäshamns kommun"
+      - "Ockelbo kommun"
+      - "Öckerö kommun"
+      - "Ödeshögs kommun"
+      - "Olofströms kommun"
+      - "Örebro kommun"
+      - "Örkelljunga kommun"
+      - "Örnsköldsviks kommun"
+      - "Orsa kommun"
+      - "Orust kommun"
+      - "Osby kommun"
+      - "Oskarshamns kommun"
+      - "Österåkers kommun"
+      - "Östersunds kommun"
+      - "Östhammars kommun"
+      - "Östra Göinge kommun"
+      - "Ovanåkers kommun"
+      - "Överkalix kommun"
+      - "Övertorneå kommun"
+      - "Oxelösunds kommun"
+      - "Pajala kommun"
+      - "Partille kommun"
+      - "Perstorps kommun"
+      - "Piteå kommun"
+      - "Ragunda kommun"
+      - "Rättviks kommun"
+      - "Region Gotland (kommun)"
+      - "Robertsfors kommun"
+      - "Ronneby kommun"
+      - "Säffle kommun"
+      - "Sala kommun"
+      - "Salems kommun"
+      - "Sandvikens kommun"
+      - "Säters kommun"
+      - "Sävsjö kommun"
+      - "Sigtuna kommun"
+      - "Simrishamns kommun"
+      - "Sjöbo kommun"
+      - "Skara kommun"
+      - "Skellefteå kommun"
+      - "Skinnskattebergs kommun"
+      - "Skövde kommun"
+      - "Skurups kommun"
+      - "Smedjebackens kommun"
+      - "Söderhamns kommun"
+      - "Söderköpings kommun"
+      - "Södertälje kommun"
+      - "Sollefteå kommun"
+      - "Sollentuna kommun"
+      - "Solna stad"
+      - "Sölvesborgs kommun"
+      - "Sorsele kommun"
+      - "Sotenäs kommun"
+      - "Staffanstorps kommun"
+      - "Stenungsunds kommun"
+      - "Stockholms stad"
+      - "Storfors kommun"
+      - "Storumans kommun"
+      - "Strängnäs kommun"
+      - "Strömstads kommun"
+      - "Strömsunds kommun"
+      - "Sundbybergs stad"
+      - "Sundsvalls kommun"
+      - "Sunne kommun"
+      - "Surahammars kommun"
+      - "Svalövs kommun"
+      - "Svedala kommun"
+      - "Svenljunga kommun"
+      - "Täby kommun"
+      - "Tanums kommun"
+      - "Tibro kommun"
+      - "Tidaholms kommun"
+      - "Tierps kommun"
+      - "Timrå kommun"
+      - "Tingsryds kommun"
+      - "Tjörns kommun"
+      - "Tomelilla kommun"
+      - "Töreboda kommun"
+      - "Torsås kommun"
+      - "Torsby kommun"
+      - "Tranås kommun"
+      - "Tranemo kommun"
+      - "Trelleborgs kommun"
+      - "Trollhättans stad"
+      - "Trosa kommun"
+      - "Tyresö kommun"
+      - "Uddevalla kommun"
+      - "Ulricehamns kommun"
+      - "Umeå kommun"
+      - "Upplands Väsby kommun"
+      - "Upplands-Bro kommun"
+      - "Uppsala kommun"
+      - "Uppvidinge kommun"
+      - "Vadstena kommun"
+      - "Vaggeryds kommun"
+      - "Valdemarsviks kommun"
+      - "Vallentuna kommun"
+      - "Vänersborgs kommun"
+      - "Vännäs kommun"
+      - "Vansbro kommun"
+      - "Vara kommun"
+      - "Varbergs kommun"
+      - "Vårgårda kommun"
+      - "Värmdö kommun"
+      - "Värnamo kommun"
+      - "Västerås stad"
+      - "Västerviks kommun"
+      - "Vaxholms stad"
+      - "Växjö kommun"
+      - "Vellinge kommun"
+      - "Vetlanda kommun"
+      - "Vilhelmina kommun"
+      - "Vimmerby kommun"
+      - "Vindelns kommun"
+      - "Vingåkers kommun"
+      - "Ydre kommun"
+      - "Ystads kommun"
+
     Location:
       description: "Information about a place that has been surveyed."
       required:

@@ -6,6 +6,7 @@ var fs = require ('fs');
 const templateOpenApiFile= config.templateOpenApiFile;
 const finalOpenApiFile= config.finalOpenApiFile;
 const specificEndpointsFile = config.specificEndpointsFile;
+const speciesFileMunicipalities= config.speciesFileMunicipalities;
 
 var today = new Date();
 
@@ -24,13 +25,15 @@ tempYmlContent = tempYmlContent.replace('%%FILE_CONTACTNAME%%', "Mathieu Blanche
 tempYmlContent = tempYmlContent.replace('%%FILE_EMAIL%%', "mathieu.blanchet@biol.lu.se");
 tempYmlContent = tempYmlContent.replace('%%SERVER_URL%%', config.apiServerUrl);
 
-
 // get the specific stuff from LU for new endpoints
 specificEndpointsContent=fs.readFileSync(specificEndpointsFile, "utf8");
-console.log(typeof specificEndpointsContent);
 
 tempYmlContent = tempYmlContent.replace('%%SPECIFIC_ENDPOINTS%%', specificEndpointsContent);
 
+// get the specific stuff from LU for new endpoints
+municipalitiesList=fs.readFileSync(speciesFileMunicipalities, "utf8");
+
+tempYmlContent = tempYmlContent.replace('%%LIST_MUNICIPALITIES%%', municipalitiesList);
 
 fs.writeFile(tempOpenApiFile, tempYmlContent, function (err) {
   if (err) return console.log(err);
@@ -55,8 +58,6 @@ fs.writeFile(tempOpenApiFile, tempYmlContent, function (err) {
       }
     });
   }
-
-
 });
 
 
