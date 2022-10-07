@@ -511,6 +511,7 @@ components:
       - ownerinstitutionCode
       - publisher
       - purpose
+      - license
       - spatial
       - startDate
       - title
@@ -537,13 +538,18 @@ components:
           description: "The organisation that orders the data collection."
           $ref: '#/components/schemas/Organisation'
         creator:
-          description: "The organisation responsible for the data collection."
-          $ref: '#/components/schemas/Organisation'
+          minItems: 1
+          type: array
+          description: "The organisation responsible for the data collection. More than \
+            \ one organisation can be given here."
+          items:
+            $ref: '#/components/schemas/Organisation'
         ownerinstitutionCode:
           description: "The organisation that is responsible for the information in the dataset."
           $ref: '#/components/schemas/Organisation'
         publisher:
-          description: "The organisation that receives the dataset from the data provider. Responsible for making the dataset accessible. (Also corresponding to: data host)"
+          description: "The organisation that receives the dataset from the data provider.\
+            \ Responsible for making the dataset accessible. (Also corresponding to: data host)"
           $ref: '#/components/schemas/Organisation'
         dataStewardship:
           type: string
@@ -557,6 +563,11 @@ components:
           - nationell miljöövervakning
           - regional miljöövervakning
           - biogeografisk uppföljning
+        license:
+          type: string
+          description: "States which Creative Commons license that is applied to the dataset. \
+            \ Note that any attachments included in the dataset have their own separate licenses."
+          format: URI
         description:
           type: string
           description: Short description of the dataset or the context for collection
@@ -1557,6 +1568,10 @@ components:
           description: Unique id for species or other given taxon rank according to
             Dyntaxa.
           example: urn:lsid:dyntaxa.se:Taxon:100049
+        euTaxonID:
+          type: string
+          description: "Species code for the observed organism according to EU's Birds \
+            \ Directive (Article 12) or Habitats Directive (Article 17)."
         vernacularName:
           type: string
           description: "The Swedish name according to Dyntaxa for the observed organism,\
@@ -1722,7 +1737,7 @@ components:
           description: Value for measured weather variable.
           example: 15
         unit:
-          description: "Unit for a reported measurement (given in the attribute "vädermått")."
+          description: "Unit for a reported measurement (given in the attribute vädermått)."
           $ref: '#/components/schemas/unit'
     PointOrBoundingBoxQuery_featurePBB_geometry:
       type: object
