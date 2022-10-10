@@ -873,7 +873,7 @@ components:
         geometry:
           $ref: '#/components/schemas/PointGeometry_geometry'
         properties:
-          $ref: '#/components/schemas/PointGeometry_properties'
+          $ref: '#/components/schemas/Geometry_properties'
     LineGeometry:
       required:
       - geometry
@@ -887,7 +887,7 @@ components:
         geometry:
           $ref: '#/components/schemas/LineGeometry_geometry'
         properties:
-          $ref: '#/components/schemas/PointGeometry_properties'
+          $ref: '#/components/schemas/Geometry_properties'
     PolygonGeometry:
       required:
       - geometry
@@ -901,7 +901,7 @@ components:
         geometry:
           $ref: '#/components/schemas/PolygonGeometry_geometry'
         properties:
-          $ref: '#/components/schemas/PointGeometry_properties'
+          $ref: '#/components/schemas/Geometry_properties'
     OrganismVariable:
       type: object
       properties:
@@ -1103,7 +1103,6 @@ components:
             - 273998e3-3138-41eb-b740-28ee53f7e344
             items:
               type: string
-        description: ""
     unit:
       type: string
       enum:
@@ -4174,6 +4173,7 @@ components:
           description: "States the air temperature during the survey event."
           $ref: '#/components/schemas/WeatherMeasuring'
         windDirectionCompass:
+          description: "States the wind direction during the survey event as a compass direction."
           type: string
           enum:
           - nord
@@ -4342,7 +4342,7 @@ components:
           items:
             multipleOf: 0.01
             type: number
-    PointGeometry_properties:
+    Geometry_properties:
       description: "Information about the geometry of a place that has been surveyed."
       required:
       - dimension
