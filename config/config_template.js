@@ -15,7 +15,9 @@ config.folderOpenApiFiles = "folder/";
 config.templateOpenApiFile = config.folderOpenApiFiles + "templateOpenapi.yaml";
 config.finalOpenApiFile = config.folderOpenApiFiles + "openapi.yaml";
 config.specificEndpointsFile = config.folderOpenApiFiles + "specific_endpoints.yaml";
-config.speciesFileMunicipalities = config.speciesFileMunicipalities + "municipalities.yaml";
+config.speciesFileMunicipalities = config.speciesFileMunicipalities + "list_municipalities.yaml";
+config.speciesFileParishes = config.folderOpenApiFiles + "list_parishes.yaml";
+config.speciesFileProvinces = config.folderOpenApiFiles + "list_provinces.yaml";
 
 // For obtaining the list of municipalities
 config.urlAPIMunicipalities = 'https://catalog.skl.se/rowstore/dataset/ed60ba69-f267-4b63-9f62-840342ba29f6/json';

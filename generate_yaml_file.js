@@ -6,7 +6,9 @@ var fs = require ('fs');
 const templateOpenApiFile= config.templateOpenApiFile;
 const finalOpenApiFile= config.finalOpenApiFile;
 const specificEndpointsFile = config.specificEndpointsFile;
-const speciesFileMunicipalities= config.speciesFileMunicipalities;
+const municipalitiesFilePath= config.municipalitiesFilePath;
+const provincesFilePath= config.provincesFilePath;
+const parishesFilePath= config.parishesFilePath;
 
 var today = new Date();
 
@@ -30,10 +32,15 @@ specificEndpointsContent=fs.readFileSync(specificEndpointsFile, "utf8");
 
 tempYmlContent = tempYmlContent.replace('%%SPECIFIC_ENDPOINTS%%', specificEndpointsContent);
 
-// get the specific stuff from LU for new endpoints
-municipalitiesList=fs.readFileSync(speciesFileMunicipalities, "utf8");
-
+// get the different long enum lists
+municipalitiesList=fs.readFileSync(municipalitiesFilePath, "utf8");
 tempYmlContent = tempYmlContent.replace('%%LIST_MUNICIPALITIES%%', municipalitiesList);
+
+provincesList=fs.readFileSync(provincesFilePath, "utf8");
+tempYmlContent = tempYmlContent.replace('%%LIST_PROVINCES%%', provincesList);
+
+parishesList=fs.readFileSync(parishesFilePath, "utf8");
+tempYmlContent = tempYmlContent.replace('%%LIST_PARISHES%%', parishesList);
 
 fs.writeFile(tempOpenApiFile, tempYmlContent, function (err) {
   if (err) return console.log(err);

@@ -1116,6 +1116,14 @@ components:
       type: string
       enum:
 %%LIST_MUNICIPALITIES%%
+    province:
+      type: string
+      enum:
+%%LIST_PROVINCES%%  
+    parish:
+      type: string
+      enum:
+%%LIST_PARISHES%%               
     Location:
       description: "Information about a place that has been surveyed."
       required:
@@ -1154,16 +1162,16 @@ components:
           description: "The county within which the site is situated. Should be derived from the given position."
           $ref: '#/components/schemas/county'
         province:
-          type: string
           description: "The province (swe: landskap OR provins) within which the site is situated.\
             \ Should be derived from the given position."
+          $ref: '#/components/schemas/province'
         municipality:
           description: "The municipality within which the site is situated. Should be derived from the given position."
           $ref: '#/components/schemas/municipality'
         parish:
-          type: string
           description: The parish within which the site is situated. Should be derived
             from the given position.
+          $ref: '#/components/schemas/parish'
         locationRemarks:
           type: string
           description: Comment (freetext) from the survey event about the site.
@@ -1202,16 +1210,16 @@ components:
           description: "The county within which the site is situated. Should be derived from the given position."
           $ref: '#/components/schemas/county'
         province:
-          type: string
           description: "The province (swe: provins) within which the site is situated.\
             \ Should be derived from the given position."
+          $ref: '#/components/schemas/province'
         municipality:
           description: "The municipality within which the site is situated. Should be derived from the given position."
           $ref: '#/components/schemas/municipality'
         parish:
-          type: string
           description: The parish within which the site is situated. Should be derived
             from the given position.
+          $ref: '#/components/schemas/parish'
         locationRemarks:
           type: string
           description: Comment (freetext) from the survey event about the site.
