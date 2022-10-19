@@ -16,7 +16,6 @@
   "license": "Unlicense",
   "private": true,
   "dependencies": {
-    "@aternus/csv-to-xlsx": "^2.0.3",
     "@turf/turf": "^6.5.0",
     "connect": "^3.2.0",
     "flat": "^5.0.2",
