@@ -306,6 +306,7 @@ exports.getEventsBySearch = function(body,skip,take) {
         // build the query filter, defined as an object (and NOT an array)
         var query = {};
 
+        /*
         // TAXON FILTER
         if (body.hasOwnProperty('taxon')) {
           if (body.taxon.hasOwnProperty('ids')) {
@@ -327,9 +328,47 @@ exports.getEventsBySearch = function(body,skip,take) {
 
         // with the eventIds from the taxon filter
         if (eventIdArray.length>0) {
+          
+          //console.log("eventIdArray length : "+eventIdArray.length);
+          //eventIdArray = eventIdArray.slice(700000, eventIdArray.length);
+          //console.log("eventIdArray length after cut : "+eventIdArray.length);
+          
           //query = {"eventID":{"$in":eventIdArray}};
           query["eventID"]={"$in":eventIdArray};
         }
+        */
+
+        
+        // TAXON FILTER
+        var joinOccurrences={};
+
+        if (body.hasOwnProperty('taxon')) {
+          if (body.taxon.hasOwnProperty('ids')) {
+
+            var idDyntaxaArray=Object.values(body.taxon.ids);
+            
+            var listTaxonFinal=Occurrence.getListTaxonIncludingHierarchy(idDyntaxaArray);
+
+            // join with records collection
+            joinOccurrences["$lookup"]= {
+              "from": "records",
+              "localField": "eventID",
+              "foreignField": "event",
+              "as": "rec"
+            };
+            // add the TAXON FILTER
+            joinOccurrences["$match"] = {
+              "rec.taxon.dyntaxaId": {
+                "$in": listTaxonFinal
+              }
+            } 
+            // 
+            joinOccurrences["$project"] = {
+              "rec": 0
+            } 
+          }
+        }
+        
 
         // DATE FILTER
         if (body.hasOwnProperty('datum')) {
@@ -365,14 +404,53 @@ exports.getEventsBySearch = function(body,skip,take) {
           query["datasetID"]={"$in":body.datasetList};
         }
 
+        
+        var pipeline = [];
+
+        if (Object.entries(joinOccurrences).length == 0) {
+          pipeline = [
+            { "$match": query }
+          ];
+        }
+        else {
+          // create the pipeline for the aggregation
+          pipeline = [
+              { "$match": query } ,
+              { "$lookup" : joinOccurrences["$lookup"] },
+              { "$match" : joinOccurrences["$match"] },
+              { "$project" : joinOccurrences["$project"] },
+          ];
+        }
+
+        console.log("pipeline query:");
+        console.log(pipeline);
+
+        collEvents.aggregate(pipeline).toArray(function(err, result) {
+          if (err) {
+            throw err;
+            resolve();
+          }
+
+          console.log(result.length+" result(s)");
+          
+          resolve(result);
+        });
+        
+        /*
+        console.log("event query:");
         console.log(query);
 
         collEvents.find(query).toArray(function(err, result) {
+          if (err) {
+            throw err;
+            resolve();
+          }
+
           console.log(result.length+" result(s)");
-          //if (err) throw err;
+          
           resolve(result);
         });
-
+        */
       }
       else {
         resolve();

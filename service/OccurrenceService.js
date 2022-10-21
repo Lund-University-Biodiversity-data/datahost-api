@@ -5,9 +5,9 @@ var dbMongo = require ('../dbmongo.js');
 var Event = require('../service/EventService');
 var Species = require('../service/SpeciesService');
 
-// returns all the occurrences based on taxonID array
-// includes all the speciesHierarchy
-exports.getOccurrencesFromDyntaxaIdAsync = async function (idsArray) {
+
+
+exports.getListTaxonIncludingHierarchy = function (idsArray) {
 
   const listTaxonIncludingHierarchy =[];
 
@@ -32,10 +32,46 @@ exports.getOccurrencesFromDyntaxaIdAsync = async function (idsArray) {
     }
   });
 
+  console.log(idsArray.length+" in idsArray => "+listTaxonIncludingHierarchy.length+" in the end including hierarchy");
+
+  return listTaxonIncludingHierarchy;
+}
+
+
+// SOON USELESS
+// returns all the occurrences based on taxonID array
+// includes all the speciesHierarchy
+exports.getOccurrencesFromDyntaxaIdAsync = async function (idsArray) {
+
+  /*
+  const listTaxonIncludingHierarchy =[];
+
+  const tableTaxonHierarchy = Species.getSpeciesHierarchy();
+
+  idsArray.forEach((element) => {
+    if (element!="None selected") {
+      // check if this dyntaxaId has childdrenIds to add
+      if (tableTaxonHierarchy[element] !== undefined) {
+        //console.log(element+ " has children ! => "+tableTaxonHierarchy[element].length);
+        tableTaxonHierarchy[element].forEach((child) => {
+          if (!listTaxonIncludingHierarchy.includes(child)) {
+            listTaxonIncludingHierarchy.push(parseInt(child));
+          }
+          else {
+            //console.log("child "+child+" already in listTaxonIncludingHierarchy");
+          }
+        });
+
+      }
+      listTaxonIncludingHierarchy.push(element);
+    }
+  });
+  */
+
   //console.log("list species final :");
   //console.log(listTaxonIncludingHierarchy);
 
-  console.log(idsArray.length+" in idsArray => "+listTaxonIncludingHierarchy.length+" in the end including hierarchy");
+  var listTaxonIncludingHierarchy = this.getListTaxonIncludingHierarchy(idsArray);
 
   var collOccurrences = dbMongo.getCollection("Occurrences");
   let occs = await collOccurrences.find({"taxon.dyntaxaId":{"$in":listTaxonIncludingHierarchy}}).toArray();
@@ -190,8 +226,13 @@ exports.getOccurrencesBySearch = function(body,skip,take) {
         if (queryOccurrence.hasOwnProperty('event') || queryOccurrence.hasOwnProperty('taxon.dyntaxaId') || queryOccurrence.hasOwnProperty('datasetID')) {
 
           collOccurrences.find(queryOccurrence).toArray(function(err, result) {
+            if (err) {
+              throw err;
+              resolve(0);
+            }
+
             console.log(result.length+" result(s)");
-            //if (err) throw err;
+
             resolve(result);
           });        
         } else {

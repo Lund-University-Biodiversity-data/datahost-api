@@ -260,8 +260,13 @@ exports.getDatasetsBySearch = function(body,skip,take) {
           console.log(queryDataset);
 
           collDatasets.find(queryDataset).toArray(function(err, result) {
+            if (err) {
+              throw err;
+              resolve(0);
+            }
+
             console.log((typeof result !== 'undefined' ? result.length : 0)+" result(s)");
-            //if (err) throw err;
+
             resolve(result);
           });
         }
