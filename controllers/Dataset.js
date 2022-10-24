@@ -31,6 +31,10 @@ module.exports.getDatasetsBySearch = function getDatasetsBySearch (req, res, nex
 
         // flattened each row to get a one-level json object
         response.forEach((rowResp) => {
+
+          // make sure to tranform the last column with the array of events in a one-line string
+          rowResp["events"]=rowResp["events"].join(",");
+
           jsonFlattened.push(flatten(rowResp));
         });
 

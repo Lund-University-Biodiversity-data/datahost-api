@@ -31,6 +31,10 @@ module.exports.getEventsBySearch = function getEventsBySearch (req, res, next, b
 
         // flattened each row to get a one-level json object
         response.forEach((rowResp) => {
+
+          // make sure to tranform the last column with the array of occurrences in a one-line string
+          rowResp["Occurrences"]=rowResp["Occurrences"].join(",");
+
           jsonFlattened.push(flatten(rowResp));
         });
 
