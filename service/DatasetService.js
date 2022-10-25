@@ -186,41 +186,84 @@ exports.getDatasetsBySearch = function(body,skip,take) {
           allDatasetsAvailable=false;
           datasetAvailableIdArray=body.datasetList;
         }
+console.log(datasetAvailableIdArray);
 
-        // build the query filter, defined as an object (and NOT an array)
-        var queryDataset = {};
-        var queryEvent = {};
+        var joinEvents={};
+        var joinOccurrences={};
 
         var noDataset=false;
-
+        
         // TAXON FILTER
+
         if (body.hasOwnProperty('taxon')) {
           if (body.taxon.hasOwnProperty('ids')) {
+
             var idDyntaxaArray=Object.values(body.taxon.ids);
+            
+            var listTaxonFinal=Occurrence.getListTaxonIncludingHierarchy(idDyntaxaArray);
 
-            let occs = await Occurrence.getOccurrencesFromDyntaxaIdAsync(idDyntaxaArray);
+            // join with records on the datasetID/identifier
+            // limit to the fields needed, to avoid large data in the temp buffer and the 16MB limit outreached
+            joinOccurrences["$lookup"]= {
+              "from": 'records',
+              "let": { "identifier": "$identifier" },
+              "pipeline": [
+                { '$project': { "datasetID": 1, "taxon.dyntaxaId": 1 } },
+                { 
+                  "$match": {
+                    "$expr": {
+                      "$and": [
+                        { "$in" : [ "$taxon.dyntaxaId", listTaxonFinal ] },
+                        { "$eq": [ "$datasetID", "$$identifier" ] } ,
+                      ]
+                    } 
+                  }
+                }
+              ],
+              as: "rec"
+            };
+            // keep only the datasets with values in the occurrences join
+            joinOccurrences["$match"] = {
+              "rec": {"$ne": []}
+            } ;
+            // do not return the records, only the dataset data is needed
+            joinOccurrences["$project"] = {
+              "rec": 0
+            } ;
 
-            if (occs && occs.length>0) {
-              occs.forEach(function(element, index) {
-                if (!datasetIdArray.includes(element.datasetID) && (allDatasetsAvailable || datasetAvailableIdArray.includes(element.datasetID))) datasetIdArray.push(element.datasetID);
-              })
-            }
-            // if no occurrence returned, no event. It has to be specified because the filter will be skipped instead
-            else {
-              noDataset=true;
-            }
+            /* example 
+              {
+                '$lookup': {
+                  from: 'records',
+                  let: { identifier: "$identifier" },
+                  pipeline: [
+                    { '$project': { datasetID: 1, "taxon.dyntaxaId": 1 } },
+                    { 
+                      $match: {
+                        $expr: {
+                          $and: [
+                            { $in : [ "$taxon.dyntaxaId", [100062, 102933] ] },
+                            { $eq: [ "$datasetID", "$$identifier" ] } ,
+                          ]
+                        } 
+                      }
+                    }
+                  ],
+                  as: "rec"
+                }
+              },
+              { '$project': { rec: 0 } }
+              */
           }
         }
+  console.log("joinOccurrences:");
+  console.log(joinOccurrences);
+
+        var pipelineDate = {};
 
         // DATE FILTER
         if (body.hasOwnProperty('datum')) {
-
-          var queryDate=Event.getDatumFilterFromBody(body);
-
-          if (typeof queryDate["eventStartDate"] !== 'undefined' && queryDate["eventStartDate"]!="" && queryDate["eventStartDate"] !== null) queryEvent["eventStartDate"]=queryDate["eventStartDate"];
-          if (typeof queryDate["eventEndDate"] !== 'undefined' && queryDate["eventEndDate"]!="" && queryDate["eventEndDate"] !== null) queryEvent["eventEndDate"]=queryDate["eventEndDate"];
-
-
+          pipelineDate=Event.getDatumFilterForAggregate(body.datum);
         }
 
         // GEOGRAPHIC FILTER
@@ -228,54 +271,122 @@ exports.getDatasetsBySearch = function(body,skip,take) {
         var siteIdArray=[];
 
         if (body.hasOwnProperty('area')) {
-          siteIdArray = await Event.getGeographicFilterFromBody(body);
+          siteIdArray = await Event.getGeographicFilterFromBodyArea(body.area);
         }
+
+        var pipelineSite = {};
 
         // the siteIds from the geographic filter 
         if (body.hasOwnProperty('area') && body.area.hasOwnProperty('area') && siteIdArray.length==0) {
-          queryEvent["site"]="NORESULT";
+          console.log("no site to add to the pipelineEvent");
         }
         else if (siteIdArray.length>0) {
-          queryEvent["site"]={"$in":siteIdArray};
+          pipelineSite={ "$in" : [ "$site", siteIdArray ] }
         }
-        
-        console.log("queryEvent:");
-        console.log(queryEvent);
 
-        let events = await collEvents.find(queryEvent).toArray();
-        events.forEach(function(element, index) {
-          if (!datasetIdArray.includes(element.datasetID) && (allDatasetsAvailable || datasetAvailableIdArray.includes(element.datasetID))) datasetIdArray.push(element.datasetID);
-        })
-
-        // with the datasetIds 
-        if (datasetIdArray.length>0) {
-          // if the taxon filter was specified and did not return anything => no result
-          if (noDataset) {
-            queryDataset["identifier"]={"$in":"NOOCCURRENCEWITHINPUTTAXON"};
-          } 
-          else          
-            queryDataset["identifier"]={"$in":datasetIdArray};
-
-          console.log("queryDataset:");
-          console.log(queryDataset);
-
-          collDatasets.find(queryDataset).toArray(function(err, result) {
-            if (err) {
-              throw err;
-              resolve(0);
-            }
-
-            console.log((typeof result !== 'undefined' ? result.length : 0)+" result(s)");
-
-            resolve(result);
-          });
-        }
+        if (Object.entries(pipelineSite).length == 0 && Object.entries(pipelineDate).length == 0) {}
         else {
-          resolve();
+
+            var pipelineEvents=[];
+
+            if (Object.entries(pipelineDate).length != 0)
+              pipelineEvents = pipelineDate;
+            if (Object.entries(pipelineSite).length != 0)
+              pipelineEvents.push(pipelineSite);
+console.log("pipelineEvents:");
+console.log(pipelineEvents);
+
+            joinEvents["$lookup"]= {
+              "from": 'events',
+              "let": { "identifier": "$identifier" },
+              "pipeline": [
+                { '$project': { "datasetID": 1, "eventID": 1, "eventEndDate": 1, "eventStartDate":1, "site": 1 } },
+                { 
+                  "$match": {
+                    "$expr": {
+                      "$and": [
+                        pipelineEvents,
+                        { $eq: [ "$datasetID", "$$identifier" ] } 
+                      ]
+                    } 
+                  }
+                }
+              ],
+              as: "ev"
+            }
+            // keep only the datasets with values in the occurrences join
+            joinEvents["$match"] = {
+              "ev": {"$ne": []}
+            } ;
+            // do not return the records, only the dataset data is needed
+            joinEvents["$project"] = { "ev": 0 }; 
+
+            /* EXAMPLE
+              {
+              '$lookup': {
+                from: 'events',
+                let: { identif: "$identifier" },
+                pipeline: [
+                  { '$project': { datasetID: 1, eventID: 1, eventEndDate: 1, eventStartDate:1 } },
+                  { 
+                    $match: {
+                      $expr: {
+                        $and: [
+                          { $gte : [ "$eventStartDate", '1995-04-25T00:00:01+0200' ] },
+                          { $lte : [ '$eventEndDate', '1995-05-25T00:00:01+0200' ] },
+                          { $eq: [ "$datasetID", "$$identif" ] } 
+                        ]
+                      } 
+                    }
+                  }
+                ],
+                as: 'ev'
+              }
+            },
+            {
+              '$match': {
+                "ev": {"$ne": []}
+              }
+            },
+            { '$project': { ev: 0 } },
+          */
         }
 
-        
+        var pipeline = [];
 
+
+        // filter on the datasetList
+        if (!allDatasetsAvailable) {
+          pipeline.push({ "$match" : { "identifier" : { "$in" : datasetAvailableIdArray } } });
+        }
+
+        if (Object.entries(joinEvents).length != 0) {
+          pipeline.push({ "$lookup" : joinEvents["$lookup"] });
+          pipeline.push({ "$match" : joinEvents["$match"] });
+          pipeline.push({ "$project" : joinEvents["$project"] });
+        }
+
+        if (Object.entries(joinOccurrences).length != 0) {
+          pipeline.push({ "$lookup" : joinOccurrences["$lookup"] });
+          pipeline.push({ "$match" : joinOccurrences["$match"] });
+          pipeline.push({ "$project" : joinOccurrences["$project"] });
+        }
+
+
+        console.log("pipeline query:");
+        console.log(pipeline);
+
+        collDatasets.aggregate(pipeline).toArray(function(err, result) {
+          if (err) {
+            throw err;
+            resolve();
+          }
+
+          console.log(result.length+" result(s)");
+          
+          resolve(result);
+        });
+        
       }
       else {
         resolve();

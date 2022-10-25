@@ -37,6 +37,85 @@ exports.getEventsByID = function(eventId) {
 }
 
 
+
+exports.getDatumFilterForAggregate = function (datum) {
+  let pipeline = [];
+  var element = {};
+
+  // datumFilterType
+  // default : OverlappingStartDateAndEndDate
+  var datumFilterType="OverlappingStartDateAndEndDate";
+  if (datum.hasOwnProperty('datumFilterType')) {
+    datumFilterType=datum.datumFilterType;
+  }
+
+  var startDate="";
+  var endDate="";
+  if (datum.hasOwnProperty('startDate')) {
+    //console.log(datum.startDate);
+    startDate=datum.startDate;
+  }
+  
+  if (datum.hasOwnProperty('endDate')) {
+    //console.log(datum.endDate);
+    endDate=datum.endDate;
+  }
+  
+  switch(datumFilterType) {
+    
+    case "BetweenStartDateAndEndDate": //  => Start AND EndDate of the event must be within the specified interval
+      if (startDate!="") {
+        pipeline.push({ "$gte" : [ "$eventStartDate", startDate ] });
+      }
+      if (endDate!="") {
+        pipeline.push({ "$lte" : [ "$eventEndDate", endDate ] });
+      }
+      break;
+
+    case "OnlyStartDate": //  => Only StartDate of the event must be within the specified interval
+
+      if(startDate!="" && endDate!="") {
+        //query["eventStartDate"]={"$gte":startDate, "$lte":endDate};
+        pipeline.push({ "$gte" : [ "eventStartDate", startDate ] });
+        pipeline.push({ "$lte" : [ "eventStartDate", endDate ] });
+      }
+      else if (startDate!="") {
+        pipeline.push({ "$gte" : [ "eventStartDate", startDate ] });
+      }
+      else if (endDate!="") {
+        pipeline.push({ "$lte" : [ "eventStartDate", endDate ] });
+      }
+      break;
+
+    case "OnlyEndDate": //  => Only EndDate of the event must be within the specified interval
+      if(startDate!="" && endDate!="") {
+        pipeline.push({ "$gte" : [ "eventEndDate", startDate ] });
+        pipeline.push({ "$lte" : [ "eventEndDate", endDate ] });
+      }
+      else if (startDate!="") {
+        pipeline.push({ "$gte" : [ "eventEndDate", startDate ] });
+      }
+      else if (endDate!="") {
+        //query["eventEndDate"]={"$lte":endDate};
+        pipeline.push({ "$lte" : [ "eventEndDate", endDate ] });
+      }
+      break;
+
+    case "OverlappingStartDateAndEndDate": // => Start OR EndDate of the event may be within the specified interval
+    default:
+      if (startDate!="") {
+        pipeline.push({ '$gte' : [ "$eventEndDate", startDate ] });
+      }
+      if (endDate!="") {
+        pipeline.push({ "$lte" : [ "$eventStartDate", endDate ] });
+      }
+      break;
+  } 
+
+  return pipeline;
+  
+}
+
 exports.getDatumFilterFromBody = function(body) {
 
   var query = [];
@@ -114,14 +193,14 @@ exports.getDatumFilterFromBody = function(body) {
 
 
 
-exports.getGeographicFilterFromBody = async function(body) {
+exports.getGeographicFilterFromBodyArea = async function(area) {
 
 
   var siteIdArray=[];
 
-  if (body.area.hasOwnProperty('county')) {
+  if (area.hasOwnProperty('county')) {
 
-    var countyArray=Object.values(body.area.county);
+    var countyArray=Object.values(area.county);
     let sits = await Site.getSitesFromCountiesAsync(countyArray); 
 
     if (sits) {
@@ -131,27 +210,27 @@ exports.getGeographicFilterFromBody = async function(body) {
     }
   }
 
-  if (body.area.hasOwnProperty('area')) {
+  if (area.hasOwnProperty('area')) {
     //console.log("area.area");
 
 
     var listSites = await Site.getAllSitesCoordinates();
 
     var maxDistanceFromGeometries=0;
-    if (body.area.area.hasOwnProperty('maxDistanceFromGeometries')) {
-      maxDistanceFromGeometries=body.area.area.maxDistanceFromGeometries;
+    if (area.area.hasOwnProperty('maxDistanceFromGeometries')) {
+      maxDistanceFromGeometries=area.area.maxDistanceFromGeometries;
       //console.log("area.area.maxDistanceFromGeometries : "+maxDistanceFromGeometries);
     }
 
-    if (body.area.area.hasOwnProperty('geographicArea')) {
-      if (body.area.area.geographicArea.hasOwnProperty('featurePBB')) {
-        if (body.area.area.geographicArea.featurePBB.hasOwnProperty('geometry')) {
-          if (body.area.area.geographicArea.featurePBB.geometry.hasOwnProperty('type')) {
-            if (body.area.area.geographicArea.featurePBB.geometry.hasOwnProperty('coordinates')) {
+    if (area.area.hasOwnProperty('geographicArea')) {
+      if (area.area.geographicArea.hasOwnProperty('featurePBB')) {
+        if (area.area.geographicArea.featurePBB.hasOwnProperty('geometry')) {
+          if (area.area.geographicArea.featurePBB.geometry.hasOwnProperty('type')) {
+            if (area.area.geographicArea.featurePBB.geometry.hasOwnProperty('coordinates')) {
 
-              var inputPBBCoord = body.area.area.geographicArea.featurePBB.geometry.coordinates;
+              var inputPBBCoord = area.area.geographicArea.featurePBB.geometry.coordinates;
 
-              if (body.area.area.geographicArea.featurePBB.geometry.type=="Point") {
+              if (area.area.geographicArea.featurePBB.geometry.type=="Point") {
 
                 // COMPARE THE COORDINATE SYSTEMS ???
 
@@ -174,7 +253,7 @@ exports.getGeographicFilterFromBody = async function(body) {
                 })
 
               }
-              else if (body.area.area.geographicArea.featurePBB.geometry.type=="BoundingBox") {
+              else if (area.area.geographicArea.featurePBB.geometry.type=="BoundingBox") {
 
                 var invertCoordPBB = [];
 
@@ -221,14 +300,14 @@ exports.getGeographicFilterFromBody = async function(body) {
       }
 
 
-      if (body.area.area.geographicArea.hasOwnProperty('featureLP')) {
-        if (body.area.area.geographicArea.featureLP.hasOwnProperty('geometry')) {
-          if (body.area.area.geographicArea.featureLP.geometry.hasOwnProperty('type')) {
-            if (body.area.area.geographicArea.featureLP.geometry.hasOwnProperty('coordinates')) {
+      if (area.area.geographicArea.hasOwnProperty('featureLP')) {
+        if (area.area.geographicArea.featureLP.hasOwnProperty('geometry')) {
+          if (area.area.geographicArea.featureLP.geometry.hasOwnProperty('type')) {
+            if (area.area.geographicArea.featureLP.geometry.hasOwnProperty('coordinates')) {
               
-              var inputLPCoord = body.area.area.geographicArea.featureLP.geometry.coordinates;
+              var inputLPCoord = area.area.geographicArea.featureLP.geometry.coordinates;
 
-              if (body.area.area.geographicArea.featureLP.geometry.type=="Polygon") {
+              if (area.area.geographicArea.featureLP.geometry.type=="Polygon") {
 
                 var invertCoordLP = [];
 
@@ -260,7 +339,7 @@ exports.getGeographicFilterFromBody = async function(body) {
                   */
                 })
               }
-              else if (body.area.area.geographicArea.featureLP.geometry.type=="lineString") {
+              else if (area.area.geographicArea.featureLP.geometry.type=="lineString") {
               }
 
               
@@ -271,7 +350,7 @@ exports.getGeographicFilterFromBody = async function(body) {
 
     }
 
-    if (body.area.area.hasOwnProperty('maxDistanceFromGeometries')) {
+    if (area.area.hasOwnProperty('maxDistanceFromGeometries')) {
       console.log("area.area.maxDistanceFromGeometries");
     }
   }
@@ -375,8 +454,8 @@ exports.getEventsBySearch = function(body,skip,take) {
 
           var queryDate=exports.getDatumFilterFromBody(body);
 
-          if (typeof queryDate["eventStartDate"] !== 'undefined' && queryDate["eventStartDate"]!="" && queryDate["eventStartDate"]!="") query["eventStartDate"]=queryDate["eventStartDate"];
-          if (typeof queryDate["eventEndDate"] !== 'undefined' && queryDate["eventEndDate"]!="" && queryDate["eventEndDate"]!="") query["eventEndDate"]=queryDate["eventEndDate"];
+          if (typeof queryDate["eventStartDate"] !== 'undefined' && queryDate["eventStartDate"]!="" && queryDate["eventStartDate"]!=null) query["eventStartDate"]=queryDate["eventStartDate"];
+          if (typeof queryDate["eventEndDate"] !== 'undefined' && queryDate["eventEndDate"]!="" && queryDate["eventEndDate"]!=null) query["eventEndDate"]=queryDate["eventEndDate"];          
 
         }
 
@@ -387,7 +466,7 @@ exports.getEventsBySearch = function(body,skip,take) {
 
         if (body.hasOwnProperty('area')) {
 
-          var siteIdArray = await exports.getGeographicFilterFromBody(body);
+          var siteIdArray = await exports.getGeographicFilterFromBodyArea(body.area);
 
         }
 

@@ -188,7 +188,7 @@ exports.getOccurrencesBySearch = function(body,skip,take) {
         var siteIdArray=[];
         
         if (body.hasOwnProperty('area')) {
-          siteIdArray = await Event.getGeographicFilterFromBody(body);
+          siteIdArray = await Event.getGeographicFilterFromBodyArea(body.area);
         }
         
 
