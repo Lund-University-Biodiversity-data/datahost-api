@@ -5,6 +5,9 @@ var dbMongo = require ('../dbmongo.js');
 var Site = require('../service/SiteService');
 var Event = require('../service/EventService');
 var Occurrence = require('../service/OccurrenceService');
+
+const util = require('util');
+
 /**
  * Get dataset by ID
  * Get dataset by ID
@@ -186,7 +189,6 @@ exports.getDatasetsBySearch = function(body,skip,take) {
           allDatasetsAvailable=false;
           datasetAvailableIdArray=body.datasetList;
         }
-console.log(datasetAvailableIdArray);
 
         var joinEvents={};
         var joinOccurrences={};
@@ -202,18 +204,17 @@ console.log(datasetAvailableIdArray);
             
             var listTaxonFinal=Occurrence.getListTaxonIncludingHierarchy(idDyntaxaArray);
 
-            // join with records on the datasetID/identifier
+            // join with the view viewDyntaxaIdDatasetId (dyntaxaId/datasetID) on the datasetID/identifier
             // limit to the fields needed, to avoid large data in the temp buffer and the 16MB limit outreached
             joinOccurrences["$lookup"]= {
-              "from": 'records',
+              "from": 'viewDyntaxaIdDatasetId',
               "let": { "identifier": "$identifier" },
               "pipeline": [
-                { '$project': { "datasetID": 1, "taxon.dyntaxaId": 1 } },
                 { 
                   "$match": {
                     "$expr": {
                       "$and": [
-                        { "$in" : [ "$taxon.dyntaxaId", listTaxonFinal ] },
+                        { "$in" : [ "$dyntaxaId", listTaxonFinal ] },
                         { "$eq": [ "$datasetID", "$$identifier" ] } ,
                       ]
                     } 
@@ -256,8 +257,8 @@ console.log(datasetAvailableIdArray);
               */
           }
         }
-  console.log("joinOccurrences:");
-  console.log(joinOccurrences);
+  //console.log("joinOccurrences:");
+  //console.log(util.inspect(joinOccurrences, false, null, true ));
 
         var pipelineDate = {};
 
@@ -293,8 +294,8 @@ console.log(datasetAvailableIdArray);
               pipelineEvents = pipelineDate;
             if (Object.entries(pipelineSite).length != 0)
               pipelineEvents.push(pipelineSite);
-console.log("pipelineEvents:");
-console.log(pipelineEvents);
+//console.log("pipelineEvents:");
+//console.log(pipelineEvents);
 
             joinEvents["$lookup"]= {
               "from": 'events',
@@ -374,7 +375,7 @@ console.log(pipelineEvents);
 
 
         console.log("pipeline query:");
-        console.log(pipeline);
+        console.log(util.inspect(pipeline, false, null, true ));
 
         collDatasets.aggregate(pipeline).toArray(function(err, result) {
           if (err) {
