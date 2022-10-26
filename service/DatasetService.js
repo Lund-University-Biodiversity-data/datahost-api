@@ -257,8 +257,6 @@ exports.getDatasetsBySearch = function(body,skip,take) {
               */
           }
         }
-  //console.log("joinOccurrences:");
-  //console.log(util.inspect(joinOccurrences, false, null, true ));
 
         var pipelineDate = {};
 

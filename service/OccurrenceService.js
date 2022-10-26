@@ -5,13 +5,7 @@ var dbMongo = require ('../dbmongo.js');
 var Event = require('../service/EventService');
 var Species = require('../service/SpeciesService');
 
-
-
-
-
-
-
-
+const util = require('util');
 
 exports.getListTaxonIncludingHierarchy = function (idsArray) {
 
@@ -220,21 +214,24 @@ exports.getOccurrencesBySearch = function(body,skip,take) {
               pipelineEvents = pipelineDate;
             if (Object.entries(pipelineSite).length != 0)
               pipelineEvents.push(pipelineSite);
+
+            // join with events fields
+            pipelineEvents.push({ $eq: [ "$eventID", "$$eventID" ] } )
+
 console.log("pipelineEvents:");
 console.log(pipelineEvents);
 
             joinEvents["$lookup"]= {
               "from": 'events',
-              "let": { "eventID": "event" },
+              "let": { "eventID": "$event" },
               "pipeline": [
                 { '$project': { "eventID": 1, "eventEndDate": 1, "eventStartDate":1, "site": 1 } },
                 { 
                   "$match": {
                     "$expr": {
-                      "$and": [
+                      "$and": 
                         pipelineEvents,
-                        { $eq: [ "$eventID", "$$eventID" ] } 
-                      ]
+                      
                     } 
                   }
                 }
@@ -331,7 +328,7 @@ console.log(pipelineEvents);
         }
 
         console.log("pipeline query:");
-        console.log(pipeline);
+        console.log(util.inspect(pipeline, false, null, true ));
 
         collOccurrences.aggregate(pipeline).toArray(function(err, result) {
           if (err) {

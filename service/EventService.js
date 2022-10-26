@@ -8,6 +8,8 @@ var Occurrence = require('../service/OccurrenceService');
 //var geolib = require('geolib');
 var turf = require('@turf/turf');
 
+const util = require('util');
+
 /**
  * Get event by ID
  * Get event by ID
@@ -502,7 +504,7 @@ exports.getEventsBySearch = function(body,skip,take) {
         }
 
         console.log("pipeline query:");
-        console.log(pipeline);
+        console.log(util.inspect(pipeline, false, null, true ));
 
         collEvents.aggregate(pipeline).toArray(function(err, result) {
           if (err) {
