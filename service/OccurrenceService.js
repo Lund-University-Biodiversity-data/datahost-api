@@ -159,13 +159,13 @@ exports.getOccurrencesBySearch = function(body,skip,take) {
 
         // DATE FILTER
         if (body.hasOwnProperty('datum')) {
-          /*
+          
           var queryDate=Event.getDatumFilterFromBody(body);
 
           if (typeof queryDate["eventStartDate"] !== 'undefined' && queryDate["eventStartDate"]!="" && queryDate["eventStartDate"] !== null) queryEvent["eventStartDate"]=queryDate["eventStartDate"];
           if (typeof queryDate["eventEndDate"] !== 'undefined' && queryDate["eventEndDate"]!="" && queryDate["eventEndDate"] !== null) queryEvent["eventEndDate"]=queryDate["eventEndDate"];
-          */
-          pipelineDate=Event.getDatumFilterForAggregate(body.datum);
+          
+          //pipelineDate=Event.getDatumFilterForAggregate(body.datum);
         }
 
 
@@ -184,6 +184,7 @@ exports.getOccurrencesBySearch = function(body,skip,take) {
           siteIdArray = await Event.getGeographicFilterFromBodyArea(body.area, listDataset);
         }
         
+        /*
         var pipelineSite = {};
 
         // the siteIds from the geographic filter 
@@ -193,24 +194,25 @@ exports.getOccurrencesBySearch = function(body,skip,take) {
         else if (siteIdArray.length>0) {
           pipelineSite={ "$in" : [ "$site", siteIdArray ] }
         }
+        */
 
         // the siteIds from the geographic filter 
         if (siteIdArray.length>0) {
           queryEvent["site"]={"$in":siteIdArray};
         }
 
-        /*
+        
         if (queryEvent.hasOwnProperty('site') || queryEvent.hasOwnProperty('eventStartDate') || queryEvent.hasOwnProperty('eventEndDate')) {
-          //console.log("queryEvent:");
-          //console.log(queryEvent);
+          console.log("queryEvent:");
+          console.log(queryEvent);
 
           let events = await collEvents.find(queryEvent).toArray();
           events.forEach(function(element, index) {
             eventIdArray.push(element.eventID);
           })
         }
-        */
         
+        /*
         if (Object.entries(pipelineSite).length == 0 && Object.entries(pipelineDate).length == 0) {}
         else {
 
@@ -256,42 +258,8 @@ console.log(pipelineEvents);
             // do not return the records, only the dataset data is needed
             joinEvents["$project"] = { "ev": 0 }; 
 
-            /* EXAMPLE
-              db.records.aggregate([
-                { '$match' : {
-                  "taxon.dyntaxaId": {$in : [100052]}
-                }},
-                {
-                  '$lookup': {
-                    from: 'events',
-                    let: { eventID: "$event" },
-                    pipeline: [
-                      { '$project': { eventID: 1, eventEndDate: 1, eventStartDate:1, site:1  } },
-                      { 
-                        $match: {
-                          $expr: {
-                            $and: [
-                              { $gte : [ "$eventStartDate", '2010-04-25T00:00:01+0200' ] },
-                              { $lte : [ '$eventEndDate', '2020-05-25T00:00:01+0200' ] },
-                              { $eq: [ "$eventID", "$$eventID" ] } 
-                            ]
-                          } 
-                        }
-                      }
-                    ],
-                    as: 'ev'
-                  }
-                },
-                {
-                  '$match': {
-                    "ev": {"$ne": []}
-                  }
-                },
-                { '$project': { ev: 0 } }
-              ])
-
-          */
-        }
+           
+        }*/
 
         // set the datasetList filter
         if (body.hasOwnProperty('datasetList')) {
@@ -301,7 +269,7 @@ console.log(pipelineEvents);
         console.log("queryOccurrence:");
         console.log(queryOccurrence);
 
-        /*
+        
         // with the eventsIDs 
         if (eventIdArray.length>0) {
           queryOccurrence["event"]={"$in":eventIdArray};
@@ -324,8 +292,10 @@ console.log(pipelineEvents);
         } else {
           resolve();
         }
-        */
+        
 
+
+        /*
         var pipeline = [];
 
         if (Object.entries(queryOccurrence).length != 0) {
@@ -351,6 +321,7 @@ console.log(pipelineEvents);
           
           resolve(result);
         });
+        */
 
 
       }
