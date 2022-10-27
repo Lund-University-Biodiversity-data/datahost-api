@@ -270,7 +270,13 @@ exports.getDatasetsBySearch = function(body,skip,take) {
         var siteIdArray=[];
 
         if (body.hasOwnProperty('area')) {
-          siteIdArray = await Event.getGeographicFilterFromBodyArea(body.area);
+
+          var listDataset=null;
+          if (!allDatasetsAvailable) {
+            listDataset = datasetAvailableIdArray;
+          }
+
+          siteIdArray = await Event.getGeographicFilterFromBodyArea(body.area, listDataset);
         }
 
         var pipelineSite = {};

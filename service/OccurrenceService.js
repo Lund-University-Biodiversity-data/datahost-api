@@ -175,7 +175,13 @@ exports.getOccurrencesBySearch = function(body,skip,take) {
         var siteIdArray=[];
         
         if (body.hasOwnProperty('area')) {
-          siteIdArray = await Event.getGeographicFilterFromBodyArea(body.area);
+
+          var listDataset=null;
+          if (body.hasOwnProperty('datasetList')) {
+            listDataset = body.datasetList;
+          }
+
+          siteIdArray = await Event.getGeographicFilterFromBodyArea(body.area, listDataset);
         }
         
         var pipelineSite = {};
@@ -215,6 +221,11 @@ exports.getOccurrencesBySearch = function(body,skip,take) {
             if (Object.entries(pipelineSite).length != 0)
               pipelineEvents.push(pipelineSite);
 
+            // add the datasetfilter in case it exists
+            if (body.hasOwnProperty('datasetList')) {
+              pipelineEvents.push({"$in": [ "$datasetID", body.datasetList ] });
+            }
+
             // join with events fields
             pipelineEvents.push({ $eq: [ "$eventID", "$$eventID" ] } )
 
@@ -225,7 +236,7 @@ console.log(pipelineEvents);
               "from": 'events',
               "let": { "eventID": "$event" },
               "pipeline": [
-                { '$project': { "eventID": 1, "eventEndDate": 1, "eventStartDate":1, "site": 1 } },
+                { '$project': { "eventID": 1, "eventEndDate": 1, "eventStartDate":1, "site": 1, "datasetID": 1 } },
                 { 
                   "$match": {
                     "$expr": {

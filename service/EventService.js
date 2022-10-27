@@ -195,7 +195,7 @@ exports.getDatumFilterFromBody = function(body) {
 
 
 
-exports.getGeographicFilterFromBodyArea = async function(area) {
+exports.getGeographicFilterFromBodyArea = async function(area, listDataset) {
 
 
   var siteIdArray=[];
@@ -216,7 +216,7 @@ exports.getGeographicFilterFromBodyArea = async function(area) {
     //console.log("area.area");
 
 
-    var listSites = await Site.getAllSitesCoordinates();
+    var listSites = await Site.getAllSitesCoordinates(listDataset);
 
     var maxDistanceFromGeometries=0;
     if (area.area.hasOwnProperty('maxDistanceFromGeometries')) {
@@ -468,7 +468,12 @@ exports.getEventsBySearch = function(body,skip,take) {
 
         if (body.hasOwnProperty('area')) {
 
-          var siteIdArray = await exports.getGeographicFilterFromBodyArea(body.area);
+          var listDataset=null;
+          if (body.hasOwnProperty('datasetList')) {
+            listDataset = body.datasetList;
+          }
+
+          var siteIdArray = await exports.getGeographicFilterFromBodyArea(body.area, listDataset);
 
         }
 
