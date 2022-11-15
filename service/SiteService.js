@@ -3,14 +3,14 @@
 var dbMongo = require ('../dbmongo.js');
 
 // returns all sites coordinates
-exports.getAllSitesCoordinates = async function(datasetList) {
+exports.getAllSitesCoordinates = async function(datasetIds) {
 
   var collSites = dbMongo.getCollection("Sites");
   
   var queryParam={};
 
-  if (datasetList != null) {
-    queryParam["datasetID"]= { "$in" : datasetList};
+  if (datasetIds != null) {
+    queryParam["datasetID"]= { "$in" : datasetIds};
   }
 
   let sitesCoordinates = await collSites.find(queryParam,{"emplacement":1}).toArray();

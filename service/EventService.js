@@ -40,30 +40,30 @@ exports.getEventsByID = function(eventId) {
 
 
 
-exports.getDatumFilterForAggregate = function (datum) {
+exports.getDateFilterForAggregate = function (date) {
   let pipeline = [];
   var element = {};
 
-  // datumFilterType
+  // dateFilterType
   // default : OverlappingStartDateAndEndDate
-  var datumFilterType="OverlappingStartDateAndEndDate";
-  if (datum.hasOwnProperty('datumFilterType')) {
-    datumFilterType=datum.datumFilterType;
+  var dateFilterType="OverlappingStartDateAndEndDate";
+  if (date.hasOwnProperty('dateFilterType')) {
+    dateFilterType=date.dateFilterType;
   }
 
   var startDate="";
   var endDate="";
-  if (datum.hasOwnProperty('startDate')) {
-    //console.log(datum.startDate);
-    startDate=datum.startDate;
+  if (date.hasOwnProperty('startDate')) {
+    //console.log(date.startDate);
+    startDate=date.startDate;
   }
   
-  if (datum.hasOwnProperty('endDate')) {
-    //console.log(datum.endDate);
-    endDate=datum.endDate;
+  if (date.hasOwnProperty('endDate')) {
+    //console.log(date.endDate);
+    endDate=date.endDate;
   }
   
-  switch(datumFilterType) {
+  switch(dateFilterType) {
     
     case "BetweenStartDateAndEndDate": //  => Start AND EndDate of the event must be within the specified interval
       if (startDate!="") {
@@ -118,16 +118,16 @@ exports.getDatumFilterForAggregate = function (datum) {
   
 }
 
-exports.getDatumFilterFromBody = function(body) {
+exports.getDateFilterFromBody = function(body) {
 
   var query = [];
 
-  // datumFilterType
+  // dateFilterType
   
   // default : OverlappingStartDateAndEndDate
-  var datumFilterType="OverlappingStartDateAndEndDate";
-  if (body.datum.hasOwnProperty('datumFilterType')) {
-    datumFilterType=body.datum.datumFilterType;
+  var dateFilterType="OverlappingStartDateAndEndDate";
+  if (body.datum.hasOwnProperty('dateFilterType')) {
+    dateFilterType=body.datum.dateFilterType;
   }
 
   var startDate="";
@@ -142,7 +142,7 @@ exports.getDatumFilterFromBody = function(body) {
     endDate=body.datum.endDate;
   }
   
-  switch(datumFilterType) {
+  switch(dateFilterType) {
     
     case "BetweenStartDateAndEndDate": //  => Start AND EndDate of the event must be within the specified interval
       if (startDate!="") {
@@ -380,6 +380,9 @@ exports.getEventsBySearch = function(body,skip,take) {
       resolve(examples[Object.keys(examples)[0]]);
     } else {
       if(body) {
+        //console.log("body received :");
+        //console.log(body);
+
         var collEvents = dbMongo.getCollection("Events");
 
         var eventIdArray=[];
@@ -397,7 +400,7 @@ exports.getEventsBySearch = function(body,skip,take) {
 
             if (occs && occs.length>0) {
               occs.forEach(function(element, index) {
-                eventIdArray.push(element.event);
+                eventIdArray.push(element.eventID);
               })
             }
             // if no occurrence returned, no event. It has to be specified because the filter will be skipped instead
@@ -434,7 +437,7 @@ exports.getEventsBySearch = function(body,skip,take) {
             joinOccurrences["$lookup"]= {
               "from": "records",
               "localField": "eventID",
-              "foreignField": "event",
+              "foreignField": "eventID",
               "as": "rec"
             };
             // add the TAXON FILTER
@@ -450,11 +453,10 @@ exports.getEventsBySearch = function(body,skip,take) {
           }
         }
         
-
         // DATE FILTER
         if (body.hasOwnProperty('datum')) {
 
-          var queryDate=exports.getDatumFilterFromBody(body);
+          var queryDate=exports.getDateFilterFromBody(body);
 
           if (typeof queryDate["eventStartDate"] !== 'undefined' && queryDate["eventStartDate"]!="" && queryDate["eventStartDate"]!=null) query["eventStartDate"]=queryDate["eventStartDate"];
           if (typeof queryDate["eventEndDate"] !== 'undefined' && queryDate["eventEndDate"]!="" && queryDate["eventEndDate"]!=null) query["eventEndDate"]=queryDate["eventEndDate"];          
@@ -469,8 +471,8 @@ exports.getEventsBySearch = function(body,skip,take) {
         if (body.hasOwnProperty('area')) {
 
           var listDataset=null;
-          if (body.hasOwnProperty('datasetList')) {
-            listDataset = body.datasetList;
+          if (body.hasOwnProperty('datasetIds')) {
+            listDataset = body.datasetIds;
           }
 
           var siteIdArray = await exports.getGeographicFilterFromBodyArea(body.area, listDataset);
@@ -485,9 +487,9 @@ exports.getEventsBySearch = function(body,skip,take) {
           query["site"]={"$in":siteIdArray};
         }
         
-        // set the datasetList filter
-        if (body.hasOwnProperty('datasetList')) {
-          query["datasetID"]={"$in":body.datasetList};
+        // set the datasetIds filter
+        if (body.hasOwnProperty('datasetIds')) {
+          query["datasetID"]={"$in":body.datasetIds};
         }
 
         

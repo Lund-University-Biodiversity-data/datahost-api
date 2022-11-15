@@ -160,12 +160,12 @@ exports.getOccurrencesBySearch = function(body,skip,take) {
         // DATE FILTER
         if (body.hasOwnProperty('datum')) {
           
-          var queryDate=Event.getDatumFilterFromBody(body);
+          var queryDate=Event.getDateFilterFromBody(body);
 
           if (typeof queryDate["eventStartDate"] !== 'undefined' && queryDate["eventStartDate"]!="" && queryDate["eventStartDate"] !== null) queryEvent["eventStartDate"]=queryDate["eventStartDate"];
           if (typeof queryDate["eventEndDate"] !== 'undefined' && queryDate["eventEndDate"]!="" && queryDate["eventEndDate"] !== null) queryEvent["eventEndDate"]=queryDate["eventEndDate"];
           
-          //pipelineDate=Event.getDatumFilterForAggregate(body.datum);
+          //pipelineDate=Event.getDateFilterForAggregate(body.date);
         }
 
 
@@ -177,8 +177,8 @@ exports.getOccurrencesBySearch = function(body,skip,take) {
         if (body.hasOwnProperty('area')) {
 
           var listDataset=null;
-          if (body.hasOwnProperty('datasetList')) {
-            listDataset = body.datasetList;
+          if (body.hasOwnProperty('datasetIds')) {
+            listDataset = body.datasetIds;
           }
 
           siteIdArray = await Event.getGeographicFilterFromBodyArea(body.area, listDataset);
@@ -203,6 +203,12 @@ exports.getOccurrencesBySearch = function(body,skip,take) {
 
         
         if (queryEvent.hasOwnProperty('site') || queryEvent.hasOwnProperty('eventStartDate') || queryEvent.hasOwnProperty('eventEndDate')) {
+
+          // add the dataset filter as well
+          if (body.hasOwnProperty('datasetIds')) {
+            queryEvent["datasetID"] = {"$in":body.datasetIds};
+          }
+
           console.log("queryEvent:");
           console.log(queryEvent);
 
@@ -224,8 +230,8 @@ exports.getOccurrencesBySearch = function(body,skip,take) {
               pipelineEvents.push(pipelineSite);
 
             // add the datasetfilter in case it exists
-            if (body.hasOwnProperty('datasetList')) {
-              pipelineEvents.push({"$in": [ "$datasetID", body.datasetList ] });
+            if (body.hasOwnProperty('datasetIds')) {
+              pipelineEvents.push({"$in": [ "$datasetID", body.datasetIds ] });
             }
 
             // join with events fields
@@ -261,23 +267,23 @@ console.log(pipelineEvents);
            
         }*/
 
-        // set the datasetList filter
-        if (body.hasOwnProperty('datasetList')) {
-          queryOccurrence["datasetID"]={"$in":body.datasetList};
+        // set the datasetIds filter
+        if (body.hasOwnProperty('datasetIds')) {
+          queryOccurrence["datasetID"]={"$in":body.datasetIds};
+        }
+
+
+        
+        // with the eventsIDs 
+        if (eventIdArray.length>0) {
+          queryOccurrence["eventID"]={"$in":eventIdArray};
         }
 
         console.log("queryOccurrence:");
         console.log(queryOccurrence);
 
-        
-        // with the eventsIDs 
-        if (eventIdArray.length>0) {
-          queryOccurrence["event"]={"$in":eventIdArray};
-        }
 
-
-
-        if (queryOccurrence.hasOwnProperty('event') || queryOccurrence.hasOwnProperty('taxon.dyntaxaId') || queryOccurrence.hasOwnProperty('datasetID')) {
+        if (queryOccurrence.hasOwnProperty('eventID') || queryOccurrence.hasOwnProperty('taxon.dyntaxaId') || queryOccurrence.hasOwnProperty('datasetID')) {
 
           collOccurrences.find(queryOccurrence).toArray(function(err, result) {
             if (err) {

@@ -52,13 +52,13 @@ paths:
               $ref: '#/components/schemas/OccurrenceFilter'
             example:
               exportMode: json
-              datasetList:
+              datasetIds:
               - - - hjkhk5-hg454-f54f53-f55f4
                   - hjkhk5-hg454-f54f53-f55f4
               datum:
                 startDate: string
                 endDate: string
-                datumFilterType: BetweenStartDateAndEndDate
+                dateFilterType: BetweenStartDateAndEndDate
               taxon:
                 ids:
                 - 0
@@ -195,13 +195,13 @@ paths:
               $ref: '#/components/schemas/DatasetFilter'
             example:
               exportMode: json
-              datasetList:
+              datasetIds:
               - - - hjkhk5-hg454-f54f53-f55f4
                   - hjkhk5-hg454-f54f53-f55f4
               datum:
                 startDate: string
                 endDate: string
-                datumFilterType: BetweenStartDateAndEndDate
+                dateFilterType: BetweenStartDateAndEndDate
               taxon:
                 ids:
                 - 0
@@ -308,13 +308,13 @@ paths:
               $ref: '#/components/schemas/EventsFilter'
             example:
               exportMode: json
-              datasetList:
+              datasetIds:
               - - - hjkhk5-hg454-f54f53-f55f4
                   - hjkhk5-hg454-f54f53-f55f4
               datum:
                 startDate: string
                 endDate: string
-                datumFilterType: BetweenStartDateAndEndDate
+                dateFilterType: BetweenStartDateAndEndDate
               taxon:
                 ids:
                 - 0
@@ -492,7 +492,7 @@ components:
               \ physical samples that can be referenced."
             items:
               $ref: '#/components/schemas/AssociatedMedia'
-          event:
+          eventId:
             type: string
             description: A unique identity of the event where the observation were
               made.
@@ -612,7 +612,7 @@ components:
           type: string
           description: The language used in the dataset.
           example: Svenska
-        events:
+        eventIds:
           minItems: 1
           type: array
           description: A list of unique identites for surveys that is part of the
@@ -651,7 +651,7 @@ components:
           speciesList: http://example.com/aeiou
           methodologyName: methodologyName
         startDate: 1996-05-23T00:00:00.000+00:00
-        events:
+        eventIds:
         - d9baea4e-2436-4481-accb-7c2fe835039e
         - 60152666-8c2c-4d33-a5c8-da1dda106c5d
         - c4eaa558-83cc-4b94-9aff-1aefdc204794
@@ -661,10 +661,10 @@ components:
       properties:
         exportMode:
           $ref: '#/components/schemas/exportMode'
-        datasetList:
-          $ref: '#/components/schemas/datasetList'
+        datasetIds:
+          $ref: '#/components/schemas/DatasetIds'
         datum:
-          $ref: '#/components/schemas/DatumFilter'
+          $ref: '#/components/schemas/DateFilter'
         taxon:
           $ref: '#/components/schemas/TaxonFilter'
         area:
@@ -676,10 +676,10 @@ components:
       properties:
         exportMode:
           $ref: '#/components/schemas/exportMode'
-        datasetList:
-          $ref: '#/components/schemas/datasetList'
+        datasetIds:
+          $ref: '#/components/schemas/DatasetIds'
         datum:
-          $ref: '#/components/schemas/DatumFilter'
+          $ref: '#/components/schemas/DateFilter'
         taxon:
           $ref: '#/components/schemas/TaxonFilter'
         area:
@@ -691,10 +691,10 @@ components:
       properties:
         exportMode:
           $ref: '#/components/schemas/exportMode'
-        datasetList:
-          $ref: '#/components/schemas/datasetList'
+        datasetIds:
+          $ref: '#/components/schemas/DatasetIds'
         datum:
-          $ref: '#/components/schemas/DatumFilter'
+          $ref: '#/components/schemas/DateFilter'
         taxon:
           $ref: '#/components/schemas/TaxonFilter'
         area:
@@ -728,7 +728,7 @@ components:
         rightsHolder:
           type: string
           description: States who the creator of the attachment is.
-    DatumFilter:
+    DateFilter:
       type: object
       properties:
         startDate:
@@ -743,11 +743,11 @@ components:
             \ is specified, GMT+1 (CEST) is assumed"
           format: date-time
           nullable: true
-        datumFilterType:
-          $ref: '#/components/schemas/DatumFilterType'
+        dateFilterType:
+          $ref: '#/components/schemas/DateFilterType'
       additionalProperties: false
       description: Date filter.
-    DatumFilterType:
+    DateFilterType:
       type: string
       description: "OverlappingStartDateAndEndDate, Start OR EndDate of the event\
         \ may be within the specified interval    \r\nBetweenStartDateAndEndDate,\
@@ -1029,13 +1029,10 @@ components:
             description: Comment (freetext) about the survey event.
             example: Någon hade landstiget och rövat bon tidigare under dagen
           noObservations:
-            type: string
+            type: boolean
             description: States whether any of the sought after organisms were observed
               during the survey event or not. "Sant" (i.e. True) means that none of
               the sought after organisms were observed at all.
-            enum:
-            - falskt
-            - sant
           associatedMedia:
             type: array
             description: "Attached information about the survey event, e.g. media\
@@ -1044,9 +1041,9 @@ components:
               $ref: '#/components/schemas/AssociatedMedia'
           Dataset:
             $ref: '#/components/schemas/Event_Dataset'
-          Occurrences:
+          occurrenceIds:
             type: array
-            description: A list of unique identities of the occurances made during
+            description: A list of unique identities of the occurrences made during
               an event
             example:
             - d9baea4e-2436-4481-accb-7c2fe835039e
@@ -1321,7 +1318,7 @@ components:
       - json
       - csv
       default: json
-    datasetList:
+    DatasetIds:
       type: array
       description: List of datasetIds
       example:

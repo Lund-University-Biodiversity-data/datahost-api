@@ -184,10 +184,10 @@ exports.getDatasetsBySearch = function(body,skip,take) {
 
         var allDatasetsAvailable=true;
 
-        // set the datasetList filter
-        if (body.hasOwnProperty('datasetList')) {
+        // set the datasetIds filter
+        if (body.hasOwnProperty('datasetIds')) {
           allDatasetsAvailable=false;
-          datasetAvailableIdArray=body.datasetList;
+          datasetAvailableIdArray=body.datasetIds;
         }
 
         var joinEvents={};
@@ -262,7 +262,7 @@ exports.getDatasetsBySearch = function(body,skip,take) {
 
         // DATE FILTER
         if (body.hasOwnProperty('datum')) {
-          pipelineDate=Event.getDatumFilterForAggregate(body.datum);
+          pipelineDate=Event.getDateFilterForAggregate(body.datum);
         }
 
         // GEOGRAPHIC FILTER
@@ -360,7 +360,7 @@ exports.getDatasetsBySearch = function(body,skip,take) {
         var pipeline = [];
 
 
-        // filter on the datasetList
+        // filter on the datasetIds
         if (!allDatasetsAvailable) {
           pipeline.push({ "$match" : { "identifier" : { "$in" : datasetAvailableIdArray } } });
         }
