@@ -16,10 +16,10 @@ module.exports.getDatasetByID = function getDatasetByID (req, res, next, id) {
     });
 };
 
-module.exports.getDatasetsBySearch = function getDatasetsBySearch (req, res, next, body, skip, take) {
-  Dataset.getDatasetsBySearch(body, skip, take)
+module.exports.getDatasetsBySearch = function getDatasetsBySearch (req, res, next, body, skip, take, exportMode, responseCoordinateSystem) {
+  Dataset.getDatasetsBySearch(body, skip, take, exportMode, responseCoordinateSystem)
     .then(function (response) {
-      if (body.hasOwnProperty('exportMode') && body.exportMode=="csv") {
+      if (exportMode=="csv") {
 
 
         console.log("export as CSV !");

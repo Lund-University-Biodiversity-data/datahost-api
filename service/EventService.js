@@ -369,9 +369,11 @@ exports.getGeographicFilterFromBodyArea = async function(area, listDataset) {
  * body EventsFilter Filter used to limit the search. (optional)
  * skip Integer Start index (optional)
  * take Integer Number of items to return. 1000 items is the max to return in one call. (optional)
+ * exportMode String  (optional)
+ * responseCoordinateSystem ResponseCoordinateSystem  (optional)
  * returns List
  **/
-exports.getEventsBySearch = function(body,skip,take) {
+exports.getEventsBySearch = function(body,skip,take,exportMode,responseCoordinateSystem) {
   return new Promise(async function(resolve, reject) {
     console.log("getEventsBySearch")
     var examples = {};

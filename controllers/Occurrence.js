@@ -16,10 +16,10 @@ module.exports.getOccurrencesByID = function getOccurrencesByID (req, res, next,
     });
 };
 
-module.exports.getOccurrencesBySearch = function getOccurrencesBySearch (req, res, next, body, skip, take) {
-  Occurrence.getOccurrencesBySearch(body, skip, take)
+module.exports.getOccurrencesBySearch = function getOccurrencesBySearch (req, res, next, body, skip, take, exportMode, responseCoordinateSystem) {
+  Occurrence.getOccurrencesBySearch(body, skip, take, exportMode, responseCoordinateSystem)
     .then(function (response) {
-      if (body.hasOwnProperty('exportMode') && body.exportMode=="csv") {
+      if (exportMode=="csv") {
 
 
         console.log("export as CSV !");

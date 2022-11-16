@@ -12,6 +12,7 @@ config.dyntaxaIdAves=4000104;
 
 // For YAML file generation
 config.folderOpenApiFiles = "folder/";
+config.folderOpenApiArchivesFiles = config.folderOpenApiFiles + "openapi_yml_archives/";
 config.templateOpenApiFile = config.folderOpenApiFiles + "templateOpenapi.yaml";
 config.finalOpenApiFile = config.folderOpenApiFiles + "openapi.yaml";
 config.specificEndpointsFile = config.folderOpenApiFiles + "specific_endpoints.yaml";

@@ -12,7 +12,7 @@ const parishesFilePath= config.parishesFilePath;
 
 var today = new Date();
 
-var tempOpenApiFile = config.folderOpenApiFiles + today.toISOString().slice(0,19).replace(/-/g,"").replace(/T/g,"_").replace(/:/g,"") + "_openapi.yml";
+var tempOpenApiFile = config.folderOpenApiArchivesFiles + today.toISOString().slice(0,19).replace(/-/g,"").replace(/T/g,"_").replace(/:/g,"") + "_openapi.yml";
 
 var okGeneration = false;
 

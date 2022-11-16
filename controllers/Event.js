@@ -16,10 +16,10 @@ module.exports.getEventsByID = function getEventsByID (req, res, next, eventID) 
     });
 };
 
-module.exports.getEventsBySearch = function getEventsBySearch (req, res, next, body, skip, take) {
-  Event.getEventsBySearch(body, skip, take)
+module.exports.getEventsBySearch = function getEventsBySearch (req, res, next, body, skip, take, exportMode, responseCoordinateSystem) {
+  Event.getEventsBySearch(body, skip, take, exportMode, responseCoordinateSystem)
     .then(function (response) {
-      if (body.hasOwnProperty('exportMode') && body.exportMode=="csv") {
+      if (exportMode=="csv") {
 
 
         console.log("export as CSV !");

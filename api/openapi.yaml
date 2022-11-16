@@ -44,6 +44,14 @@ paths:
           format: int32
           nullable: true
           default: 100
+      - name: exportMode
+        in: query
+        schema:
+          $ref: '#/components/schemas/ExportMode'
+      - name: responseCoordinateSystem
+        in: query
+        schema:
+          $ref: '#/components/schemas/ResponseCoordinateSystem'
       requestBody:
         description: Filter used to limit the search.
         content:
@@ -51,7 +59,6 @@ paths:
             schema:
               $ref: '#/components/schemas/OccurrenceFilter'
             example:
-              exportMode: json
               datasetIds:
               - - - hjkhk5-hg454-f54f53-f55f4
                   - hjkhk5-hg454-f54f53-f55f4
@@ -78,7 +85,6 @@ paths:
                       - - 15.0051
                         - 58.16108
                   maxDistanceFromGeometries: 25
-                responseCoordinateSystem: EPSG:4326
       responses:
         "200":
           description: Success
@@ -187,6 +193,14 @@ paths:
           format: int32
           nullable: true
           default: 100
+      - name: exportMode
+        in: query
+        schema:
+          $ref: '#/components/schemas/ExportMode'
+      - name: responseCoordinateSystem
+        in: query
+        schema:
+          $ref: '#/components/schemas/ResponseCoordinateSystem'
       requestBody:
         description: Filter used to limit the search.
         content:
@@ -194,7 +208,6 @@ paths:
             schema:
               $ref: '#/components/schemas/DatasetFilter'
             example:
-              exportMode: json
               datasetIds:
               - - - hjkhk5-hg454-f54f53-f55f4
                   - hjkhk5-hg454-f54f53-f55f4
@@ -217,7 +230,6 @@ paths:
                     - -122.64
                     - 45.53
                   maxDistanceFromGeometries: 25
-                responseCoordinateSystem: EPSG:4326
       responses:
         "200":
           description: Success
@@ -300,6 +312,14 @@ paths:
           format: int32
           nullable: true
           default: 100
+      - name: exportMode
+        in: query
+        schema:
+          $ref: '#/components/schemas/ExportMode'
+      - name: responseCoordinateSystem
+        in: query
+        schema:
+          $ref: '#/components/schemas/ResponseCoordinateSystem'
       requestBody:
         description: Filter used to limit the search.
         content:
@@ -307,7 +327,6 @@ paths:
             schema:
               $ref: '#/components/schemas/EventsFilter'
             example:
-              exportMode: json
               datasetIds:
               - - - hjkhk5-hg454-f54f53-f55f4
                   - hjkhk5-hg454-f54f53-f55f4
@@ -332,7 +351,6 @@ paths:
                       - - 14.58003
                         - 58.10148
                   maxDistanceFromGeometries: 25
-                responseCoordinateSystem: EPSG:4326
       responses:
         "200":
           description: Success
@@ -707,8 +725,6 @@ components:
     OccurrenceFilter:
       type: object
       properties:
-        exportMode:
-          $ref: '#/components/schemas/exportMode'
         datasetIds:
           $ref: '#/components/schemas/DatasetIds'
         datum:
@@ -722,8 +738,6 @@ components:
     DatasetFilter:
       type: object
       properties:
-        exportMode:
-          $ref: '#/components/schemas/exportMode'
         datasetIds:
           $ref: '#/components/schemas/DatasetIds'
         datum:
@@ -737,8 +751,6 @@ components:
     EventsFilter:
       type: object
       properties:
-        exportMode:
-          $ref: '#/components/schemas/exportMode'
         datasetIds:
           $ref: '#/components/schemas/DatasetIds'
         datum:
@@ -847,17 +859,6 @@ components:
             $ref: '#/components/schemas/municipality'
         area:
           $ref: '#/components/schemas/GeographicsFilter_area'
-        responseCoordinateSystem:
-          type: array
-          items:
-            type: string
-            enum:
-            - EPSG:3006
-            - EPSG:4619
-            - EPSG:4326
-            - EPSG:3857
-            - EPSG:4258
-            default: EPSG:4326
       additionalProperties: true
       description: Geometry filter.
     PointGeometry:
@@ -4112,13 +4113,24 @@ components:
           description: The id for species or other given level of taxonomy as reported
             by the surveyor. Can be different from now valid taxonomy. (For traceability.)
       description: "Information about a species or other taxon rank."
-    exportMode:
+    ExportMode:
       type: string
       description: json or csv
       enum:
       - json
       - csv
       default: json
+    ResponseCoordinateSystem:
+      type: array
+      items:
+        type: string
+        enum:
+        - EPSG:3006
+        - EPSG:4619
+        - EPSG:4326
+        - EPSG:3857
+        - EPSG:4258
+        default: EPSG:4326
     DatasetIds:
       type: array
       description: List of datasetIds

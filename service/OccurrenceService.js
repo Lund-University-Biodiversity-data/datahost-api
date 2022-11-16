@@ -92,9 +92,18 @@ exports.getOccurrencesByID = function(occurrenceId) {
  * body OccurrenceFilter Filter used to limit the search. (optional)
  * skip Integer Start index (optional)
  * take Integer Number of items to return. 1000 items is the max to return in one call. (optional)
+ * exportMode String  (optional)
+ * responseCoordinateSystem ResponseCoordinateSystem  (optional)
  * returns List
  **/
-exports.getOccurrencesBySearch = function(body,skip,take) {
+exports.getOccurrencesBySearch = function(body,skip,take,exportMode,responseCoordinateSystem) {
+
+  console.log("params (body/skip/take/exportMode):");
+  console.log(body);
+  console.log(skip);
+  console.log(take);
+  console.log(exportMode);
+
   return new Promise(async function(resolve, reject) {
     var examples = {};
     //examples['application/json'] = [ "", "" ];
