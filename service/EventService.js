@@ -522,8 +522,17 @@ exports.getEventsBySearch = function(body,skip,take,exportMode,responseCoordinat
           }
 
           console.log(result.length+" result(s)");
-          
-          resolve(result);
+
+          // in order to deal with pagination, should return as well other parameters :
+          // "skip": XX,
+          // "take": YY,
+          // "count": ZZ,          
+          var responseFinal = {
+            "totalCount": result.length,
+            "results": result
+          }
+
+          resolve(responseFinal);
         });
         
         /*

@@ -91,9 +91,32 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Occurrence'
+                type: object
+                properties:
+                  skip:
+                    type: integer
+                    format: int32
+                    nullable: true
+                    default: 0
+                  take:
+                    type: integer
+                    format: int32
+                    nullable: true
+                    default: 0
+                  count:
+                    type: integer
+                    format: int32
+                    nullable: true
+                    default: 0
+                  totalCount:
+                    type: integer
+                    format: int32
+                    nullable: true
+                    default: 0
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Occurrence'
                 x-content-type: application/json
             text/csv:
               schema:
@@ -196,7 +219,7 @@ paths:
       - name: exportMode
         in: query
         schema:
-          $ref: '#/components/schemas/ExportMode'         
+          $ref: '#/components/schemas/ExportMode'
       - name: responseCoordinateSystem
         in: query
         schema:
@@ -236,10 +259,39 @@ paths:
           content:
             application/json:
               schema:
+                type: object
+                properties:
+                  skip:
+                    type: integer
+                    format: int32
+                    nullable: true
+                    default: 0
+                  take:
+                    type: integer
+                    format: int32
+                    nullable: true
+                    default: 0
+                  count:
+                    type: integer
+                    format: int32
+                    nullable: true
+                    default: 0
+                  totalCount:
+                    type: integer
+                    format: int32
+                    nullable: true
+                    default: 0
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Dataset'
+                x-content-type: application/json
+            text/csv:
+              schema:
                 type: array
                 items:
                   $ref: '#/components/schemas/Dataset'
-                x-content-type: application/json
+                x-content-type: text/csv
         "400":
           description: Bad Request
         "403":
@@ -357,10 +409,39 @@ paths:
           content:
             application/json:
               schema:
+                type: object
+                properties:
+                  skip:
+                    type: integer
+                    format: int32
+                    nullable: true
+                    default: 0
+                  take:
+                    type: integer
+                    format: int32
+                    nullable: true
+                    default: 0
+                  count:
+                    type: integer
+                    format: int32
+                    nullable: true
+                    default: 0
+                  totalCount:
+                    type: integer
+                    format: int32
+                    nullable: true
+                    default: 0
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Event'
+                x-content-type: application/json
+            text/csv:
+              schema:
                 type: array
                 items:
                   $ref: '#/components/schemas/Event'
-                x-content-type: application/json
+                x-content-type: text/csv
         "400":
           description: Bad Request
         "403":

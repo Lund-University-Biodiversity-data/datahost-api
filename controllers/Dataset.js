@@ -30,17 +30,17 @@ module.exports.getDatasetsBySearch = function getDatasetsBySearch (req, res, nex
         const jsonFlattened = [];
 
         // flattened each row to get a one-level json object
-        response.forEach((rowResp) => {
-
+        // get the results object
+        response.results.forEach((rowResp) => {
           // make sure to tranform the last column with the array of events in a one-line string
-          rowResp["events"]=rowResp["events"].join(",");
+          if ("eventIds" in rowResp)
+            rowResp["eventIds"]=rowResp["eventIds"].join(",");
 
           jsonFlattened.push(flatten(rowResp));
         });
 
         //const csv = json2csv.parse(response);
         const csv = json2csv.parse(jsonFlattened);
-
 
         res.header('Content-Type', 'text/csv');
         res.attachment("tempDataset.csv");

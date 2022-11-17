@@ -269,7 +269,16 @@ exports.getDatasetsBySearch = function(body,skip,take,exportMode,responseCoordin
 
           console.log(result.length+" result(s)");
           
-          resolve(result);
+          // in order to deal with pagination, should return as well other parameters :
+          // "skip": XX,
+          // "take": YY,
+          // "count": ZZ,
+          var responseFinal = {
+            "totalCount": result.length,
+            "results": result
+          }
+
+          resolve(responseFinal);
         });
         
       }

@@ -30,7 +30,8 @@ module.exports.getOccurrencesBySearch = function getOccurrencesBySearch (req, re
         const jsonFlattened = [];
 
         // flattened each row to get a one-level json object
-        response.forEach((rowResp) => {
+        // get the results object
+        response.results.forEach((rowResp) => {
           jsonFlattened.push(flatten(rowResp));
         });
 
