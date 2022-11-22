@@ -113,7 +113,7 @@ paths:
                     format: int32
                     nullable: true
                     default: 0
-                  results: 
+                  results:
                     type: array
                     items:
                       $ref: '#/components/schemas/Occurrence'
@@ -219,7 +219,7 @@ paths:
       - name: exportMode
         in: query
         schema:
-          $ref: '#/components/schemas/ExportMode'         
+          $ref: '#/components/schemas/ExportMode'
       - name: responseCoordinateSystem
         in: query
         schema:
@@ -281,7 +281,7 @@ paths:
                     format: int32
                     nullable: true
                     default: 0
-                  results: 
+                  results:
                     type: array
                     items:
                       $ref: '#/components/schemas/Dataset'
@@ -431,7 +431,7 @@ paths:
                     format: int32
                     nullable: true
                     default: 0
-                  results: 
+                  results:
                     type: array
                     items:
                       $ref: '#/components/schemas/Event'
@@ -639,7 +639,7 @@ components:
               \ physical samples that can be referenced."
             items:
               $ref: '#/components/schemas/AssociatedMedia'
-          eventId:
+          eventID:
             type: string
             description: A unique identity of the event where the observation were
               made.
