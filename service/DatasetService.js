@@ -166,7 +166,7 @@ exports.getDatasetsBySearch = function(body,skip,take,exportMode,responseCoordin
           console.log("no site to add to the pipelineEvent");
         }
         else if (siteIdArray.length>0) {
-          pipelineSite={ "$in" : [ "$site", siteIdArray ] }
+          pipelineSite={ "$in" : [ "$site.locationID", siteIdArray ] }
         }
 
         if (Object.entries(pipelineSite).length == 0 && Object.entries(pipelineDate).length == 0) {}

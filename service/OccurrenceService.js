@@ -207,11 +207,11 @@ exports.getOccurrencesBySearch = function(body,skip,take,exportMode,responseCoor
 
         // the siteIds from the geographic filter 
         if (siteIdArray.length>0) {
-          queryEvent["site"]={"$in":siteIdArray};
+          queryEvent["site.locationID"]={"$in":siteIdArray};
         }
 
         
-        if (queryEvent.hasOwnProperty('site') || queryEvent.hasOwnProperty('eventStartDate') || queryEvent.hasOwnProperty('eventEndDate')) {
+        if (queryEvent.hasOwnProperty('site.locationID') || queryEvent.hasOwnProperty('eventStartDate') || queryEvent.hasOwnProperty('eventEndDate')) {
 
           // add the dataset filter as well
           if (body.hasOwnProperty('datasetIds')) {

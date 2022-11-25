@@ -483,10 +483,10 @@ exports.getEventsBySearch = function(body,skip,take,exportMode,responseCoordinat
 
         // the siteIds from the geographic filter 
         if (body.hasOwnProperty('area') && body.area.hasOwnProperty('area') && siteIdArray.length==0) {
-          query["site"]="NORESULT";
+          query["site.locationID"]="NORESULT";
         }
         else if (siteIdArray.length>0) {
-          query["site"]={"$in":siteIdArray};
+          query["site.locationID"]={"$in":siteIdArray};
         }
         
         // set the datasetIds filter
