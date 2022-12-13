@@ -599,6 +599,7 @@ components:
     Dataset:
       required:
       - accessRights
+      - programmeArea
       - assigner
       - creator
       - dataStewardship
@@ -625,14 +626,21 @@ components:
           description: Name of the dataset. Can sometimes be the same as the name
             of the project.
           example: "Svensk Fågeltaxering: Standardrutterna"
-        projectID:
+        project:
+          description: "Information about the project the dataset was collected within. \
+            \ There are different types of projects, e.g. ”delprogram”, ”gemensamt delprogram”. \
+            \ A project can be part of another project."
+          $ref: '#/components/schemas/Project'
+        programmeArea:
           type: string
-          description: Unique id for the project within which the dataset was collected.
-        projectCode:
-          type: string
-          description: Name of the project within which the dataset was collected.
-            Can sometimes be the same as the name of the dataset.
-          example: Svensk Fågeltaxering
+          description: "The program area within environmental monitoring that the dataset belongs to."
+          enum:
+          - "Biogeografisk uppföljning av naturtyper och arter"
+          - "Fjäll"
+          - "Jordbruksmark"
+          - "Kust och hav"
+          - "Landskap"
+          - "Skog"
         assigner:
           description: "The organisation that orders the data collection."
           $ref: '#/components/schemas/Organisation'
@@ -695,9 +703,13 @@ components:
           description: "Information about whether the whole, parts of, or nothing\
             \ in the dataset is publically available."
           enum:
-          - publik
-          - begränsad
-          - ej offentlig
+          - "publik"
+          - "begränsad"
+          - "ej offentlig"
+        descriptionAccessRights:
+          type: string
+          description: "When the dataset is not public or access is restricted \
+            \ (see the property accessRights), how and/or why is described here."
         license:
           type: string
           description: "States which Creative Commons license that is applied to the dataset. \
@@ -1288,7 +1300,7 @@ components:
           description: "The county within which the site is situated. Should be derived from the given position."
           $ref: '#/components/schemas/county'
         province:
-          description: "The province (swe: provins) within which the site is situated.\
+          description: "The province (swe: landskap OR provins) within which the site is situated. \
             \ Should be derived from the given position."
           $ref: '#/components/schemas/province'
         municipality:
@@ -1352,6 +1364,25 @@ components:
       example:
         organisationID: "2021001975"
         organisationCode: Naturvårdsverket
+    Project:
+      required:
+        - projectCode
+        - projectType
+      properties:
+        projectID:
+          type: string
+          description: "Unique id for the project within which the dataset was collected."
+        projectCode:
+          type: string
+          description: "Name of the project within which the dataset was collected. Can sometimes be the same as the name of the dataset."
+        projectType:
+          type: string
+          description: "Type of project that the dataset was collected within, e.g. 'delprogram', 'gemensamt delprogram'."
+          enum:
+          - "artportalenprojekt"
+          - "delprogram"
+          - "delsystem"
+          - "gemensamt delprogram"
     Taxon:
       required:
       - scientificName
