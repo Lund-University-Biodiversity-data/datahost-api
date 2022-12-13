@@ -148,6 +148,7 @@ exports.getDatasetsBySearch = function(body,skip,take,exportMode,responseCoordin
         // GEOGRAPHIC FILTER
 
         var siteIdArray=[];
+        var noSiteMatch=false;
 
         if (body.hasOwnProperty('area')) {
 
@@ -157,6 +158,10 @@ exports.getDatasetsBySearch = function(body,skip,take,exportMode,responseCoordin
           }
 
           siteIdArray = await Event.getGeographicFilterFromBodyArea(body.area, listDataset);
+          if (siteIdArray.length==0) {
+            //siteIdArray.push("NOSITEFOUND");
+            noSiteMatch=true;
+          }
         }
 
         var pipelineSite = {};
@@ -239,22 +244,26 @@ exports.getDatasetsBySearch = function(body,skip,take,exportMode,responseCoordin
 
         var pipeline = [];
 
-
-        // filter on the datasetIds
-        if (!allDatasetsAvailable) {
-          pipeline.push({ "$match" : { "identifier" : { "$in" : datasetAvailableIdArray } } });
+        if (noSiteMatch) { // must return 0
+          pipeline.push({ "$match" : { "identifier" : { "$in" : ["NOSITEFOUND"] } } });
         }
+        else {
+          // filter on the datasetIds
+          if (!allDatasetsAvailable) {
+            pipeline.push({ "$match" : { "identifier" : { "$in" : datasetAvailableIdArray } } });
+          }
 
-        if (Object.entries(joinEvents).length != 0) {
-          pipeline.push({ "$lookup" : joinEvents["$lookup"] });
-          pipeline.push({ "$match" : joinEvents["$match"] });
-          pipeline.push({ "$project" : joinEvents["$project"] });
-        }
+          if (Object.entries(joinEvents).length != 0) {
+            pipeline.push({ "$lookup" : joinEvents["$lookup"] });
+            pipeline.push({ "$match" : joinEvents["$match"] });
+            pipeline.push({ "$project" : joinEvents["$project"] });
+          }
 
-        if (Object.entries(joinOccurrences).length != 0) {
-          pipeline.push({ "$lookup" : joinOccurrences["$lookup"] });
-          pipeline.push({ "$match" : joinOccurrences["$match"] });
-          pipeline.push({ "$project" : joinOccurrences["$project"] });
+          if (Object.entries(joinOccurrences).length != 0) {
+            pipeline.push({ "$lookup" : joinOccurrences["$lookup"] });
+            pipeline.push({ "$match" : joinOccurrences["$match"] });
+            pipeline.push({ "$project" : joinOccurrences["$project"] });
+          }
         }
 
 

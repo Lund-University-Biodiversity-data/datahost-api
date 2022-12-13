@@ -191,6 +191,7 @@ exports.getOccurrencesBySearch = function(body,skip,take,exportMode,responseCoor
           }
 
           siteIdArray = await Event.getGeographicFilterFromBodyArea(body.area, listDataset);
+          if (siteIdArray.length==0) siteIdArray.push("NOSITEFOUND");
         }
         
         /*
@@ -225,6 +226,10 @@ exports.getOccurrencesBySearch = function(body,skip,take,exportMode,responseCoor
           events.forEach(function(element, index) {
             eventIdArray.push(element.eventID);
           })
+
+          if (eventIdArray.length==0) {
+            eventIdArray.push("NOEVENTFOUND");
+          }
         }
         
         /*
@@ -287,7 +292,6 @@ console.log(pipelineEvents);
         if (eventIdArray.length>0) {
           queryOccurrence["eventID"]={"$in":eventIdArray};
         }
-
         console.log("queryOccurrence:");
         console.log(queryOccurrence);
 

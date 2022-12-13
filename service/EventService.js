@@ -213,7 +213,7 @@ exports.getGeographicFilterFromBodyArea = async function(area, listDataset) {
   }
 
   if (area.hasOwnProperty('area')) {
-    //console.log("area.area");
+    console.log("area.area");
 
 
     var listSites = await Site.getAllSitesCoordinates(listDataset);
@@ -310,7 +310,7 @@ exports.getGeographicFilterFromBodyArea = async function(area, listDataset) {
               var inputLPCoord = area.area.geographicArea.featureLP.geometry.coordinates;
 
               if (area.area.geographicArea.featureLP.geometry.type=="Polygon") {
-
+                console.log("polygon");
                 var invertCoordLP = [];
 
                 // can get more than 2 points
@@ -339,7 +339,8 @@ exports.getGeographicFilterFromBodyArea = async function(area, listDataset) {
                     siteIdArray.push(eltSite.locationID);
                   }
                   */
-                })
+                });
+                console.log(siteIdArray.length+ " sites matched");
               }
               else if (area.area.geographicArea.featureLP.geometry.type=="lineString") {
               }
