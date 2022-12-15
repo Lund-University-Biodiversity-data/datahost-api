@@ -647,8 +647,7 @@ components:
         creator:
           minItems: 1
           type: array
-          description: "The organisation responsible for the data collection. More than \
-            \ one organisation can be given here."
+          description: "The organisation responsible for the data collection."
           items:
             $ref: '#/components/schemas/Organisation'
         ownerinstitutionCode:
