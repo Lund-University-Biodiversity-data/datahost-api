@@ -171,7 +171,6 @@ function getList (urlList){
 
   return new Promise ((resolve, reject) => {
 
-    console.log("ca appaelle l'url");
     https.get(urlList,(res) => {
     //https.get(urlAPIListsALABirds,(res) => {
       let body = "";
@@ -250,12 +249,12 @@ function loopLists() {
       try {
         let rtGetList = await getList (urlList);
         //chai.assert.equal(rtGetList.statusCode, 200);
-        console.log("end list "+urlList);
+        //console.log("end list "+urlList);
 
         nbListsRead++;
         // resolve only when final list read
         if (nbListsRead==nbListsToRead) {
-          console.log("endloopLists");
+          //console.log("endloopLists");
           resolve();
         }
 
@@ -345,6 +344,8 @@ const asyncedLoopLists = async _ => {
       // add one row for eachelemnt in speciesSupp
 
 
+      timeStop=new Date().getTime() / 1000;
+      console.log(Math.round(timeStop-timeStart)+" second(s) to execute until now (after asyncedLoopForParentsId)");
     }
 
     else {
@@ -360,8 +361,3 @@ const asyncedLoopLists = async _ => {
 
 let rt=asyncedLoopLists();
 
-console.log("end script");
-
-
-timeStop=new Date().getTime() / 1000;
-console.log(Math.round(timeStop-timeStart)+" second(s) to execute until now (end)")
