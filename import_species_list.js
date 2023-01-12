@@ -13,7 +13,9 @@ const speciesIndex=[]; // only the dyntaxaIds
 const speciesSupp=[]; // species added based on the hierarchical dependecies
 const speciesHierarchy={}; // species with hierarchies relations AS OBJECT and not array
 
-const urlAPIListsALA=config.urlAPIListsALABirds;
+//const urlAPIListsALABirds=config.urlAPIListsALABirds;
+let urlAPILists=config.urlAPILists;
+
 var urlAPISLUparentsId=config.urlAPISLUparentsId;
 var urlAPISLUgetTaxa=config.urlAPISLUgetTaxa;
 
@@ -46,7 +48,7 @@ async function getDyntaxaAPIparentsId (dyntaxaId) {
           let json = JSON.parse(body);
 
           //console.log("body:"+body);
-          var avesFound = false; // boolean to stop when dyntaxaIdAves found (no need to go higher in hierarchy)
+          var finalTaxonFound = false; // boolean to stop when the final taxon is found (Aves, Mammalia , ...  no need to go higher in hierarchy)
 
           Object.entries(json).forEach(([parentKey, parentVal]) => {
             
@@ -56,19 +58,19 @@ async function getDyntaxaAPIparentsId (dyntaxaId) {
             Object.entries(parentVal).forEach(([taxKey, taxVal]) => {
 
               // do not add until finding the "bird/aves"
-              if(!avesFound && config.dyntaxaIdAves == taxVal) {
-                //console.log("Aves trouvé => let's go");
-                avesFound=true;
+              if(!finalTaxonFound && config.dyntaxaIdFinalStoppingTaxon.includes(taxVal)) {
+                //console.log("final taxon trouvé => let's go" + taxVal);
+                finalTaxonFound=true;
               }
 
               // adding the element to the list of species to add in the end
-              if (taxVal!=0 && avesFound && !speciesIndex.includes(taxVal) && !speciesSupp.includes(taxVal)) {
+              if (taxVal!=0 && finalTaxonFound && !speciesIndex.includes(taxVal) && !speciesSupp.includes(taxVal)) {
                 speciesSupp.push(taxVal);
                 //console.log("elt added : "+taxVal+"("+(typeof taxVal)+")");
               }
 
               // adding the hierarchy
-              if (taxVal!=0 && avesFound) {
+              if (taxVal!=0 && finalTaxonFound) {
                 if (speciesHierarchy[taxVal] === undefined) {
                   speciesHierarchy[taxVal]=[];
                 }
@@ -164,133 +166,202 @@ function addSpeciesToList (dyntaxaId, scientificName, swedishName) {
 }
 
 
-https.get(urlAPIListsALA,(res) => {
-    let body = "";
 
-    res.on("data", (chunk) => {
-        body += chunk;
-    });
+function getList (urlList){
 
-    res.on("end", () => {
-      try {
-        let json = JSON.parse(body);
+  return new Promise ((resolve, reject) => {
 
-        //var lsid="";
-        var dyntaxaId="";
-        var scientificName="";
-        var swedishName="";
+    console.log("ca appaelle l'url");
+    https.get(urlList,(res) => {
+    //https.get(urlAPIListsALABirds,(res) => {
+      let body = "";
 
-        Object.entries(json).forEach(element => {
+      res.on("data", (chunk) => {
+          body += chunk;
+      });
 
-          const [key, data] = element;
+      res.on("end", () => {
+        try {
+          let json = JSON.parse(body);
 
-          //lsid=data.id;
-          scientificName=data.name;
-          Object.entries(data.kvpValues).forEach(([kvpKey, kvpVal]) => {
+          //var lsid="";
+          var dyntaxaId="";
+          var scientificName="";
+          var swedishName="";
 
-            if (kvpVal.key=="dyntaxa_id") {
-              dyntaxaId=kvpVal.value;
+          Object.entries(json).forEach(element => {
 
-              if (dyntaxaId=="NULL") {
-                console.log("WARNING : dyntaxaId is NULL for "+data.id+"/"+data.name);
+            const [key, data] = element;
+
+            //lsid=data.id;
+            scientificName=data.name;
+            Object.entries(data.kvpValues).forEach(([kvpKey, kvpVal]) => {
+
+              if (kvpVal.key=="dyntaxa_id") {
+                dyntaxaId=kvpVal.value;
+
+                if (dyntaxaId=="NULL") {
+                  console.log("WARNING : dyntaxaId is NULL for "+data.id+"/"+data.name);
+                }
               }
-            }
-            else if (kvpVal.key=="arthela") {
-              swedishName=kvpVal.value;
-            }
+              else if (kvpVal.key=="arthela") {
+                swedishName=kvpVal.value;
+              }
+
+            });
+            
+            addSpeciesToList (dyntaxaId, scientificName, swedishName);
 
           });
-          
-          addSpeciesToList (dyntaxaId, scientificName, swedishName);
-
-        });
 
 
-        console.log(speciesArr.length+" element(s) in speciesArr");
+          console.log(speciesArr.length+" element(s) in speciesArr");
+
+          timeStop=new Date().getTime() / 1000;
+          console.log(Math.round(timeStop-timeStart)+" second(s) to execute until now.")
+
+          resolve();
+        
+        } catch (error) {
+          console.error("ERR"+error.message);
+          reject(error);
+        }
+      });
+      
+    }).on("error", (error) => {
+        console.error("ERR2"+error.message);
+        reject(error);
+    });
+
+  });
+}
+
+
+function loopLists() {
+
+  return new Promise ((resolve, reject) => {
+
+    var nbListsToRead=urlAPILists.length;
+    var nbListsRead=0;
+    urlAPILists.forEach(async function (urlList) { 
+
+      console.log(urlList);
+
+      try {
+        let rtGetList = await getList (urlList);
+        //chai.assert.equal(rtGetList.statusCode, 200);
+        console.log("end list "+urlList);
+
+        nbListsRead++;
+        // resolve only when final list read
+        if (nbListsRead==nbListsToRead) {
+          console.log("endloopLists");
+          resolve();
+        }
+
+      } catch (err) {
+        console.log('some error occurred...');
+      }
+
+    });
+
+    
+
+  });
+}
+
+
+const asyncedLoopLists = async _ => {
+
+
+  try {
+    let res = await loopLists();
+    //chai.assert.equal(rtGetList.statusCode, 200);
+    console.log("end loopLists");
+
+    if (speciesArr.length>0) {
+
+      console.log("get dependencies for "+speciesArr.length+ " species");
+
+      // async to make sure that the for Loop awaits all the results before doing more
+      const asyncedLoopForGetTaxa = async _ => {
+        for (const onespecies of speciesSupp) {
+          var urlSLU=urlAPISLUgetTaxa.replace("{taxonId}", onespecies);
+          let rtApi = await getDyntaxaAPIgetTaxa(urlSLU);
+          //let rtApi = await testAsync(urlSLU);
+          //console.log("rt GetTaxa after await : "+rtApi); 
+        //});
+        }
+        console.log(speciesArr.length+" element(s) now in speciesArr");
 
         timeStop=new Date().getTime() / 1000;
         console.log(Math.round(timeStop-timeStart)+" second(s) to execute until now.")
 
         if (speciesArr.length>0) {
-
-          console.log("get dependencies for "+speciesArr.length+ " species");
-
-          // async to make sure that the for Loop awaits all the results before doing more
-          const asyncedLoopForGetTaxa = async _ => {
-            for (const onespecies of speciesSupp) {
-              var urlSLU=urlAPISLUgetTaxa.replace("{taxonId}", onespecies);
-              let rtApi = await getDyntaxaAPIgetTaxa(urlSLU);
-              //let rtApi = await testAsync(urlSLU);
-              //console.log("rt GetTaxa after await : "+rtApi); 
-            //});
-            }
-            console.log(speciesArr.length+" element(s) now in speciesArr");
-
-            timeStop=new Date().getTime() / 1000;
-            console.log(Math.round(timeStop-timeStart)+" second(s) to execute until now.")
-
-            if (speciesArr.length>0) {
-              writeFileSpecies();
-            }
-
-            timeStop=new Date().getTime() / 1000;
-            console.log(Math.round(timeStop-timeStart)+" second(s) to execute until now.")
-
-          }
-
-
-          // async to make sure that the for Loop awaits all the results before doing more
-          const asyncedLoopForParentsId = async _ => {
-            //speciesArr.forEach(async function(onespecies) {
-            for (const onespecies of speciesArr) {
-              if (onespecies.dyntaxaId !== null && onespecies.dyntaxaId !== "NULL" && onespecies.dyntaxaId !="" ) {
-                let rtApi = await getDyntaxaAPIparentsId(onespecies.dyntaxaId);
-              }
-              else {
-                console.log("WARNING : no dyntaxaId for :");
-                console.log(onespecies);
-              }
-              //let rtApi = await testAsync(urlSLU);
-              //console.log("rt after await : "+rtApi); 
-            //});
-            }
-            console.log(speciesSupp.length+" element(s) to add as higher hierarchical groups");
-            // loop among the species to add to the list
-            console.log(speciesSupp);
-
-            console.log(Object.keys(speciesHierarchy).length+" element(s) with childIds (speciesHierarchy)");
-
-            //console.log("avant asyncedLoopForGetTaxa"+speciesSupp.length);
-            asyncedLoopForGetTaxa();
-            //console.log("apres asyncedLoopForGetTaxa");
-
-
-            timeStop=new Date().getTime() / 1000;
-            console.log(Math.round(timeStop-timeStart)+" second(s) to execute until now.")
-          }
-
-
-          //console.log("avant asyncedLoopForParentsId");
-          let rt=asyncedLoopForParentsId();
-          //console.log("apres asyncedLoopForParentsId");
-
-          // add one row for eachelemnt in speciesSupp
-
-
+          writeFileSpecies();
         }
 
+        timeStop=new Date().getTime() / 1000;
+        console.log(Math.round(timeStop-timeStart)+" second(s) to execute until now (after writing)")
+
+      }
 
 
+      // async to make sure that the for Loop awaits all the results before doing more
+      const asyncedLoopForParentsId = async _ => {
+        //speciesArr.forEach(async function(onespecies) {
+        for (const onespecies of speciesArr) {
+          if (onespecies.dyntaxaId !== null && onespecies.dyntaxaId !== "NULL" && onespecies.dyntaxaId !="" ) {
+            let rtApi = await getDyntaxaAPIparentsId(onespecies.dyntaxaId);
+          }
+          else {
+            console.log("WARNING : no dyntaxaId for :");
+            console.log(onespecies);
+          }
+          //let rtApi = await testAsync(urlSLU);
+          //console.log("rt after await : "+rtApi); 
+        //});
+        }
+        console.log(speciesSupp.length+" element(s) to add as higher hierarchical groups");
+        // loop among the species to add to the list
+        console.log(speciesSupp);
 
-      } catch (error) {
-          console.error(error.message);
-      };
-    });
+        console.log(Object.keys(speciesHierarchy).length+" element(s) with childIds (speciesHierarchy)");
 
-}).on("error", (error) => {
-    console.error(error.message);
-});
+        //console.log("avant asyncedLoopForGetTaxa"+speciesSupp.length);
+        asyncedLoopForGetTaxa();
+        //console.log("apres asyncedLoopForGetTaxa");
+
+
+        timeStop=new Date().getTime() / 1000;
+        console.log(Math.round(timeStop-timeStart)+" second(s) to execute until now.")
+      }
+
+
+      //console.log("avant asyncedLoopForParentsId");
+      let rt=asyncedLoopForParentsId();
+      //console.log("apres asyncedLoopForParentsId");
+
+      // add one row for eachelemnt in speciesSupp
+
+
+    }
+
+    else {
+      console.log("nothing in speciesArr");
+    }
+
+  } catch (err) {
+    console.log('some error occurred loopLists...');
+  }
+
+}
+
+
+let rt=asyncedLoopLists();
+
+console.log("end script");
 
 
 timeStop=new Date().getTime() / 1000;
-console.log(Math.round(timeStop-timeStart)+" second(s) to execute until now.")
+console.log(Math.round(timeStop-timeStart)+" second(s) to execute until now (end)")
