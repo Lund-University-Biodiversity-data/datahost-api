@@ -1,6 +1,7 @@
 var config = {};
 
 config.apiServerUrl='http://URL';
+config.apiServerUrlVersion='/v1';
 
 config.SLUAPIkey = "YOUR_KEY_HERE";
 config.speciesFilePath = "PATH";
