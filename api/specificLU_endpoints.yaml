@@ -1,5 +1,5 @@
 
-  %%API_VERSION_URL%%/speciesList:
+  /speciesList:
     get:
       tags:
       - SpeciesList
@@ -23,7 +23,7 @@
         "500":
           description: Internal Server Error
       x-swagger-router-controller: StaticSpeciesList
-  %%API_VERSION_URL%%/speciesHierarchy:
+  /speciesHierarchy:
     get:
       tags:
       - SpeciesHierarchy
