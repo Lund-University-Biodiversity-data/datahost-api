@@ -12,7 +12,7 @@ info:
 servers:
 - url: %%SERVER_URL%%
 paths:
-  /occurrences:
+  %%API_VERSION_URL%%/occurrences:
     post:
       tags:
       - Occurrence
@@ -144,7 +144,7 @@ paths:
         "500":
           description: Internal Server Error
       x-swagger-router-controller: Occurrence
-  /occurrences/{occurrenceId}:
+  %%API_VERSION_URL%%/occurrences/{occurrenceId}:
     get:
       tags:
       - Occurrence
@@ -184,7 +184,7 @@ paths:
         "500":
           description: Internal Server Error
       x-swagger-router-controller: Occurrence
-  /datasets:
+  %%API_VERSION_URL%%/datasets:
     post:
       tags:
       - Dataset
@@ -299,7 +299,7 @@ paths:
         "500":
           description: Internal Server Error
       x-swagger-router-controller: Dataset
-  /datasets/{id}:
+  %%API_VERSION_URL%%/datasets/{id}:
     get:
       tags:
       - Dataset
@@ -332,7 +332,7 @@ paths:
         "500":
           description: Internal Server Error
       x-swagger-router-controller: Dataset
-  /events:
+  %%API_VERSION_URL%%/events:
     post:
       tags:
       - Event
@@ -449,7 +449,7 @@ paths:
         "500":
           description: Internal Server Error
       x-swagger-router-controller: Event
-  /events/{eventID}:
+  %%API_VERSION_URL%%/events/{eventID}:
     get:
       tags:
       - Event

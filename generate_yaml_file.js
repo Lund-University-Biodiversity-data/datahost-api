@@ -21,16 +21,20 @@ var tempYmlContent;
 // get the template content
 tempYmlContent=fs.readFileSync(templateOpenApiFile, "utf8");
 
+// get the specific stuff from LU for new endpoints
+specificEndpointsContent=fs.readFileSync(specificEndpointsFile, "utf8");
+
+tempYmlContent = tempYmlContent.replace('%%SPECIFIC_ENDPOINTS%%', specificEndpointsContent);
+
+
 tempYmlContent = tempYmlContent.replace('%%FILE_TITLE%%', "LU API-documentation Template");
 tempYmlContent = tempYmlContent.replace('%%FILE_DESC%%', "Created by the DPS-group. Updated by LU");
 tempYmlContent = tempYmlContent.replace('%%FILE_CONTACTNAME%%', "Mathieu Blanchet");
 tempYmlContent = tempYmlContent.replace('%%FILE_EMAIL%%', "mathieu.blanchet@biol.lu.se");
 tempYmlContent = tempYmlContent.replace('%%SERVER_URL%%', config.apiServerUrl);
+// REPLACE ALL the API_VERSION_URL
+tempYmlContent = tempYmlContent.replace(new RegExp('%%API_VERSION_URL%%', 'g'), config.apiServerUrlVersion);
 
-// get the specific stuff from LU for new endpoints
-specificEndpointsContent=fs.readFileSync(specificEndpointsFile, "utf8");
-
-tempYmlContent = tempYmlContent.replace('%%SPECIFIC_ENDPOINTS%%', specificEndpointsContent);
 
 // get the different long enum lists
 municipalitiesList=fs.readFileSync(municipalitiesFilePath, "utf8");

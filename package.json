@@ -8,7 +8,8 @@
     "start": "node index.js",
     "species": "node import_species_list.js",
     "yamlgen": "node generate_yaml_file.js",
-    "getmun": "node get_municipalities_list.js"
+    "getmun": "node get_municipalities_list.js",
+    "oldindexurl": "node index_old_url.js"
   },
   "keywords": [
     "swagger"

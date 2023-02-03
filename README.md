@@ -9,11 +9,7 @@ sudo apt-get install mongodb
 ```
 
 The database has to have a couple of indexes, to make sure the queries don't take forever.
-Examples :
-```
-db.records.createIndex( { event : 1 } )
-db.events.createIndex( { eventID : 1 } )
-db.events.createIndex( { site : 1 } )
+See the dedicated repo (convert-ecodata-to-datahost)
 ```
 
 ## Overview

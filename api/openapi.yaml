@@ -12,7 +12,7 @@ info:
 servers:
 - url: http://canmove-dev.ekol.lu.se:8088
 paths:
-  /occurrences:
+  /v1/occurrences:
     post:
       tags:
       - Occurrence
@@ -144,7 +144,7 @@ paths:
         "500":
           description: Internal Server Error
       x-swagger-router-controller: Occurrence
-  /occurrences/{occurrenceId}:
+  /v1/occurrences/{occurrenceId}:
     get:
       tags:
       - Occurrence
@@ -184,7 +184,7 @@ paths:
         "500":
           description: Internal Server Error
       x-swagger-router-controller: Occurrence
-  /datasets:
+  /v1/datasets:
     post:
       tags:
       - Dataset
@@ -299,7 +299,7 @@ paths:
         "500":
           description: Internal Server Error
       x-swagger-router-controller: Dataset
-  /datasets/{id}:
+  /v1/datasets/{id}:
     get:
       tags:
       - Dataset
@@ -332,7 +332,7 @@ paths:
         "500":
           description: Internal Server Error
       x-swagger-router-controller: Dataset
-  /events:
+  /v1/events:
     post:
       tags:
       - Event
@@ -449,7 +449,7 @@ paths:
         "500":
           description: Internal Server Error
       x-swagger-router-controller: Event
-  /events/{eventID}:
+  /v1/events/{eventID}:
     get:
       tags:
       - Event
@@ -484,7 +484,7 @@ paths:
       x-swagger-router-controller: Event
 
 
-  /speciesList:
+  /v1/speciesList:
     get:
       tags:
       - SpeciesList
@@ -508,7 +508,7 @@ paths:
         "500":
           description: Internal Server Error
       x-swagger-router-controller: StaticSpeciesList
-  /speciesHierarchy:
+  /v1/speciesHierarchy:
     get:
       tags:
       - SpeciesHierarchy
