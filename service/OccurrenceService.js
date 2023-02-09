@@ -1,6 +1,7 @@
 'use strict';
 
 var dbMongo = require ('../dbmongo.js');
+var stats = require ('../utils/statistics.js');
 
 var Event = require('../service/EventService');
 var Species = require('../service/SpeciesService');
@@ -77,6 +78,9 @@ exports.getOccurrencesByID = function(occurrenceId) {
           resolve(500);
             //return response.status(500).send(error);
         }
+        // stats
+        stats.addStat("getOccurrencesByID", occurrenceId);
+
         resolve(result);
         //response.send(result);
       });
@@ -98,11 +102,11 @@ exports.getOccurrencesByID = function(occurrenceId) {
  **/
 exports.getOccurrencesBySearch = function(body,skip,take,exportMode,responseCoordinateSystem) {
 
-  console.log("params (body/skip/take/exportMode):");
+  /*console.log("params (body/skip/take/exportMode):");
   console.log(body);
   console.log(skip);
   console.log(take);
-  console.log(exportMode);
+  console.log(exportMode);*/
 
   return new Promise(async function(resolve, reject) {
     var examples = {};
@@ -314,6 +318,9 @@ console.log(pipelineEvents);
               "totalCount": result.length,
               "results": result
             }
+
+            // stats
+            stats.addStat("getOccurrencesBySearch", "POST");
 
             resolve(responseFinal);
           });        

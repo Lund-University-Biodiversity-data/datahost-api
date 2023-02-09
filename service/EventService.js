@@ -1,6 +1,7 @@
 'use strict';
 
 var dbMongo = require ('../dbmongo.js');
+var stats = require ('../utils/statistics.js');
 
 var Site = require('../service/SiteService');
 var Occurrence = require('../service/OccurrenceService');
@@ -31,6 +32,9 @@ exports.getEventsByID = function(eventId) {
           resolve(500);
             //return response.status(500).send(error);
         }
+        // stats
+        stats.addStat("getEventsByID", eventId);
+
         resolve(result);
         //response.send(result);
       });
@@ -532,6 +536,10 @@ exports.getEventsBySearch = function(body,skip,take,exportMode,responseCoordinat
             "totalCount": result.length,
             "results": result
           }
+
+
+          // stats
+          stats.addStat("getEventsBySearch", "POST");
 
           resolve(responseFinal);
         });

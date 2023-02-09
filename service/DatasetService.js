@@ -1,6 +1,7 @@
 'use strict';
 
 var dbMongo = require ('../dbmongo.js');
+var stats = require ('../utils/statistics.js');
 
 var Site = require('../service/SiteService');
 var Event = require('../service/EventService');
@@ -30,6 +31,9 @@ exports.getDatasetByID = function(datasetID) {
           resolve(500);
             //return response.status(500).send(error);
         }
+        // stats
+        stats.addStat("getDatasetByID", datasetID);
+
         resolve(result);
         //response.send(result);
       });
@@ -112,29 +116,6 @@ exports.getDatasetsBySearch = function(body,skip,take,exportMode,responseCoordin
               "rec": 0
             } ;
 
-            /* example 
-              {
-                '$lookup': {
-                  from: 'records',
-                  let: { identifier: "$identifier" },
-                  pipeline: [
-                    { '$project': { datasetID: 1, "taxon.dyntaxaId": 1 } },
-                    { 
-                      $match: {
-                        $expr: {
-                          $and: [
-                            { $in : [ "$taxon.dyntaxaId", [100062, 102933] ] },
-                            { $eq: [ "$datasetID", "$$identifier" ] } ,
-                          ]
-                        } 
-                      }
-                    }
-                  ],
-                  as: "rec"
-                }
-              },
-              { '$project': { rec: 0 } }
-              */
           }
         }
 
@@ -183,8 +164,6 @@ exports.getDatasetsBySearch = function(body,skip,take,exportMode,responseCoordin
               pipelineEvents = pipelineDate;
             if (Object.entries(pipelineSite).length != 0)
               pipelineEvents.push(pipelineSite);
-//console.log("pipelineEvents:");
-//console.log(pipelineEvents);
 
             joinEvents["$lookup"]= {
               "from": 'events',
@@ -211,35 +190,6 @@ exports.getDatasetsBySearch = function(body,skip,take,exportMode,responseCoordin
             // do not return the records, only the dataset data is needed
             joinEvents["$project"] = { "ev": 0 }; 
 
-            /* EXAMPLE
-              {
-              '$lookup': {
-                from: 'events',
-                let: { identif: "$identifier" },
-                pipeline: [
-                  { '$project': { datasetID: 1, eventID: 1, eventEndDate: 1, eventStartDate:1 } },
-                  { 
-                    $match: {
-                      $expr: {
-                        $and: [
-                          { $gte : [ "$eventStartDate", '1995-04-25T00:00:01+0200' ] },
-                          { $lte : [ '$eventEndDate', '1995-05-25T00:00:01+0200' ] },
-                          { $eq: [ "$datasetID", "$$identif" ] } 
-                        ]
-                      } 
-                    }
-                  }
-                ],
-                as: 'ev'
-              }
-            },
-            {
-              '$match': {
-                "ev": {"$ne": []}
-              }
-            },
-            { '$project': { ev: 0 } },
-          */
         }
 
         var pipeline = [];
@@ -286,6 +236,9 @@ exports.getDatasetsBySearch = function(body,skip,take,exportMode,responseCoordin
             "totalCount": result.length,
             "results": result
           }
+
+          // stats
+          stats.addStat("getDatasetsBySearch", "POST");
 
           resolve(responseFinal);
         });
