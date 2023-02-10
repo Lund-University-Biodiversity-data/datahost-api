@@ -29,4 +29,9 @@ config.speciesFileProvinces = config.folderOpenApiFiles + "list_provinces.yaml";
 // For obtaining the list of municipalities
 config.urlAPIMunicipalities = 'https://catalog.skl.se/rowstore/dataset/ed60ba69-f267-4b63-9f62-840342ba29f6/json';
 
+// STATISTICS
+config.databaseStatisticsUrl = "mongodb://localhost:27017";
+config.databaseStatisticsName = "statsDB";
+config.databaseStatisticsTable = "statsServer";
+
 export default config;
