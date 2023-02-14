@@ -1,6 +1,6 @@
 'use strict';
 
-var dbMongo = require ('../dbmongo.js');
+var dbMongo = require ('../utils/dbmongo.js');
 var stats = require ('../utils/statistics.js');
 
 var Event = require('../service/EventService');
@@ -308,7 +308,7 @@ console.log(pipelineEvents);
 
         var skipInt=0;
         // add the skip(start) param
-        console.log("SKIP :"+skip);
+        //console.log("SKIP :"+skip);
         if (!isNaN(skip) && skip >0) {
           skipInt=parseInt(skip);
         }

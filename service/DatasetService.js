@@ -1,6 +1,6 @@
 'use strict';
 
-var dbMongo = require ('../dbmongo.js');
+var dbMongo = require ('../utils/dbmongo.js');
 var stats = require ('../utils/statistics.js');
 
 var Site = require('../service/SiteService');
@@ -218,7 +218,7 @@ exports.getDatasetsBySearch = function(body,skip,take,exportMode,responseCoordin
         }
 
         // add the skip(start) param
-        console.log("SKIP :"+skip);
+        //console.log("SKIP :"+skip);
         if (!isNaN(skip) && skip >0) {
           pipeline.push({"$skip" : parseInt(skip)})
         }
@@ -228,7 +228,7 @@ exports.getDatasetsBySearch = function(body,skip,take,exportMode,responseCoordin
         if (!isNaN(take) && take >0) {
           pipeline.push({"$limit" : parseInt(take)})
         }
-        
+
         console.log("pipeline query dataset:");
         console.log(util.inspect(pipeline, false, null, true ));
 

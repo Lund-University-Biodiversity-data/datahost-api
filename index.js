@@ -6,7 +6,7 @@ var myApp = require('./datahostServerApiV1').app;
 var http = require('http');
 var serverPort = 8088;
 var config = require ('./config/config.js');
-var dbMongo = require ('./dbmongo.js');
+var dbMongo = require ('./utils/dbmongo.js');
 
 app.use(config.apiServerUrlVersion, myApp);
 //app.use("/datahostServerApiV1", myApp);

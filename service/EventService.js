@@ -1,6 +1,6 @@
 'use strict';
 
-var dbMongo = require ('../dbmongo.js');
+var dbMongo = require ('../utils/dbmongo.js');
 var stats = require ('../utils/statistics.js');
 
 var Site = require('../service/SiteService');

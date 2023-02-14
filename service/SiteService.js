@@ -1,6 +1,6 @@
 'use strict';
 
-var dbMongo = require ('../dbmongo.js');
+var dbMongo = require ('../utils/dbmongo.js');
 
 // returns all sites coordinates
 exports.getAllSitesCoordinates = async function(datasetIds) {
