@@ -379,6 +379,13 @@ exports.getGeographicFilterFromBodyArea = async function(area, listDataset) {
  * returns List
  **/
 exports.getEventsBySearch = function(body,skip,take,exportMode,responseCoordinateSystem) {
+
+  /*console.log("2params (body/skip/take/exportMode):");
+  console.log(body);
+  console.log(skip);
+  console.log(take);
+  console.log(exportMode);*/
+
   return new Promise(async function(resolve, reject) {
     console.log("getEventsBySearch")
     var examples = {};
@@ -517,6 +524,13 @@ exports.getEventsBySearch = function(body,skip,take,exportMode,responseCoordinat
           ];
         }
 
+
+        // add the take/limit param
+        //console.log("TAKE :"+take);
+        if (!isNaN(take) && take >0) {
+          pipeline.push({"$limit" : parseInt(take)})
+        }
+
         console.log("pipeline query:");
         console.log(util.inspect(pipeline, false, null, true ));
 
@@ -530,9 +544,9 @@ exports.getEventsBySearch = function(body,skip,take,exportMode,responseCoordinat
 
           // in order to deal with pagination, should return as well other parameters :
           // "skip": XX,
-          // "take": YY,
           // "count": ZZ,          
           var responseFinal = {
+            "take": parseInt(take),
             "totalCount": result.length,
             "results": result
           }

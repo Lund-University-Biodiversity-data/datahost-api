@@ -31,9 +31,9 @@ tempYmlContent = tempYmlContent.replace('%%FILE_TITLE%%', "LU API-documentation 
 tempYmlContent = tempYmlContent.replace('%%FILE_DESC%%', "Created by the DPS-group. Updated by LU");
 tempYmlContent = tempYmlContent.replace('%%FILE_CONTACTNAME%%', "Mathieu Blanchet");
 tempYmlContent = tempYmlContent.replace('%%FILE_EMAIL%%', "mathieu.blanchet@biol.lu.se");
-tempYmlContent = tempYmlContent.replace('%%SERVER_URL%%', config.apiServerUrl);
+tempYmlContent = tempYmlContent.replace('%%SERVER_URL%%', config.apiServerUrl+config.apiServerUrlVersion);
 // REPLACE ALL the API_VERSION_URL
-tempYmlContent = tempYmlContent.replace(new RegExp('%%API_VERSION_URL%%', 'g'), config.apiServerUrlVersion);
+//tempYmlContent = tempYmlContent.replace(new RegExp('%%API_VERSION_URL%%', 'g'), config.apiServerUrlVersion);
 
 
 // get the different long enum lists

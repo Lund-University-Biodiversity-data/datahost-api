@@ -17,6 +17,7 @@ module.exports.getEventsByID = function getEventsByID (req, res, next, eventID) 
 };
 
 module.exports.getEventsBySearch = function getEventsBySearch (req, res, next, body, skip, take, exportMode, responseCoordinateSystem) {
+
   Event.getEventsBySearch(body, skip, take, exportMode, responseCoordinateSystem)
     .then(function (response) {
       if (exportMode=="csv") {

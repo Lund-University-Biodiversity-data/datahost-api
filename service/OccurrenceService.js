@@ -299,10 +299,16 @@ console.log(pipelineEvents);
         console.log("queryOccurrence:");
         console.log(queryOccurrence);
 
+        var limit=0;
+        // add the take/limit param
+        //console.log("TAKE :"+take);
+        if (!isNaN(take) && take >0) {
+          limit=parseInt(take);
+        }
 
         if (queryOccurrence.hasOwnProperty('eventID') || queryOccurrence.hasOwnProperty('taxon.dyntaxaId') || queryOccurrence.hasOwnProperty('datasetID')) {
 
-          collOccurrences.find(queryOccurrence).toArray(function(err, result) {
+          collOccurrences.find(queryOccurrence).limit(limit).toArray(function(err, result) {
             if (err) {
               throw err;
               resolve(0);
@@ -315,6 +321,7 @@ console.log(pipelineEvents);
             // "take": YY,
             // "count": ZZ,
             var responseFinal = {
+              "take": limit,
               "totalCount": result.length,
               "results": result
             }

@@ -54,6 +54,7 @@ exports.getDatasetByID = function(datasetID) {
  * returns List
  **/
 exports.getDatasetsBySearch = function(body,skip,take,exportMode,responseCoordinateSystem) {
+
   return new Promise(async function(resolve, reject) {
     var examples = {};
     if (Object.keys(examples).length > 0) {
@@ -216,8 +217,13 @@ exports.getDatasetsBySearch = function(body,skip,take,exportMode,responseCoordin
           }
         }
 
+        // add the take/limit param
+        //console.log("TAKE :"+take);
+        if (!isNaN(take) && take >0) {
+          pipeline.push({"$limit" : parseInt(take)})
+        }
 
-        console.log("pipeline query:");
+        console.log("pipeline query dataset:");
         console.log(util.inspect(pipeline, false, null, true ));
 
         collDatasets.aggregate(pipeline).toArray(function(err, result) {
@@ -233,6 +239,7 @@ exports.getDatasetsBySearch = function(body,skip,take,exportMode,responseCoordin
           // "take": YY,
           // "count": ZZ,
           var responseFinal = {
+            "take": parseInt(take),
             "totalCount": result.length,
             "results": result
           }

@@ -22,28 +22,12 @@ paths:
       parameters:
       - name: skip
         in: query
-        description: Start index
-        required: false
-        style: form
-        explode: true
         schema:
-          type: integer
-          format: int32
-          nullable: true
-          default: 0
+          $ref: "#/components/parameters/skipParam"
       - name: take
         in: query
-        description: Number of items to return. 1000 items is the max to return in
-          one call.
-        required: false
-        style: form
-        explode: true
         schema:
-          maximum: 1000
-          type: integer
-          format: int32
-          nullable: true
-          default: 100
+          $ref: '#/components/parameters/takeParam'
       - name: exportMode
         in: query
         schema:
@@ -194,28 +178,12 @@ paths:
       parameters:
       - name: skip
         in: query
-        description: Start index
-        required: false
-        style: form
-        explode: true
         schema:
-          type: integer
-          format: int32
-          nullable: true
-          default: 0
+          $ref: "#/components/parameters/skipParam"
       - name: take
         in: query
-        description: Number of items to return. 1000 items is the max to return in
-          one call.
-        required: false
-        style: form
-        explode: true
         schema:
-          maximum: 1000
-          type: integer
-          format: int32
-          nullable: true
-          default: 100
+          $ref: '#/components/parameters/takeParam'
       - name: exportMode
         in: query
         schema:
@@ -342,28 +310,12 @@ paths:
       parameters:
       - name: skip
         in: query
-        description: Start index
-        required: false
-        style: form
-        explode: true
         schema:
-          type: integer
-          format: int32
-          nullable: true
-          default: 0
+          $ref: "#/components/parameters/skipParam"
       - name: take
         in: query
-        description: Number of items to return. 1000 items is the max to return in
-          one call.
-        required: false
-        style: form
-        explode: true
         schema:
-          maximum: 1000
-          type: integer
-          format: int32
-          nullable: true
-          default: 100
+          $ref: '#/components/parameters/takeParam'
       - name: exportMode
         in: query
         schema:
