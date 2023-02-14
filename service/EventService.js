@@ -525,11 +525,18 @@ exports.getEventsBySearch = function(body,skip,take,exportMode,responseCoordinat
         }
 
 
+        // add the skip(start) param
+        //console.log("SKIP :"+skip);
+        if (!isNaN(skip) && skip >0) {
+          pipeline.push({"$skip" : parseInt(skip)})
+        }
+        
         // add the take/limit param
         //console.log("TAKE :"+take);
         if (!isNaN(take) && take >0) {
           pipeline.push({"$limit" : parseInt(take)})
         }
+
 
         console.log("pipeline query:");
         console.log(util.inspect(pipeline, false, null, true ));
@@ -546,6 +553,7 @@ exports.getEventsBySearch = function(body,skip,take,exportMode,responseCoordinat
           // "skip": XX,
           // "count": ZZ,          
           var responseFinal = {
+            "skip": parseInt(skip),
             "take": parseInt(take),
             "totalCount": result.length,
             "results": result

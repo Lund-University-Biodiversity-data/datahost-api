@@ -299,16 +299,25 @@ console.log(pipelineEvents);
         console.log("queryOccurrence:");
         console.log(queryOccurrence);
 
-        var limit=0;
+        var takeInt=0;
         // add the take/limit param
         //console.log("TAKE :"+take);
         if (!isNaN(take) && take >0) {
-          limit=parseInt(take);
+          takeInt=parseInt(take);
         }
+
+        var skipInt=0;
+        // add the skip(start) param
+        console.log("SKIP :"+skip);
+        if (!isNaN(skip) && skip >0) {
+          skipInt=parseInt(skip);
+        }
+
+
 
         if (queryOccurrence.hasOwnProperty('eventID') || queryOccurrence.hasOwnProperty('taxon.dyntaxaId') || queryOccurrence.hasOwnProperty('datasetID')) {
 
-          collOccurrences.find(queryOccurrence).limit(limit).toArray(function(err, result) {
+          collOccurrences.find(queryOccurrence).skip(skipInt).limit(takeInt).toArray(function(err, result) {
             if (err) {
               throw err;
               resolve(0);
@@ -321,7 +330,8 @@ console.log(pipelineEvents);
             // "take": YY,
             // "count": ZZ,
             var responseFinal = {
-              "take": limit,
+              "skip": skipInt,
+              "take": takeInt,
               "totalCount": result.length,
               "results": result
             }
