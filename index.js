@@ -11,10 +11,10 @@ var dbMongo = require ('./utils/dbmongo.js');
 app.use(config.apiServerUrlVersion, myApp);
 //app.use("/datahostServerApiV1", myApp);
 
-http.createServer(app).listen(serverPort, function () {
+http.createServer(app).listen(config.apiServerPort, function () {
 
-    console.log('Your server is listening on port %d (http://localhost:%d%s)', serverPort, serverPort, config.apiServerUrlVersion);
-    console.log('Swagger-ui is available on http://localhost:%d%s/docs', serverPort, config.apiServerUrlVersion);
+    console.log('Your server is listening on port %d (%s%s)', config.apiServerPort, config.apiServerUrl, config.apiServerUrlVersion);
+    console.log('Swagger-ui is available on %s%s/docs', config.apiServerUrl, config.apiServerUrlVersion);
 
     dbMongo.connectToServer( function( err, client ) {
       if (err) console.log(err);

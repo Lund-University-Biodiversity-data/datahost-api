@@ -2,3 +2,7 @@ swagger-download/*
 docs_yaml_config_api/*
 node_modules/*
 config/config.js
+old/
+public/
+test-post-api/
+api/openapi_yml_archives/

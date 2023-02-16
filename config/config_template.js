@@ -1,6 +1,7 @@
 var config = {};
 
-config.apiServerUrl='http://URL';
+config.apiServerPort=8088;
+config.apiServerUrl='http://URL:'+config.apiServerPort;
 config.apiServerUrlVersion='/v1';
 
 config.SLUAPIkey = "YOUR_KEY_HERE";
