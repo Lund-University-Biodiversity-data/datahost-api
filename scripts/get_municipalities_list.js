@@ -6,7 +6,7 @@ var https = require ('https');
 var fs = require ('fs');
 
 var url=config.urlAPIMunicipalities;
-const speciesFileMunicipalities= config.speciesFileMunicipalities;
+const speciesFileMunicipalities= config.municipalitiesFilePath;
 
 //const listMunicipalities= [];
 var listMunicipalities="";
