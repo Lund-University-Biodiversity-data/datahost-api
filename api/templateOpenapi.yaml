@@ -499,10 +499,7 @@ components:
           identificationVerificationStatus:
             type: string
             description: "States the quality of a species observation, i.e. whether\
-              \ its verified by an expert or similar. Quality categories are chosen\
-              \ from a codelist."
-            enum:
-            - värdelista saknas
+              \ its verified by an expert or similar."
           associatedMedia:
             type: array
             description: "Attached information about the species observation, e.g.\
