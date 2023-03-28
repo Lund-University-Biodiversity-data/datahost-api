@@ -557,6 +557,7 @@ components:
           - "Kust och hav"
           - "Landskap"
           - "Skog"
+          - "Våtmarker"
         assigner:
           description: "The organisation that orders the data collection."
           $ref: '#/components/schemas/Organisation'
