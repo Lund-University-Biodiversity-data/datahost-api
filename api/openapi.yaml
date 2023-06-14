@@ -1038,13 +1038,35 @@ components:
               \ programme."
           eventStartDate:
             type: string
-            description: Date and Time for when the survey started (local time).
-            format: date-time
-            example: 1996-05-27T03:55:00Z
+            description: "Date for when the survey started (Central European Time (CET) zone\
+             \ , UTC+1 during standard time, and Central European Summer Time (CEST), UTC+2, \
+             \ during daylight saving time)."
+            format: date
+            example: 2020-04-14
           eventEndDate:
             type: string
-            description: Date and Time for when the survey ended (local time).
-            format: date-time
+            description: "Date for when the survey ended (Central European Time (CET) zone, \
+             \ UTC+1 during standard time, and Central European Summer Time (CEST), UTC+2, \
+              \ during daylight saving time)."
+            format: date
+            example: 2020-04-15
+          eventStartTime:
+            type: string
+            nullable: true
+            description: "Time for when the survey started (Central European Time (CET) zone, \
+             \ UTC+1 during standard time, and Central European Summer Time (CEST), UTC+2, \
+             \ during daylight saving time)."
+            format: time
+            example: "15:16:00"
+          eventEndTime:
+            type: string
+            nullable: true
+            description: "Time for when the survey ended (Central European Time (CET) zone, \
+             \ UTC+1 during standard time, and Central European Summer Time (CEST), UTC+2, \
+             \ during daylight saving time)."
+            format: time
+            example: "23:42:00"
+
           locationProtected:
             type: boolean
             description: States whether the position of a location is protected. The

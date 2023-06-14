@@ -67,6 +67,10 @@ exports.getDateFilterForAggregate = function (date) {
     endDate=date.endDate;
   }
   
+  // add finishtime to 23:59:39 for comparaison with $lte
+  var endDateFinalSecond=endDate.replace("T00:00:00.000Z", "T23:59:59Z");
+
+
   switch(dateFilterType) {
     
     case "BetweenStartDateAndEndDate": //  => Start AND EndDate of the event must be within the specified interval
@@ -74,7 +78,7 @@ exports.getDateFilterForAggregate = function (date) {
         pipeline.push({ "$gte" : [ "$eventStartDate", startDate ] });
       }
       if (endDate!="") {
-        pipeline.push({ "$lte" : [ "$eventEndDate", endDate ] });
+        pipeline.push({ "$lte" : [ "$eventEndDate", endDateFinalSecond ] });
       }
       break;
 
@@ -83,27 +87,27 @@ exports.getDateFilterForAggregate = function (date) {
       if(startDate!="" && endDate!="") {
         //query["eventStartDate"]={"$gte":startDate, "$lte":endDate};
         pipeline.push({ "$gte" : [ "eventStartDate", startDate ] });
-        pipeline.push({ "$lte" : [ "eventStartDate", endDate ] });
+        pipeline.push({ "$lte" : [ "eventStartDate", endDateFinalSecond ] });
       }
       else if (startDate!="") {
         pipeline.push({ "$gte" : [ "eventStartDate", startDate ] });
       }
       else if (endDate!="") {
-        pipeline.push({ "$lte" : [ "eventStartDate", endDate ] });
+        pipeline.push({ "$lte" : [ "eventStartDate", endDateFinalSecond ] });
       }
       break;
 
     case "OnlyEndDate": //  => Only EndDate of the event must be within the specified interval
       if(startDate!="" && endDate!="") {
         pipeline.push({ "$gte" : [ "eventEndDate", startDate ] });
-        pipeline.push({ "$lte" : [ "eventEndDate", endDate ] });
+        pipeline.push({ "$lte" : [ "eventEndDate", endDateFinalSecond ] });
       }
       else if (startDate!="") {
         pipeline.push({ "$gte" : [ "eventEndDate", startDate ] });
       }
       else if (endDate!="") {
         //query["eventEndDate"]={"$lte":endDate};
-        pipeline.push({ "$lte" : [ "eventEndDate", endDate ] });
+        pipeline.push({ "$lte" : [ "eventEndDate", endDateFinalSecond ] });
       }
       break;
 
@@ -113,7 +117,7 @@ exports.getDateFilterForAggregate = function (date) {
         pipeline.push({ '$gte' : [ "$eventEndDate", startDate ] });
       }
       if (endDate!="") {
-        pipeline.push({ "$lte" : [ "$eventStartDate", endDate ] });
+        pipeline.push({ "$lte" : [ "$eventStartDate", endDateFinalSecond ] });
       }
       break;
   } 
@@ -145,7 +149,10 @@ exports.getDateFilterFromBody = function(body) {
     //console.log(body.datum.endDate);
     endDate=body.datum.endDate;
   }
-  
+
+  // add finishtime to 23:59:39 for comparaison with $lte
+  var endDateFinalSecond=endDate.replace("T00:00:00.000Z", "T23:59:59Z");
+
   switch(dateFilterType) {
     
     case "BetweenStartDateAndEndDate": //  => Start AND EndDate of the event must be within the specified interval
@@ -153,32 +160,32 @@ exports.getDateFilterFromBody = function(body) {
         query["eventStartDate"]={"$gte":startDate};
       }
       if (endDate!="") {
-        query["eventEndDate"]={"$lte":endDate};
+        query["eventEndDate"]={"$lte":endDateFinalSecond};
       }
       break;
 
     case "OnlyStartDate": //  => Only StartDate of the event must be within the specified interval
 
       if(startDate!="" && endDate!="") {
-        query["eventStartDate"]={"$gte":startDate, "$lte":endDate};
+        query["eventStartDate"]={"$gte":startDate, "$lte":endDateFinalSecond};
       }
       else if (startDate!="") {
         query["eventStartDate"]={"$gte":startDate};
       }
       else if (endDate!="") {
-        query["eventStartDate"]={"$lte":endDate};
+        query["eventStartDate"]={"$lte":endDateFinalSecond};
       }
       break;
 
     case "OnlyEndDate": //  => Only EndDate of the event must be within the specified interval
       if(startDate!="" && endDate!="") {
-        query["eventEndDate"]={"$gte":startDate, "$lte":endDate};
+        query["eventEndDate"]={"$gte":startDate, "$lte":endDateFinalSecond};
       }
       else if (startDate!="") {
         query["eventEndDate"]={"$gte":startDate};
       }
       else if (endDate!="") {
-        query["eventEndDate"]={"$lte":endDate};
+        query["eventEndDate"]={"$lte":endDateFinalSecond};
       }
       break;
 
@@ -188,7 +195,7 @@ exports.getDateFilterFromBody = function(body) {
         query["eventEndDate"]={"$gte":startDate};
       }
       if (endDate!="") {
-        query["eventStartDate"]={"$lte":endDate};
+        query["eventStartDate"]={"$lte":endDateFinalSecond};
       }
       break;
   } 

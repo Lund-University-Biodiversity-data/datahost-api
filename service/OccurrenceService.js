@@ -135,33 +135,6 @@ exports.getOccurrencesBySearch = function(body,skip,take,exportMode,responseCoor
             
             var listTaxonIncludingHierarchy=exports.getListTaxonIncludingHierarchy(idDyntaxaArray);
 
-            /*
-            const listTaxonIncludingHierarchy =[];
-            const tableTaxonHierarchy = Species.getSpeciesHierarchy();
-
-            body.taxon.ids.forEach((element) => {
-              if (element!="None selected") {
-                // check if this dyntaxaId has childdrenIds to add
-                if (tableTaxonHierarchy[element] !== undefined) {
-                  //console.log(element+ " has children ! => "+tableTaxonHierarchy[element].length);
-                  tableTaxonHierarchy[element].forEach((child) => {
-                    if (!listTaxonIncludingHierarchy.includes(child)) {
-                      listTaxonIncludingHierarchy.push(parseInt(child));
-                    }
-                    else {
-                      console.log("child "+child+" already in listTaxonIncludingHierarchy");
-                    }
-                  });
-                }
-                listTaxonIncludingHierarchy.push(element);
-              }
-            });
-
-            //console.log("list species final :");
-            //console.log(listTaxonIncludingHierarchy);
-
-            console.log(body.taxon.ids.length+" in idsArray => "+listTaxonIncludingHierarchy.length+" in the end including hierarchy");
-            */
 
             //queryOccurrence["taxon.dyntaxaId"]={"$in":body.taxon.ids};
             queryOccurrence["taxon.dyntaxaId"]={"$in":listTaxonIncludingHierarchy};
@@ -198,17 +171,6 @@ exports.getOccurrencesBySearch = function(body,skip,take,exportMode,responseCoor
           if (siteIdArray.length==0) siteIdArray.push("NOSITEFOUND");
         }
         
-        /*
-        var pipelineSite = {};
-
-        // the siteIds from the geographic filter 
-        if (body.hasOwnProperty('area') && body.area.hasOwnProperty('area') && siteIdArray.length==0) {
-          console.log("no site to add to the pipelineEvent");
-        }
-        else if (siteIdArray.length>0) {
-          pipelineSite={ "$in" : [ "$site", siteIdArray ] }
-        }
-        */
 
         // the siteIds from the geographic filter 
         if (siteIdArray.length>0) {
@@ -236,54 +198,6 @@ exports.getOccurrencesBySearch = function(body,skip,take,exportMode,responseCoor
           }
         }
         
-        /*
-        if (Object.entries(pipelineSite).length == 0 && Object.entries(pipelineDate).length == 0) {}
-        else {
-
-            var pipelineEvents=[];
-
-            if (Object.entries(pipelineDate).length != 0)
-              pipelineEvents = pipelineDate;
-            if (Object.entries(pipelineSite).length != 0)
-              pipelineEvents.push(pipelineSite);
-
-            // add the datasetfilter in case it exists
-            if (body.hasOwnProperty('datasetIds')) {
-              pipelineEvents.push({"$in": [ "$datasetID", body.datasetIds ] });
-            }
-
-            // join with events fields
-            pipelineEvents.push({ $eq: [ "$eventID", "$$eventID" ] } )
-
-console.log("pipelineEvents:");
-console.log(pipelineEvents);
-
-            joinEvents["$lookup"]= {
-              "from": 'events',
-              "let": { "eventID": "$event" },
-              "pipeline": [
-                { '$project': { "eventID": 1, "eventEndDate": 1, "eventStartDate":1, "site": 1, "datasetID": 1 } },
-                { 
-                  "$match": {
-                    "$expr": {
-                      "$and": 
-                        pipelineEvents,
-                      
-                    } 
-                  }
-                }
-              ],
-              as: "ev"
-            }
-            // keep only the datasets with values in the occurrences join
-            joinEvents["$match"] = {
-              "ev": {"$ne": []}
-            } ;
-            // do not return the records, only the dataset data is needed
-            joinEvents["$project"] = { "ev": 0 }; 
-
-           
-        }*/
 
         // set the datasetIds filter
         if (body.hasOwnProperty('datasetIds')) {
@@ -345,36 +259,6 @@ console.log(pipelineEvents);
           resolve();
         }
         
-
-
-        /*
-        var pipeline = [];
-
-        if (Object.entries(queryOccurrence).length != 0) {
-          pipeline.push({ "$match" : queryOccurrence });
-        }
-
-        if (Object.entries(joinEvents).length != 0) {
-          pipeline.push({ "$lookup" : joinEvents["$lookup"] });
-          pipeline.push({ "$match" : joinEvents["$match"] });
-          pipeline.push({ "$project" : joinEvents["$project"] });
-        }
-
-        console.log("pipeline query:");
-        console.log(util.inspect(pipeline, false, null, true ));
-
-        collOccurrences.aggregate(pipeline).toArray(function(err, result) {
-          if (err) {
-            throw err;
-            resolve();
-          }
-
-          console.log(result.length+" result(s)");
-          
-          resolve(result);
-        });
-        */
-
 
       }
       else {
