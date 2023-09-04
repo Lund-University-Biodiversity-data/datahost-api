@@ -12,6 +12,23 @@ info:
 servers:
 - url: http://localhost:8088/v1
 paths:
+  /api-info:
+    get:
+      description: Get API information
+      operationId: getApiInfo
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ApiInformation'
+                x-content-type: application/json      
+        "500":
+          description: Internal Server Error
+      x-swagger-router-controller: ApiInfo
   /occurrences:
     post:
       tags:
@@ -454,6 +471,30 @@ paths:
 
 components:
   schemas:
+    ApiInformation:
+      type: object
+      description: "API information."   
+      properties:
+        apiName:
+          type: string
+          description: "Name of the API."
+        apiVersion:
+          type: string
+          description: "API version with MAJOR, MINOR and PATCH version"
+        apiReleased:
+          type: string
+          description: "The date when the current API version was published."
+          format: date-time
+        apiDocumentation:
+          type: string
+          description: "A link to the current API documentation."
+          format: uri  
+          nullable: true
+        apiStatus: 
+          type: string
+          description: "The state or status of the API according to lifecycle management. \
+            \ For example. alpha, beta, active, deprecated, retired or decommissioned."      
+      additionalProperties: false
     Occurrence:
       description: "A specific observation of an organism or a uniform group of organisms made at an event."
       allOf:

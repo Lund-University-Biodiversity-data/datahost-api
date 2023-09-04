@@ -99,3 +99,9 @@ to generate the new openapi.yml file
 ```
 npm run yamlgen
 ```
+
+
+### generate the new files from https://editor.swagger.io/
+visit https://editor.swagger.io/, copy-paste your open-api.yaml and check/fix the errors
+Then generate server (nodejs-server)
+download the result. browse through the files to get the methods needed.
