@@ -13,7 +13,7 @@ exports.getApiInfo = function() {
   "apiName" : "Nature data - Systematic species observations",
   "apiVersion" : "1.0.6",
   "apiDocumentation" : "https://github.com/Lund-University-Biodiversity-data/datahost-api",
-  "apiStatus" : "apiStatus",
+  "apiStatus" : "active",
   "apiReleased" : "2023-09-04T08:57:07.000+00:00"
 } ];
     if (Object.keys(examples).length > 0) {
