@@ -12,7 +12,8 @@ exports.getApiInfo = function() {
     examples['application/json'] = [ {
   "apiName" : "Nature data - Systematic species observations",
   "apiVersion" : "1.0.6",
-  "apiDocumentation" : "https://github.com/Lund-University-Biodiversity-data/datahost-api",
+  "apiChangelog" : "https://github.com/Lund-University-Biodiversity-data/datahost-api",
+  "apiDocumentation" : "https://github.com/Lund-University-Biodiversity-data/datahost-api/blob/main/changelog.md",
   "apiStatus" : "active",
   "apiReleased" : "2023-09-04T08:57:07.000+00:00"
 } ];

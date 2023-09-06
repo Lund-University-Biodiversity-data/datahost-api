@@ -25,7 +25,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/ApiInformation'
-                x-content-type: application/json 
+                x-content-type: application/json
         "500":
           description: Internal Server Error
       x-swagger-router-controller: ApiInfo
@@ -437,6 +437,10 @@ components:
           type: string
           description: "The date when the current API version was published."
           format: date-time
+        apiChangelog:
+          type: string
+          description: "A link to the file containing the logs."
+          format: uri
         apiDocumentation:
           type: string
           description: "A link to the current API documentation."

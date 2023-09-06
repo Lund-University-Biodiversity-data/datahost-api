@@ -8,7 +8,7 @@ info:
   license:
     name: CC0 1.0 universell (only text information)
     url: https://creativecommons.org/publicdomain/zero/1.0/legalcode
-  version: 1.0.4
+  version: 1.0.6
 servers:
 - url: http://localhost:8088/v1
 paths:
@@ -25,7 +25,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/ApiInformation'
-                x-content-type: application/json      
+                x-content-type: application/json 
         "500":
           description: Internal Server Error
       x-swagger-router-controller: ApiInfo
@@ -473,7 +473,7 @@ components:
   schemas:
     ApiInformation:
       type: object
-      description: "API information."   
+      description: "API information."
       properties:
         apiName:
           type: string
@@ -485,15 +485,19 @@ components:
           type: string
           description: "The date when the current API version was published."
           format: date-time
+        apiChangelog:
+          type: string
+          description: "A link to the file containing the logs."
+          format: uri
         apiDocumentation:
           type: string
           description: "A link to the current API documentation."
-          format: uri  
+          format: uri
           nullable: true
-        apiStatus: 
+        apiStatus:
           type: string
           description: "The state or status of the API according to lifecycle management. \
-            \ For example. alpha, beta, active, deprecated, retired or decommissioned."      
+            \ For example. alpha, beta, active, deprecated, retired or decommissioned."
       additionalProperties: false
     Occurrence:
       description: "A specific observation of an organism or a uniform group of organisms made at an event."
