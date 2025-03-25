@@ -12,6 +12,7 @@ config.urlAPISLUdetails = "URLwith{taxonId}andyourkey=";+config.SLUAPIkey;
 config.urlAPISLUgetTaxa = "URLwith{taxonId}andyourkey=";+config.SLUAPIkey;
 
 config.urlAPILists=[
+	"https://lists.biodiversitydata.se/ws/URL", // butterflies
 	"https://lists.biodiversitydata.se/ws/URL", // birds
 	"https://lists.biodiversitydata.se/ws/URL" // mammals
 ];

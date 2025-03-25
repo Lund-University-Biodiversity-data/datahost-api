@@ -196,6 +196,7 @@ function getList (urlList){
             scientificName=data.name;
             Object.entries(data.kvpValues).forEach(([kvpKey, kvpVal]) => {
 
+              // dyntaxa for birds/mammals list
               if (kvpVal.key=="dyntaxa_id") {
                 dyntaxaId=kvpVal.value;
 
@@ -203,10 +204,24 @@ function getList (urlList){
                   console.log("WARNING : dyntaxaId is NULL for "+data.id+"/"+data.name);
                 }
               }
+              // dyntaxa for butterflies list
+              else if (kvpVal.key=="dyntaxa") {
+                dyntaxaId=kvpVal.value;
+
+                if (dyntaxaId=="NULL") {
+                  console.log("WARNING : dyntaxaId is NULL for "+data.id+"/"+data.name);
+                }
+              }
+              // swedish name for birds/mammals lists
               else if (kvpVal.key=="arthela") {
                 swedishName=kvpVal.value;
               }
-
+              // swedish name for butterflies lists
+              else if (kvpVal.key=="swedish common name") {
+                if (kvpVal.value!="NULL" && kvpVal.value!="null" kvpVal.value!= null)
+                  swedishName=kvpVal.value;
+                else swedishName="";
+              }
             });
             
             addSpeciesToList (dyntaxaId, scientificName, swedishName);
