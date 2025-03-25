@@ -217,7 +217,7 @@ function getList (urlList){
                 swedishName=kvpVal.value;
               }
               // swedish name for butterflies lists
-              else if (kvpVal.key=="swedish common name") {
+              else if (kvpVal.key=="semainname") {
                 if (kvpVal.value!="NULL" && kvpVal.value!="null" && kvpVal.value!= null)
                   swedishName=kvpVal.value;
                 else swedishName="";
