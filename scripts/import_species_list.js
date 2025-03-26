@@ -205,7 +205,7 @@ function getList (urlList){
                 }
               }
               // dyntaxa for butterflies list
-              else if (kvpVal.key=="dyntaxa") {
+              else if (kvpVal.key=="spe_dyntaxa") {
                 dyntaxaId=kvpVal.value;
 
                 if (dyntaxaId=="NULL") {
@@ -217,7 +217,7 @@ function getList (urlList){
                 swedishName=kvpVal.value;
               }
               // swedish name for butterflies lists
-              else if (kvpVal.key=="semainname") {
+              else if (kvpVal.key=="spe_semainname") {
                 if (kvpVal.value!="NULL" && kvpVal.value!="null" && kvpVal.value!= null)
                   swedishName=kvpVal.value;
                 else swedishName="";
