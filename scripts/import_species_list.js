@@ -194,6 +194,9 @@ function getList (urlList){
 
             //lsid=data.id;
             scientificName=data.name;
+            dyntaxaId="-";
+            swedishName="";
+
             Object.entries(data.kvpValues).forEach(([kvpKey, kvpVal]) => {
 
               // dyntaxa for birds/mammals list
