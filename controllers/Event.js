@@ -2,12 +2,18 @@
 
 var utils = require('../utils/writer.js');
 var Event = require('../service/EventService');
+var config = require ('../config/config.js');
 
 const { Parser } = require("json2csv");
 const flatten = require("flat");
 
 module.exports.getEventsByID = function getEventsByID (req, res, next, eventID) {
-  Event.getEventsByID(eventID)
+
+  var appNameId = "";
+  if (config.biologginClientAppId == req.get("x-app-id"))
+    appNameId=config.datahostClientAppName;
+
+  Event.getEventsByID(appNameId, eventID)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -18,7 +24,11 @@ module.exports.getEventsByID = function getEventsByID (req, res, next, eventID) 
 
 module.exports.getEventsBySearch = function getEventsBySearch (req, res, next, body, skip, take, exportMode, responseCoordinateSystem) {
 
-  Event.getEventsBySearch(body, skip, take, exportMode, responseCoordinateSystem)
+  var appNameId = "";
+  if (config.biologginClientAppId == req.get("x-app-id"))
+    appNameId=config.datahostClientAppName;
+
+  Event.getEventsBySearch(appNameId, body, skip, take, exportMode, responseCoordinateSystem)
     .then(function (response) {
       if (exportMode=="csv") {
 

@@ -2,12 +2,18 @@
 
 var utils = require('../utils/writer.js');
 var Dataset = require('../service/DatasetService');
+var config = require ('../config/config.js');
 
 const { Parser } = require("json2csv");
 const flatten = require("flat");
 
 module.exports.getDatasetByID = function getDatasetByID (req, res, next, id) {
-  Dataset.getDatasetByID(id)
+
+  var appNameId = "";
+  if (config.biologginClientAppId == req.get("x-app-id"))
+    appNameId=config.datahostClientAppName;
+
+  Dataset.getDatasetByID(appNameId, id)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -17,7 +23,13 @@ module.exports.getDatasetByID = function getDatasetByID (req, res, next, id) {
 };
 
 module.exports.getDatasetsBySearch = function getDatasetsBySearch (req, res, next, body, skip, take, exportMode, responseCoordinateSystem) {
-  Dataset.getDatasetsBySearch(body, skip, take, exportMode, responseCoordinateSystem)
+
+
+  var appNameId = "";
+  if (config.biologginClientAppId == req.get("x-app-id"))
+    appNameId=config.datahostClientAppName;
+
+  Dataset.getDatasetsBySearch(appNameId, body, skip, take, exportMode, responseCoordinateSystem)
     .then(function (response) {
       if (exportMode=="csv") {
 

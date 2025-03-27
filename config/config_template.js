@@ -36,4 +36,8 @@ config.databaseStatisticsUrl = "mongodb://localhost:27017";
 config.databaseStatisticsName = "statsDB";
 config.databaseStatisticsTable = "statsServer";
 
+// APP IDs + stats
+config.biologginClientAppId = "a-nice-id";
+config.biologginClientAppName = "a-nice-name";
+
 export default config;

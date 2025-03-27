@@ -8,7 +8,7 @@ info:
   license:
     name: CC0 1.0 universell (only text information)
     url: https://creativecommons.org/publicdomain/zero/1.0/legalcode
-  version: 1.0.6
+  version: 1.0.4
 servers:
 - url: http://localhost:8088/v1
 paths:
@@ -25,7 +25,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/ApiInformation'
-                x-content-type: application/json 
+                x-content-type: application/json
         "500":
           description: Internal Server Error
       x-swagger-router-controller: ApiInfo
@@ -470,6 +470,15 @@ paths:
       x-swagger-router-controller: StaticSpeciesList
 
 components:
+  securitySchemes:
+    apiKey:
+      type: apiKey
+      in: header
+      name: X-API-KEY
+    appId:
+      type: apiKey
+      in: header
+      name: X-APP-ID  
   schemas:
     ApiInformation:
       type: object
@@ -4578,3 +4587,7 @@ components:
         format: int32
         nullable: true
         default: 100
+security:
+- {} # allows no apiKey or appId
+- apiKey: [] # dash is important to be a OR
+- appId: [] # dash is important to be a OR

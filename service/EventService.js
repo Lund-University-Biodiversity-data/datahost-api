@@ -18,7 +18,7 @@ const util = require('util');
  * eventId String EventId of the event to get
  * returns List
  **/
-exports.getEventsByID = function(eventId) {
+exports.getEventsByID = function(appNameId, eventId) {
 
   return new Promise(function(resolve, reject) {
     var examples = {};
@@ -33,7 +33,7 @@ exports.getEventsByID = function(eventId) {
             //return response.status(500).send(error);
         }
         // stats
-        stats.addStat("getEventsByID", eventId);
+        stats.addStat(appNameId, "getEventsByID", eventId);
 
         resolve(result);
         //response.send(result);
@@ -385,7 +385,7 @@ exports.getGeographicFilterFromBodyArea = async function(area, listDataset) {
  * responseCoordinateSystem ResponseCoordinateSystem  (optional)
  * returns List
  **/
-exports.getEventsBySearch = function(body,skip,take,exportMode,responseCoordinateSystem) {
+exports.getEventsBySearch = function(appNameId, body,skip,take,exportMode,responseCoordinateSystem) {
 
   /*console.log("2params (body/skip/take/exportMode):");
   console.log(body);
@@ -568,7 +568,7 @@ exports.getEventsBySearch = function(body,skip,take,exportMode,responseCoordinat
 
 
           // stats
-          stats.addStat("getEventsBySearch", "POST");
+          stats.addStat(appNameId, "getEventsBySearch", "POST");
 
           resolve(responseFinal);
         });

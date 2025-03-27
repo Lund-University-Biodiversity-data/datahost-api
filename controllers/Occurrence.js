@@ -2,12 +2,18 @@
 
 var utils = require('../utils/writer.js');
 var Occurrence = require('../service/OccurrenceService');
+var config = require ('../config/config.js');
 
 const { Parser } = require("json2csv");
 const flatten = require("flat");
 
 module.exports.getOccurrencesByID = function getOccurrencesByID (req, res, next, occurrenceId) {
-  Occurrence.getOccurrencesByID(occurrenceId)
+
+  var appNameId = "";
+  if (config.datahostClientAppId == req.get("x-app-id"))
+    appNameId=config.datahostClientAppName;
+
+  Occurrence.getOccurrencesByID(appNameId, occurrenceId)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -17,7 +23,12 @@ module.exports.getOccurrencesByID = function getOccurrencesByID (req, res, next,
 };
 
 module.exports.getOccurrencesBySearch = function getOccurrencesBySearch (req, res, next, body, skip, take, exportMode, responseCoordinateSystem) {
-  Occurrence.getOccurrencesBySearch(body, skip, take, exportMode, responseCoordinateSystem)
+
+  var appNameId = "";
+  if (config.datahostClientAppId == req.get("x-app-id"))
+    appNameId=config.datahostClientAppName;
+
+  Occurrence.getOccurrencesBySearch(appNameId, body, skip, take, exportMode, responseCoordinateSystem)
     .then(function (response) {
       if (exportMode=="csv") {
 

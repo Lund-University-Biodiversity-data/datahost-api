@@ -422,6 +422,15 @@ paths:
 %%SPECIFIC_ENDPOINTS%%
 
 components:
+  securitySchemes:
+    apiKey:
+      type: apiKey
+      in: header
+      name: X-API-KEY
+    appId:
+      type: apiKey
+      in: header
+      name: X-APP-ID  
   schemas:
     ApiInformation:
       type: object
@@ -1776,3 +1785,7 @@ components:
         format: int32
         nullable: true
         default: 100
+security:
+- {} # allows no apiKey or appId
+- apiKey: [] # dash is important to be a OR
+- appId: [] # dash is important to be a OR

@@ -65,7 +65,7 @@ exports.getOccurrencesFromDyntaxaIdAsync = async function (idsArray) {
  * occurrenceId String OccurrenceId of the occurrence to get
  * returns List
  **/
-exports.getOccurrencesByID = function(occurrenceId) {
+exports.getOccurrencesByID = function(appNameId, occurrenceId) {
   return new Promise(function(resolve, reject) {
     var examples = {};
     //examples['application/json'] = [ "", "" ];
@@ -79,7 +79,7 @@ exports.getOccurrencesByID = function(occurrenceId) {
             //return response.status(500).send(error);
         }
         // stats
-        stats.addStat("getOccurrencesByID", occurrenceId);
+        stats.addStat(appNameId, "getOccurrencesByID", occurrenceId);
 
         resolve(result);
         //response.send(result);
@@ -100,7 +100,7 @@ exports.getOccurrencesByID = function(occurrenceId) {
  * responseCoordinateSystem ResponseCoordinateSystem  (optional)
  * returns List
  **/
-exports.getOccurrencesBySearch = function(body,skip,take,exportMode,responseCoordinateSystem) {
+exports.getOccurrencesBySearch = function(appNameId, body,skip,take,exportMode,responseCoordinateSystem) {
 
   /*console.log("params (body/skip/take/exportMode):");
   console.log(body);
@@ -211,7 +211,7 @@ exports.getOccurrencesBySearch = function(body,skip,take,exportMode,responseCoor
           queryOccurrence["eventID"]={"$in":eventIdArray};
         }
         console.log("queryOccurrence:");
-        console.log(queryOccurrence);
+        //console.log(queryOccurrence);
 
         var takeInt=0;
         // add the take/limit param
@@ -251,7 +251,7 @@ exports.getOccurrencesBySearch = function(body,skip,take,exportMode,responseCoor
             }
 
             // stats
-            stats.addStat("getOccurrencesBySearch", "POST");
+            stats.addStat(appNameId, "getOccurrencesBySearch", "POST");
 
             resolve(responseFinal);
           });        

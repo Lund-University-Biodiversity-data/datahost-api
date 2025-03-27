@@ -16,7 +16,7 @@ const util = require('util');
  * id String ID of the dataset to get
  * returns List
  **/
-exports.getDatasetByID = function(datasetID) {
+exports.getDatasetByID = function(appNameId, datasetID) {
   return new Promise(function(resolve, reject) {
     var examples = {};
     if (Object.keys(examples).length > 0) {
@@ -32,7 +32,7 @@ exports.getDatasetByID = function(datasetID) {
             //return response.status(500).send(error);
         }
         // stats
-        stats.addStat("getDatasetByID", datasetID);
+        stats.addStat(appNameId, "getDatasetByID", datasetID);
 
         resolve(result);
         //response.send(result);
@@ -53,7 +53,7 @@ exports.getDatasetByID = function(datasetID) {
  * responseCoordinateSystem ResponseCoordinateSystem  (optional)
  * returns List
  **/
-exports.getDatasetsBySearch = function(body,skip,take,exportMode,responseCoordinateSystem) {
+exports.getDatasetsBySearch = function(appNameId, body,skip,take,exportMode,responseCoordinateSystem) {
 
   return new Promise(async function(resolve, reject) {
     var examples = {};
@@ -252,7 +252,7 @@ exports.getDatasetsBySearch = function(body,skip,take,exportMode,responseCoordin
           }
 
           // stats
-          stats.addStat("getDatasetsBySearch", "POST");
+          stats.addStat(appNameId, "getDatasetsBySearch", "POST");
 
           resolve(responseFinal);
         });
