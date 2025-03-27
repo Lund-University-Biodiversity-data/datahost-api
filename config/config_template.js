@@ -37,7 +37,7 @@ config.databaseStatisticsName = "statsDB";
 config.databaseStatisticsTable = "statsServer";
 
 // APP IDs + stats
-config.biologginClientAppId = "a-nice-id";
-config.biologginClientAppName = "a-nice-name";
+config.datahostClientAppId = "a-nice-id";
+config.datahostClientAppName = "a-nice-name";
 
 export default config;

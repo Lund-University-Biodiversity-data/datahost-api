@@ -10,7 +10,7 @@ const flatten = require("flat");
 module.exports.getEventsByID = function getEventsByID (req, res, next, eventID) {
 
   var appNameId = "";
-  if (config.biologginClientAppId == req.get("x-app-id"))
+  if (config.datahostClientAppId == req.get("x-app-id"))
     appNameId=config.datahostClientAppName;
 
   Event.getEventsByID(appNameId, eventID)
@@ -25,7 +25,7 @@ module.exports.getEventsByID = function getEventsByID (req, res, next, eventID) 
 module.exports.getEventsBySearch = function getEventsBySearch (req, res, next, body, skip, take, exportMode, responseCoordinateSystem) {
 
   var appNameId = "";
-  if (config.biologginClientAppId == req.get("x-app-id"))
+  if (config.datahostClientAppId == req.get("x-app-id"))
     appNameId=config.datahostClientAppName;
 
   Event.getEventsBySearch(appNameId, body, skip, take, exportMode, responseCoordinateSystem)

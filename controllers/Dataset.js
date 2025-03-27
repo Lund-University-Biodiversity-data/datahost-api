@@ -10,7 +10,7 @@ const flatten = require("flat");
 module.exports.getDatasetByID = function getDatasetByID (req, res, next, id) {
 
   var appNameId = "";
-  if (config.biologginClientAppId == req.get("x-app-id"))
+  if (config.datahostClientAppId == req.get("x-app-id"))
     appNameId=config.datahostClientAppName;
 
   Dataset.getDatasetByID(appNameId, id)
@@ -26,7 +26,7 @@ module.exports.getDatasetsBySearch = function getDatasetsBySearch (req, res, nex
 
 
   var appNameId = "";
-  if (config.biologginClientAppId == req.get("x-app-id"))
+  if (config.datahostClientAppId == req.get("x-app-id"))
     appNameId=config.datahostClientAppName;
 
   Dataset.getDatasetsBySearch(appNameId, body, skip, take, exportMode, responseCoordinateSystem)
