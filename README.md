@@ -3,11 +3,15 @@
 
 ### Requirements
 
-Mongodb (v4 checked)
+Mongodb (v4 and v8 checked)
 ```
 sudo apt-get install mongodb
 ```
 
+npm
+```
+sudo apt-get install npm
+```
 
 The database has to have a couple of indexes, to make sure the queries don't take forever.
 See the dedicated repo (convert-ecodata-to-datahost)

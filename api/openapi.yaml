@@ -10,7 +10,8 @@ info:
     url: https://creativecommons.org/publicdomain/zero/1.0/legalcode
   version: 1.0.4
 servers:
-- url: http://localhost:8088/v1
+#- url: http://localhost:8088/v1
+- url: http://biodiv-app.biol.lu.se:8088/v1
 paths:
   /api-info:
     get:
